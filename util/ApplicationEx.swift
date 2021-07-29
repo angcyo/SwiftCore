@@ -1,8 +1,5 @@
 //
-//  ControllerEx.swift
-//  Wayto.GBSecurity.iOS
-//
-//  Created by wayto on 2021/7/27.
+// Created by wayto on 2021/7/29.
 //
 
 import Foundation
@@ -25,4 +22,8 @@ extension UIApplication {
         }
     }
 
+    /// 状态栏管理
+    class func statusBarManager() -> UIStatusBarManager? {
+        UIApplication.mainWindow?.windowScene?.statusBarManager
+    }
 }
