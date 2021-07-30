@@ -4,9 +4,7 @@
 
 import Foundation
 
-
-
-func logObj(_ obj: Any, _ prefix: String = "", _ debug: Bool = true) {
+func logObj(_ obj: Any, _ prefix: String = "", _ debug: Bool = D.isBeingDebugged) {
     if debug {
         Swift.debugPrint(prefix, obj)
     } else {
@@ -15,7 +13,7 @@ func logObj(_ obj: Any, _ prefix: String = "", _ debug: Bool = true) {
 }
 
 extension NSObject {
-    
+
     /// 打印日志
     func log(_ prefix: String = "", _ debug: Bool = true) {
         logObj(self, prefix, debug)
@@ -26,13 +24,13 @@ extension NSObject {
 extension Dictionary {
     /// 打印日志
     func log(_ prefix: String = "", _ debug: Bool = true) {
-        logObj( self, prefix, debug)
+        logObj(self, prefix, debug)
     }
 }
 
 extension Int {
     /// 打印日志
     func log(_ prefix: String = "", _ debug: Bool = true) {
-        logObj( self, prefix, debug)
+        logObj(self, prefix, debug)
     }
 }

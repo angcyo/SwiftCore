@@ -8,7 +8,9 @@
 import Foundation
 import UIKit
 
-func textView() -> UITextView {
+func tv() -> UITextView {
     let view = UITextView()
+    view.font = Res.Font.normal
+    view.textColor = Res.Text.normal.color
     return view
 }

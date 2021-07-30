@@ -5,6 +5,16 @@
 import Foundation
 import UIKit
 
+class TargetObserver {
+    /// dsl
+    var onAction: (() -> Void)? = nil
+
+    /// 回调
+    @objc func onActionInner(sender: UIView) {
+        onAction?()
+    }
+}
+
 extension UIView {
 
     /**将UIVIew转换成UIImage*/
@@ -114,13 +124,13 @@ extension UIView {
     }
 
     /// 同时设置4个角的圆角
-    func setRadius(_ radius: Double) {
+    func setRadius(_ radius: Float) {
         layer.cornerRadius = CGFloat(radius)
     }
 
     /// 单独设置4个角的圆角
-    func setRound(_ radii: CGFloat, topLeft: Bool = false, topRight: Bool = false,
-                  bottomLeft: Bool = false, bottomRight: Bool = false) {
+    func setRound(_ radii: CGFloat, topLeft: Bool = true, topRight: Bool = true,
+                  bottomLeft: Bool = true, bottomRight: Bool = true) {
         var corners: UIRectCorner = []
         if topLeft {
             corners.insert(UIRectCorner.topLeft)
@@ -143,24 +153,76 @@ extension UIView {
     }
 
     func setRoundTop(_ radii: CGFloat) {
-        setRound(radii, topLeft: true, topRight: true)
+        setRound(radii, topLeft: true, topRight: true, bottomLeft: false, bottomRight: false)
     }
 
     func setRoundBottom(_ radii: CGFloat) {
-        setRound(radii, bottomLeft: true, bottomRight: true)
+        setRound(radii, topLeft: false, topRight: false, bottomLeft: true, bottomRight: true)
     }
 
     func setRoundLeft(_ radii: CGFloat) {
-        setRound(radii, topLeft: true, bottomLeft: true)
+        setRound(radii, topLeft: true, topRight: false, bottomLeft: true, bottomRight: false)
     }
 
     func setRoundRight(_ radii: CGFloat) {
-        setRound(radii, topRight: true, bottomRight: true)
+        setRound(radii, topLeft: false, topRight: true, bottomLeft: false, bottomRight: true)
+    }
+
+
+    /// 快速监听事件
+    /// 返回对象需要保存起来, 否则会被ARC回收, 导致回调不了
+    /// - Parameters:
+    ///   - controlEvents:
+    ///   - action:
+    /// - Returns:
+    func onClick(_ controlEvents: UIControl.Event = .touchUpInside, _ action: @escaping () -> Void) -> Any {
+        let observer = TargetObserver()
+        observer.onAction = action
+
+        //self.isUserInteractionEnabled = true
+
+        if self is UIControl {
+            (self as! UIControl).addTarget(observer,
+                    action: #selector(TargetObserver.onActionInner(sender:)),
+                    for: controlEvents)
+            return observer
+        } else {
+            let gesture = UITapGestureRecognizer(target: observer,
+                    action: #selector(TargetObserver.onActionInner(sender:)))
+
+            // 点击一次
+            gesture.numberOfTapsRequired = 1
+            // 一个手指
+            gesture.numberOfTouchesRequired = 1
+
+            //需要交互
+            isUserInteractionEnabled = true
+            //添加手势
+            addGestureRecognizer(gesture)
+
+            return gesture
+        }
     }
 }
 
 func v() -> UIView {
     let view = UIView()
     //view.backgroundColor = UIColor()
+    return view
+}
+
+/// 横线, 宽度需要手动约束
+func hLine(height: Float = Res.Size.line, color: UIColor = Res.Color.line) -> UIView {
+    let view = v()
+    view.makeHeight(height)
+    view.setBackground(color)
+    return view
+}
+
+/// 竖线, 高度需要手动约束
+func vLine(width: Float = Res.Size.line, color: UIColor = Res.Color.line) -> UIView {
+    let view = v()
+    view.makeWidth()
+    view.setBackground(color)
     return view
 }

@@ -95,10 +95,10 @@ extension UIView {
                 maker.width.equalTo(width).multipliedBy(amount)
             }
             if let min = minWidth {
-                maker.width.lessThanOrEqualTo(min).multipliedBy(amount)
+                maker.width.greaterThanOrEqualTo(min).multipliedBy(amount)
             }
             if let max = maxWidth {
-                maker.width.greaterThanOrEqualTo(max).multipliedBy(amount)
+                maker.width.lessThanOrEqualTo(max).multipliedBy(amount)
             }
         }
     }
@@ -113,10 +113,12 @@ extension UIView {
                 maker.height.equalTo(height).multipliedBy(amount)
             }
             if let min = minHeight {
-                maker.height.lessThanOrEqualTo(min).multipliedBy(amount)
+                // 约束最小高度, >=min
+                maker.height.greaterThanOrEqualTo(min).multipliedBy(amount)
             }
             if let max = maxHeight {
-                maker.height.greaterThanOrEqualTo(max).multipliedBy(amount)
+                // 约束最大高度, <=max
+                maker.height.lessThanOrEqualTo(max).multipliedBy(amount)
             }
         }
     }
@@ -196,6 +198,22 @@ extension UIView {
         }
     }
 
+    func makeGravityHorizontal(_ parent: ConstraintRelatableTarget? = nil, offset: Int = 0) {
+        make { maker in
+            let parent = toConstraintTarget(parent)
+            maker.left.equalTo(parent).offset(offset)
+            maker.right.equalTo(parent).offset(-offset)
+        }
+    }
+
+    func makeGravityVertical(_ parent: ConstraintRelatableTarget? = nil, offset: Int = 0) {
+        make { maker in
+            let parent = toConstraintTarget(parent)
+            maker.top.equalTo(parent).offset(offset)
+            maker.bottom.equalTo(parent).offset(-offset)
+        }
+    }
+
     func makeGravityRight(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
         make { maker in
             maker.right.equalTo(parent ?? superview!).offset(offset)
@@ -208,12 +226,53 @@ extension UIView {
         }
     }
 
+    /// 自身左边, 对齐目标右边
+    func makeLeftToRightOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.LAST,
+                           offset: ConstraintOffsetTarget = 0) {
+        make { maker in
+            let parent = toConstraintTargetView(parent)
+            maker.left.equalTo(parent.snp.right).offset(offset)
+        }
+    }
+
+    func makeLeftToLeftOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.LAST,
+                          offset: ConstraintOffsetTarget = 0) {
+        make { maker in
+            let parent = toConstraintTargetView(parent)
+            maker.left.equalTo(parent.snp.left).offset(offset)
+        }
+    }
+
+    func makeRightToRightOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.LAST,
+                            offset: ConstraintOffsetTarget = 0) {
+        make { maker in
+            let parent = toConstraintTargetView(parent)
+            maker.right.equalTo(parent.snp.right).offset(offset)
+        }
+    }
+
+    func makeRightToLeftOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.LAST,
+                           offset: ConstraintOffsetTarget = 0) {
+        make { maker in
+            let parent = toConstraintTargetView(parent)
+            maker.right.equalTo(parent.snp.left).offset(offset)
+        }
+    }
+
     /// 自身顶部, 对齐目标底部
-    func makeTopToBottomOf(_ parent: ConstraintRelatableTarget = ConstraintTarget.LAST,
+    func makeTopToBottomOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.LAST,
                            offset: ConstraintOffsetTarget = 0) {
         make { maker in
             let parent = toConstraintTargetView(parent)
             maker.top.equalTo(parent.snp.bottom).offset(offset)
+        }
+    }
+
+    func makeBottomToBottomOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.LAST,
+                              offset: ConstraintOffsetTarget = 0) {
+        make { maker in
+            let parent = toConstraintTargetView(parent)
+            maker.bottom.equalTo(parent.snp.bottom).offset(offset)
         }
     }
 }
