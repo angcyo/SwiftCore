@@ -35,7 +35,14 @@ struct Res {
 
     struct Size {
         static var line: Float = 1
+
         static var roundNormal: Float = 5
+        static var roundCommon: Float = 15
+        static var roundMax: Float = 45
+
+        static var x: Float = 10
+        static var xx: Float = 20
+        static var xxx: Float = 30
     }
 
     // MARK: - 字体资源

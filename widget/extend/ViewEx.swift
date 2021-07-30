@@ -129,27 +129,34 @@ extension UIView {
     }
 
     /// 单独设置4个角的圆角
-    func setRound(_ radii: CGFloat, topLeft: Bool = true, topRight: Bool = true,
+    func setRound(_ radii: CGFloat,
+                  topLeft: Bool = true, topRight: Bool = true,
                   bottomLeft: Bool = true, bottomRight: Bool = true) {
-        var corners: UIRectCorner = []
-        if topLeft {
-            corners.insert(UIRectCorner.topLeft)
-        }
-        if topRight {
-            corners.insert(UIRectCorner.topRight)
-        }
-        if bottomLeft {
-            corners.insert(UIRectCorner.bottomLeft)
-        }
-        if bottomRight {
-            corners.insert(UIRectCorner.bottomRight)
-        }
+        if bounds.isEmpty {
+            doMain { [self] in
+                setRound(radii, topLeft: topLeft, topRight: topRight, bottomLeft: bottomLeft, bottomRight: bottomRight)
+            }
+        } else {
+            var corners: UIRectCorner = []
+            if topLeft {
+                corners.insert(UIRectCorner.topLeft)
+            }
+            if topRight {
+                corners.insert(UIRectCorner.topRight)
+            }
+            if bottomLeft {
+                corners.insert(UIRectCorner.bottomLeft)
+            }
+            if bottomRight {
+                corners.insert(UIRectCorner.bottomRight)
+            }
 
-        let maskPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radii, height: radii))
-        let maskLayer = CAShapeLayer()
-        maskLayer.frame = bounds
-        maskLayer.path = maskPath.cgPath
-        layer.mask = maskLayer
+            let maskPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radii, height: radii))
+            let maskLayer = CAShapeLayer()
+            maskLayer.frame = bounds
+            maskLayer.path = maskPath.cgPath
+            layer.mask = maskLayer
+        }
     }
 
     func setRoundTop(_ radii: CGFloat) {
@@ -205,9 +212,10 @@ extension UIView {
     }
 }
 
-func v() -> UIView {
+func v(_ color: Any? = nil) -> UIView {
     let view = UIView()
     //view.backgroundColor = UIColor()
+    view.setBackground(color)
     return view
 }
 

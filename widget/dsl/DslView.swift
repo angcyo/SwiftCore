@@ -50,6 +50,8 @@ extension UIView {
     func toConstraintTarget(_ parent: ConstraintRelatableTarget? = nil) -> ConstraintRelatableTarget {
         if parent is ConstraintTarget {
             switch parent as! ConstraintTarget {
+            case .PARENT:
+                return superview!
             case .LAST:
                 let views: [UIView] = superview!.subviews.reversed()
                 for view in views {
@@ -68,6 +70,8 @@ extension UIView {
     func toConstraintTargetView(_ parent: ConstraintRelatableTarget? = nil) -> UIView {
         if parent is ConstraintTarget {
             switch parent as! ConstraintTarget {
+            case .PARENT:
+                return superview!
             case .LAST:
                 let views: [UIView] = superview!.subviews.reversed()
                 for view in views {
@@ -214,12 +218,14 @@ extension UIView {
         }
     }
 
+    /// 注意offset的负值
     func makeGravityRight(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
         make { maker in
             maker.right.equalTo(parent ?? superview!).offset(offset)
         }
     }
 
+    /// 注意offset的负值
     func makeGravityBottom(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
         make { maker in
             maker.bottom.equalTo(parent ?? superview!).offset(offset)
@@ -273,6 +279,14 @@ extension UIView {
         make { maker in
             let parent = toConstraintTargetView(parent)
             maker.bottom.equalTo(parent.snp.bottom).offset(offset)
+        }
+    }
+
+    func makeBottomToTopOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.LAST,
+                           offset: ConstraintOffsetTarget = 0) {
+        make { maker in
+            let parent = toConstraintTargetView(parent)
+            maker.bottom.equalTo(parent.snp.top).offset(offset)
         }
     }
 }

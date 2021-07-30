@@ -41,3 +41,7 @@ extension UIView {
         return Bundle.main.loadNibNamed(loadName, owner: owner, options: options)?.first as! Self
     }
 }
+
+func cgRect(_ x: CGFloat, _ y: CGFloat, _ width: CGFloat, _ height: CGFloat) -> CGRect {
+    CGRect(x: x, y: y, width: width, height: height)
+}
