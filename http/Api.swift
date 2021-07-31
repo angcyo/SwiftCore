@@ -7,17 +7,22 @@ import Alamofire
 
 struct Api {
 
+    /// 弱引用保存
+    static var requestHold: [DataRequest] = []
+
     @discardableResult
     static func request(_ url: String,
                         _ parameters: Parameters? = nil,
                         method: HTTPMethod = .get,
                         config: ((Http) -> Void)? = nil,
                         _ onResult: @escaping (Dictionary<String, Any>?, Error?) -> Void) -> DataRequest {
-        Http.request(url, parameters, method: method) { http in
+        var request: DataRequest? = nil
+        request = Http.request(url, parameters, method: method) { http in
                     http.encoding = URLEncoding.default
                     config?(http)
                 }.validate(statusCode: 200...299)
                 .responseJSON { response in
+                    requestHold.remove(request!)
                     debugPrint("[\(threadName())] 请求结束:↓")
                     debugPrint(response)
                     switch response.result {
@@ -27,6 +32,8 @@ struct Api {
                         onResult(nil, error)
                     }
                 }
+        requestHold.append(request!)
+        return request!
     }
 
     @discardableResult
