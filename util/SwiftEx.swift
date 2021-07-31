@@ -24,5 +24,19 @@ extension NSObject {
         let result = action(this)
         return result
     }
+
+    // MARK:返回className
+
+    var className: String {
+        get {
+            //"Wayto_GBSecurity_iOS.LoginController"
+            let name = type(of: self).description()
+            if (name.contains(".")) {
+                return name.components(separatedBy: ".")[1];
+            } else {
+                return name;
+            }
+        }
+    }
 }
 

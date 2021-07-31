@@ -10,13 +10,20 @@ extension UIApplication {
     /**获取最主要的UIWindow*/
     static var mainWindow: UIWindow? {
         get {
-            let _result: UIWindow?
+            var _result: UIWindow?
             if #available(iOS 13.0, *) {
                 _result = UIApplication.shared.windows.first {
                     $0.isKeyWindow
                 }
             } else {
                 _result = UIApplication.shared.keyWindow
+            }
+            if _result == nil {
+                if let scene = CoreSceneDelegate.connectScene {
+                    _result = scene.windows.first {
+                        $0.isKeyWindow
+                    } ?? scene.windows.last
+                }
             }
             return _result
         }

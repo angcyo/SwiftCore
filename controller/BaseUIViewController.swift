@@ -24,6 +24,7 @@ class BaseUIViewController: UIViewController {
 
     override func loadView() {
         super.loadView()
+        debugPrint("加载试图:\(self)")
     }
 
     /// 加载试图
@@ -79,5 +80,9 @@ class BaseUIViewController: UIViewController {
         super.showDetailViewController(vc, sender: sender)
     }
 
-
+    /// Swift 的ARC, 在创建对象之后, 没有被引用会立马被回收.
+    /// https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html
+    deinit {
+        debugPrint("销毁:\(self)")
+    }
 }
