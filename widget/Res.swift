@@ -17,6 +17,7 @@ struct Res {
         static var big = (size: 22.0, color: UIColor.parse("#000000"))
         static var subTitle = (size: 14.0, color: UIColor.parse("#666666"))
         static var des = (size: 12.0, color: UIColor.parse("#ACB0B7"))
+        static var tip = (size: 12.0, color: UIColor.parse("#ACB0B7"))
         static var body = (size: 16.0, color: UIColor.parse("#161D26"))
     }
 
@@ -29,6 +30,7 @@ struct Res {
 
         static var white = UIColor.white
         static var line = UIColor.parse("#ECECEC")
+        static var bg = UIColor.parse("#F3F5F9")
     }
 
     // MARK: - 尺寸资源

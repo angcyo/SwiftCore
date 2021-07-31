@@ -29,6 +29,19 @@ extension UIApplication {
         }
     }
 
+    /// 活跃的UIScene
+    static var activeScene: UIScene? {
+        UIApplication.shared
+                .connectedScenes
+                .filter {
+            $0.activationState == .foregroundActive
+        }.first
+    }
+
+    static var activeWindowScene: UIWindowScene? {
+        activeScene as? UIWindowScene
+    }
+
     /// 状态栏管理
     class func statusBarManager() -> UIStatusBarManager? {
         UIApplication.mainWindow?.windowScene?.statusBarManager
@@ -37,6 +50,30 @@ extension UIApplication {
     /// 是否开启交互, 接收touch事件
     static func isUserInteractionEnabled(_ enable: Bool = true) {
         mainWindow?.isUserInteractionEnabled = enable
+    }
+}
+
+/// 创建一个新的UIWindow, 返回对象需要hold,否则会被arc回收
+func newWindow(_ action: ((UIWindow) -> Void)? = nil) -> UIWindow {
+    let window = UIWindow(windowScene: UIApplication.activeWindowScene!)
+    window.frame = UIScreen.main.bounds
+    //window.windowLevel = UIWindow.Level.alert
+    action?(window)
+    window.makeKeyAndVisible()
+    return window
+}
+
+/// 返回对象需要hold,否则会被arc回收
+func newWindow(_ rootView: UIView, _ action: ((UIWindow) -> Void)? = nil) -> UIWindow {
+    let vc = UIViewController()
+    //    vc.view.setBackground(UIColor.red)
+    //    vc.view.addSubview(rootView)
+    vc.view = rootView
+    return newWindow { (window: UIWindow) -> () in
+        //window.setBackground(UIColor.clear)
+        window.rootViewController = vc
+        //window.addSubview(rootView)
+        action?(window)
     }
 }
 

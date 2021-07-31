@@ -15,6 +15,34 @@ class TargetObserver {
     }
 }
 
+/// 获取一个角度UIBezierPath
+func roundPath(bounds: CGRect,
+               topLeft: Bool = true,
+               topRight: Bool = true,
+               bottomLeft: Bool = true,
+               bottomRight: Bool = true,
+               widthRadii: Float = Res.Size.roundNormal,
+               heightRadii: Float = Res.Size.roundNormal) -> UIBezierPath {
+    var corners: UIRectCorner = []
+    if topLeft {
+        corners.insert(UIRectCorner.topLeft)
+    }
+    if topRight {
+        corners.insert(UIRectCorner.topRight)
+    }
+    if bottomLeft {
+        corners.insert(UIRectCorner.bottomLeft)
+    }
+    if bottomRight {
+        corners.insert(UIRectCorner.bottomRight)
+    }
+
+    let maskPath = UIBezierPath(roundedRect: bounds,
+            byRoundingCorners: corners,
+            cornerRadii: CGSize(width: CGFloat(widthRadii), height: CGFloat(heightRadii)))
+    return maskPath
+}
+
 extension UIView {
 
     /**将UIVIew转换成UIImage*/
@@ -129,7 +157,7 @@ extension UIView {
     }
 
     /// 单独设置4个角的圆角
-    func setRound(_ radii: CGFloat,
+    func setRound(_ radii: Float,
                   topLeft: Bool = true, topRight: Bool = true,
                   bottomLeft: Bool = true, bottomRight: Bool = true) {
         if bounds.isEmpty {
@@ -151,7 +179,8 @@ extension UIView {
                 corners.insert(UIRectCorner.bottomRight)
             }
 
-            let maskPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radii, height: radii))
+            let r = CGFloat(radii)
+            let maskPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: r, height: r))
             let maskLayer = CAShapeLayer()
             maskLayer.frame = bounds
             maskLayer.path = maskPath.cgPath
@@ -159,19 +188,19 @@ extension UIView {
         }
     }
 
-    func setRoundTop(_ radii: CGFloat) {
+    func setRoundTop(_ radii: Float) {
         setRound(radii, topLeft: true, topRight: true, bottomLeft: false, bottomRight: false)
     }
 
-    func setRoundBottom(_ radii: CGFloat) {
+    func setRoundBottom(_ radii: Float) {
         setRound(radii, topLeft: false, topRight: false, bottomLeft: true, bottomRight: true)
     }
 
-    func setRoundLeft(_ radii: CGFloat) {
+    func setRoundLeft(_ radii: Float) {
         setRound(radii, topLeft: true, topRight: false, bottomLeft: true, bottomRight: false)
     }
 
-    func setRoundRight(_ radii: CGFloat) {
+    func setRoundRight(_ radii: Float) {
         setRound(radii, topLeft: false, topRight: true, bottomLeft: false, bottomRight: true)
     }
 
@@ -210,6 +239,46 @@ extension UIView {
             return gesture
         }
     }
+
+    /// 设置边框
+    func setBorder(_ strokeColor: UIColor = Res.Color.colorAccent,
+                   radii: Float = Res.Size.roundNormal,
+                   lineWidth: Float = Res.Size.line,
+                   fillColor: UIColor = UIColor.clear) {
+        if bounds.isEmpty {
+            doMain { [self] in
+                setBorder(strokeColor, radii: radii, lineWidth: lineWidth, fillColor: fillColor)
+            }
+        } else {
+            let roundPath = roundPath(bounds: bounds, widthRadii: radii, heightRadii: radii)
+            setBorder(strokeColor, radii: radii, lineWidth: lineWidth, fillColor: fillColor, path: roundPath.cgPath)
+        }
+    }
+
+    func setBorder(_ strokeColor: UIColor = Res.Color.colorAccent,
+                   radii: Float = Res.Size.roundNormal,
+                   lineWidth: Float = Res.Size.line,
+                   fillColor: UIColor = UIColor.clear,
+                   path: CGPath) {
+        if bounds.isEmpty {
+            doMain { [self] in
+                setBorder(strokeColor, radii: radii, lineWidth: lineWidth, fillColor: fillColor, path: path)
+            }
+        } else {
+            let borderLayer = CAShapeLayer()
+            borderLayer.frame = bounds;
+            borderLayer.path = path;
+            borderLayer.lineWidth = CGFloat(lineWidth);
+            borderLayer.fillColor = fillColor.cgColor;
+            borderLayer.strokeColor = strokeColor.cgColor;
+            layer.addSublayer(borderLayer)
+        }
+    }
+}
+
+/// 将控件的操作放在动画中执行, 相当于Android的transition
+func animate(_ duration: TimeInterval, _ animations: @escaping () -> Void) {
+    UIView.animate(withDuration: duration, animations: animations)
 }
 
 func v(_ color: Any? = nil) -> UIView {
