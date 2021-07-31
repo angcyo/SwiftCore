@@ -45,6 +45,19 @@ func roundPath(bounds: CGRect,
 
 extension UIView {
 
+    ///key
+    static var KEY_VIEW_NAME = "s_key_view_name"
+
+    ///控件的名字, 可以用来查找控件
+    var viewName: String? {
+        get {
+            objc_getAssociatedObject(self, &UIView.KEY_VIEW_NAME) as? String
+        }
+        set {
+            objc_setAssociatedObject(self, &UIView.KEY_VIEW_NAME, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+
     /**将UIVIew转换成UIImage*/
     func toImage() -> UIImage? {
         let size = bounds.size
@@ -68,12 +81,18 @@ extension UIView {
                 result = view
                 break
             }
+            result = find(condition)
+            if result != nil {
+                break
+            }
         }
         return result
     }
 
     func find(_ name: String) -> UIView? {
-        find(name.hashValue)
+        find { view in
+            view.viewName == name
+        }
     }
 
     func v<T: UIView>(_ id: Int) -> T? {
@@ -81,7 +100,7 @@ extension UIView {
     }
 
     func v<T: UIView>(_ name: String) -> T? {
-        v(name.hashValue)
+        find(name) as? T
     }
 
     /// 设置id

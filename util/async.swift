@@ -23,3 +23,12 @@ func doBack(_ delay: TimeInterval = 0, _ qos: DispatchQoS = .background, action:
     DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + delay, qos: qos, execute: action)
 }
 
+/// 在子线程等待异步方法结束, 再继续执行
+func syncWith(_ async: @escaping (DispatchSemaphore) -> Void) {
+    let semaphore = DispatchSemaphore(value: 0)
+    DispatchQueue.global(qos: .background).async {
+        async(semaphore)
+    }
+    semaphore.wait()
+    //semaphore.signal() //请记得调用
+}

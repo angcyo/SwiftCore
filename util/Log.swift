@@ -34,3 +34,12 @@ extension Int {
         logObj(self, prefix, debug)
     }
 }
+
+/// 线程名
+func threadName() -> String {
+    let name = Thread.current.name
+    if name?.isEmpty == true {
+        return Thread.current.description
+    }
+    return name!
+}

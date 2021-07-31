@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import Alamofire
 
 /// 核心代理
 class CoreAppDelegate: UIResponder, UIApplicationDelegate {
@@ -13,12 +14,14 @@ class CoreAppDelegate: UIResponder, UIApplicationDelegate {
         debugPrint("启动程序↓\(launchOptions)")
 
         Core.initCore()
+        Http.HOST = (Bundle.getPlist("ApiHost") as? String) ?? Http.HOST
+        Http.headers.append(HTTPHeader(name: "source-of-request", value: "app"))
 
-        //sleep(15)
-        debugPrint(Bundle.getPlist("Api Host"))
+        debugPrint(Http.HOST)
 
         logObj(Bundle.main.infoDictionary)
 
+        //sleep(15)
         return true
     }
 
