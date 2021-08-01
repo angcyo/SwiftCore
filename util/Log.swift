@@ -4,7 +4,7 @@
 
 import Foundation
 
-func logObj(_ obj: Any, _ prefix: String = "", _ debug: Bool = D.isBeingDebugged) {
+func logObj(_ obj: Any, _ prefix: String = "", _ debug: Bool = D.isDebug) {
     if debug {
         Swift.debugPrint(prefix, obj)
     } else {

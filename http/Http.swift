@@ -56,7 +56,7 @@ class Http {
         //拦截器
         var interceptors: [RequestInterceptor] = []
 
-        if D.isBeingDebugged {
+        if D.isDebug {
             interceptors.append(LogInterceptor())
         }
 

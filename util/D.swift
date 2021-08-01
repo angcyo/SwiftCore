@@ -7,7 +7,14 @@ import UIKit
 
 struct D {
 
-    /// 是否调试模式
+    static var debug: Bool {
+        #if DEBUG // 判断是否在测试环境下
+        return true
+        #else
+        return false
+        #endif
+    }
+
     static var isBeingDebugged: Bool {
         // Initialize all the fields so that,
         // if sysctl fails for some bizarre reason, we get a predictable result.
@@ -21,6 +28,11 @@ struct D {
         assert(junk == 0, "sysctl failed")
         // We're being debugged if the P_TRACED flag is set.
         return (info.kp_proc.p_flag & P_TRACED) != 0
+    }
+
+    /// 是否调试模式
+    static var isDebug: Bool {
+        debug || isBeingDebugged
     }
 
     /// 是否越狱
