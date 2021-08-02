@@ -45,6 +45,17 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         //separatorEffect = .none
         //separatorInset = .zero
 
+        //编辑模式
+        //isEditing = true
+
+        isUserInteractionEnabled = true
+
+        //selection
+        allowsSelection = true //允许选择
+        allowsSelectionDuringEditing = false //编辑模式下是否允许选择
+        allowsMultipleSelection = false //多行选择
+        allowsMultipleSelectionDuringEditing = false
+
         delegate = self
         dataSource = self
     }
@@ -92,26 +103,31 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     /// 是否可以编辑
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
+        debugPrint("canEditRowAt:\(indexPath)")
+        return false
     }
 
     /// 是否可以移动
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        debugPrint("canMoveRowAt:\(indexPath)")
         return true
     }
 
     /// titles
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        debugPrint("sectionIndexTitles")
         return nil
     }
 
     /// 根据title 获取 索引
     func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
+        debugPrint("sectionForSectionIndexTitle:\(title):\(index)")
         return index
     }
 
+    /// 点击了侧滑按钮
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        debugPrint("editingStyle:\(indexPath)")
+        debugPrint("commit editingStyle:\(editingStyle.rawValue):\(indexPath)")
     }
 
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -191,6 +207,7 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     }
 
     /// 需要cell的样式为:accessoryType = .detailButton 或 .detailDisclosureButton
+    /// 点击排序按钮的时候, 也会触发
     func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         debugPrint("点击详情按钮:\(indexPath)")
     }
@@ -233,12 +250,13 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     /// 编辑模式下得编辑样式
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        return .none
+        debugPrint("editingStyleForRowAt:\(indexPath)")
+        return .delete
     }
 
     /// 侧滑删除按钮的文本
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        return "删除\(indexPath)"
+        return "删除:\(indexPath)"
     }
 
     /// 侧滑菜单

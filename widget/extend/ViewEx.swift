@@ -11,6 +11,7 @@ class TargetObserver {
 
     /// 回调
     @objc func onActionInner(sender: UIView) {
+        debugPrint("onActionInner:\(sender)")
         onAction?()
     }
 }
