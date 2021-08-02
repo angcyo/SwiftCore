@@ -166,8 +166,14 @@ extension UIView {
                        leftOffset: ConstraintOffsetTarget = 0,
                        rightOffset: ConstraintOffsetTarget = 0) {
         make { maker in
-            maker.left.equalTo(parent ?? superview!).offset(leftOffset)
-            maker.right.equalTo(parent ?? superview!).offset(rightOffset)
+            if parent is Number {
+                maker.left.equalTo(superview!).offset(leftOffset)
+                maker.right.equalTo(superview!).offset(rightOffset)
+                maker.width.equalTo(parent!)
+            } else {
+                maker.left.equalTo(parent ?? superview!).offset(leftOffset)
+                maker.right.equalTo(parent ?? superview!).offset(rightOffset)
+            }
         }
     }
 
@@ -176,8 +182,14 @@ extension UIView {
                         topOffset: ConstraintOffsetTarget = 0,
                         bottomOffset: ConstraintOffsetTarget = 0) {
         make { maker in
-            maker.top.equalTo(parent ?? superview!).offset(topOffset)
-            maker.bottom.equalTo(parent ?? superview!).offset(bottomOffset)
+            if parent is Number {
+                maker.top.equalTo(superview!).offset(topOffset)
+                maker.bottom.equalTo(superview!).offset(bottomOffset)
+                maker.height.equalTo(parent!)
+            } else {
+                maker.top.equalTo(parent ?? superview!).offset(topOffset)
+                maker.bottom.equalTo(parent ?? superview!).offset(bottomOffset)
+            }
         }
     }
 
@@ -295,6 +307,7 @@ extension UIView {
         }
     }
 
+    /// 底部对齐底部时, 请先确定控件的高度, 否则无法准确计算
     func makeBottomToBottomOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.LAST,
                               offset: ConstraintOffsetTarget = 0) {
         make { maker in

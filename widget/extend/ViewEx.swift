@@ -301,6 +301,10 @@ func animate(_ duration: TimeInterval, _ animations: @escaping () -> Void) {
     UIView.animate(withDuration: duration, animations: animations)
 }
 
+func view(_ color: Any? = nil) -> UIView {
+    v(color)
+}
+
 func v(_ color: Any? = nil) -> UIView {
     let view = UIView()
     //view.backgroundColor = UIColor()
