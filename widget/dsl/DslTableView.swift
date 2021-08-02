@@ -9,7 +9,7 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     var itemArray: [DslItem] = []
 
-    override init(frame: CGRect, style: Style = .plain) {
+    override init(frame: CGRect, style: Style = .insetGrouped) {
         super.init(frame: frame, style: style)
         initTableView()
     }
@@ -38,6 +38,12 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         bouncesZoom = true //当达到最大限制时, 是否开启zoom
 
         contentInsetAdjustmentBehavior = .never //安全区域的行为
+
+        //分割线
+        //separatorColor = UIColor.gray
+        //separatorStyle = .none
+        //separatorEffect = .none
+        //separatorInset = .zero
 
         delegate = self
         dataSource = self
@@ -105,12 +111,14 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        debugPrint("editingStyle:\(indexPath)")
     }
 
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        debugPrint("moveRowAt:\(sourceIndexPath) to:\(destinationIndexPath)")
     }
 
-    // MARK: UITableView代理
+    // MARK: cell header footer 显示和隐藏
 
     /// cell 即将显示
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -170,7 +178,7 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         return 20
     }
 
-    // MARK: 收尾试图获取
+    // MARK: 首尾试图获取
 
     /// 返回头部试图
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

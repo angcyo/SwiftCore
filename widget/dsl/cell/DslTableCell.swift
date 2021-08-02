@@ -47,4 +47,8 @@ class DslTableCell: UITableViewCell, DslCell {
         super.setSelected(selected, animated: animated)
         debugPrint("setSelected")
     }
+
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+    }
 }
