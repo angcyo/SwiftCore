@@ -40,8 +40,8 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         contentInsetAdjustmentBehavior = .never //安全区域的行为
 
         //分割线
+        separatorStyle = .none //取消分割线
         //separatorColor = UIColor.gray
-        //separatorStyle = .none
         //separatorEffect = .none
         //separatorInset = .zero
 
