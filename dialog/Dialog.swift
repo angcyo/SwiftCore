@@ -13,7 +13,7 @@ struct Dialog {
         //ProgressHUD.colorStatus = Res.Color.colorAccent //状态文本的颜色
         //ProgressHUD.colorProgress = Res.Color.colorAccent
         //ProgressHUD.colorBackground = Res.Color.colorAccent
-        ProgressHUD.colorAnimation = Res.Color.colorAccent //动画的颜色
+        ProgressHUD.colorAnimation = Res.color.colorAccent //动画的颜色
     }
 
     /// 显示一个成功提示

@@ -7,3 +7,9 @@
 # https://github.com/SnapKit/SnapKit
 pod 'SnapKit', '5.0.1'
 ```
+
+```
+# 网络图片
+# https://github.com/Alamofire/AlamofireImage
+pod 'AlamofireImage', '~> 4.2.0'
+```

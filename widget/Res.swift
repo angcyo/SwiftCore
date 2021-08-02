@@ -11,7 +11,7 @@ struct Res {
 
     // MARK: - 文本资源
 
-    struct Text {
+    struct text {
         static var normal = (size: 17.0, color: UIColor.parse("#222222"))
         static var title = (size: 20.0, color: UIColor.parse("#222222"))
         static var big = (size: 22.0, color: UIColor.parse("#000000"))
@@ -23,7 +23,7 @@ struct Res {
 
     // MARK: - 颜色资源
 
-    struct Color {
+    struct color {
         static var colorPrimary = UIColor.parse("#2D52F2")
         static var colorPrimaryDark = UIColor.parse("#162bf2ff")
         static var colorAccent = UIColor.parse("#2D52F2")
@@ -35,7 +35,7 @@ struct Res {
 
     // MARK: - 尺寸资源
 
-    struct Size {
+    struct size {
         static var line: Float = 1
 
         static var roundNormal: Float = 5
@@ -49,7 +49,7 @@ struct Res {
 
     // MARK: - 字体资源
 
-    struct Font {
-        static var normal = UIFont.systemFont(ofSize: CGFloat(Text.normal.size), weight: .regular)
+    struct font {
+        static var normal = UIFont.systemFont(ofSize: CGFloat(text.normal.size), weight: .regular)
     }
 }

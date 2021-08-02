@@ -6,9 +6,9 @@ import Foundation
 import UIKit
 
 func button(_ title: String? = nil,
-            titleColor: UIColor = Res.Color.white,
-            bgColor: UIColor = Res.Color.colorAccent,
-            radius: Float = Res.Size.roundNormal) -> UIButton {
+            titleColor: UIColor = Res.color.white,
+            bgColor: UIColor = Res.color.colorAccent,
+            radius: Float = Res.size.roundNormal) -> UIButton {
     let view = UIButton()
     view.setTitle(title, for: .normal)
     view.setTitleColor(titleColor, for: .normal)

@@ -3,9 +3,9 @@
 //
 
 import Foundation
+import UIKit
 
 protocol Number {
-
 }
 
 extension Int: Number {

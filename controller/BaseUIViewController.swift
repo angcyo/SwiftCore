@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 import RxSwift
 
-/// base
+/// base by Rx
 class BaseUIViewController: UIViewController {
 
     //Rx 自动取消订阅,
@@ -17,6 +17,15 @@ class BaseUIViewController: UIViewController {
     /// 数据/对象存储
     var controllerData: [Any] = []
 
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        debugPrint("\(threadName())->创建:\(self)")
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+
     /// 保存对象, 防止被ARC回收. 通常delegate都需要保存起来
     func holdObj(_ obj: Any) {
         controllerData.append(obj)
@@ -24,7 +33,7 @@ class BaseUIViewController: UIViewController {
 
     override func loadView() {
         super.loadView()
-        debugPrint("加载试图:\(self)")
+        debugPrint("\(threadName())->加载试图:\(self)")
     }
 
     /// 加载试图
@@ -83,6 +92,6 @@ class BaseUIViewController: UIViewController {
     /// Swift 的ARC, 在创建对象之后, 没有被引用会立马被回收.
     /// https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html
     deinit {
-        debugPrint("销毁:\(self)")
+        debugPrint("\(threadName())->销毁:\(self)")
     }
 }

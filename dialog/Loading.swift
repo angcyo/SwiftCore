@@ -48,28 +48,28 @@ func showBottomLoading(_ status: String? = "正在操作...") {
             blurView.isUserInteractionEnabled = true //接收用户交互
         }
 
-        root.render(v(Res.Color.bg)) { (view: UIView) in
+        root.render(v(Res.color.bg)) { (view: UIView) in
             view.makeHeight(minHeight: 50)
             //maker.sizeToFit()
-            view.makeBottomToBottomOf(nil, offset: -Float(root.safeAreaInsets.bottom) - Res.Size.xx)
+            view.makeBottomToBottomOf(nil, offset: -Float(root.safeAreaInsets.bottom) - Res.size.xx)
             //maker.makeGravityBottom(offset: -10)
-            view.makeGravityHorizontal(offset: Int(Res.Size.xxx))
-            view.setRound(Res.Size.roundMax)
-            view.setBorder(radii: Res.Size.roundMax)
+            view.makeGravityHorizontal(offset: Int(Res.size.xxx))
+            view.setRound(Res.size.roundMax)
+            view.setBorder(radii: Res.size.roundMax)
 
             view.render(NVActivityIndicatorView(frame: cgRect(0, 0, 20, 20),
                     type: .lineSpinFadeLoader,
-                    color: Res.Color.colorAccent,
+                    color: Res.color.colorAccent,
                     padding: 0)) { (view: NVActivityIndicatorView) in
                 view.startAnimating()
                 view.makeCenterY()
-                view.makeGravityLeft(offset: Res.Size.x)
+                view.makeGravityLeft(offset: Res.size.x)
             }
 
             view.render(labelView(status)) { label in
                 //label.setBackground(UIColor.green)
                 label.sizeToFit()
-                label.makeLeftToRightOf(offset: Res.Size.x)
+                label.makeLeftToRightOf(offset: Res.size.x)
                 label.makeCenterY()
             }
         }

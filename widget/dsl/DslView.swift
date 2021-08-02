@@ -35,6 +35,13 @@ extension UIView {
         action?(view)
         return view
     }
+
+    @discardableResult
+    func renderAndMake(_ view: UIView, _ action: (ConstraintMaker) -> Void) -> UIView {
+        render(view)
+        view.make(action)
+        return view
+    }
 }
 
 // MARK: - 布局扩展, 需要库SnapKit支持
@@ -124,6 +131,12 @@ extension UIView {
                 // 约束最大高度, <=max
                 maker.height.lessThanOrEqualTo(max).multipliedBy(amount)
             }
+        }
+    }
+
+    func makeWidthHeight(size: ConstraintRelatableTarget) {
+        make { maker in
+            maker.width.height.equalTo(size)
         }
     }
 
@@ -218,14 +231,14 @@ extension UIView {
         }
     }
 
-    /// 注意offset的负值
+    /// 注意offset可能需要是负值
     func makeGravityRight(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
         make { maker in
             maker.right.equalTo(parent ?? superview!).offset(offset)
         }
     }
 
-    /// 注意offset的负值
+    /// 注意offset可能需要是负值
     func makeGravityBottom(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
         make { maker in
             maker.bottom.equalTo(parent ?? superview!).offset(offset)
@@ -262,6 +275,14 @@ extension UIView {
         make { maker in
             let parent = toConstraintTargetView(parent)
             maker.right.equalTo(parent.snp.left).offset(offset)
+        }
+    }
+
+    func makeTopToTopOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.LAST,
+                        offset: ConstraintOffsetTarget = 0) {
+        make { maker in
+            let parent = toConstraintTargetView(parent)
+            maker.top.equalTo(parent.snp.top).offset(offset)
         }
     }
 

@@ -30,6 +30,7 @@ extension NSObject {
     var className: String {
         get {
             //"Wayto_GBSecurity_iOS.LoginController"
+            //NSStringFromClass(type(of: self))
             let name = type(of: self).description()
             if (name.contains(".")) {
                 return name.components(separatedBy: ".")[1];

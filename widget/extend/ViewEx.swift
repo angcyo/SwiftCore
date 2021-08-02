@@ -21,8 +21,8 @@ func roundPath(bounds: CGRect,
                topRight: Bool = true,
                bottomLeft: Bool = true,
                bottomRight: Bool = true,
-               widthRadii: Float = Res.Size.roundNormal,
-               heightRadii: Float = Res.Size.roundNormal) -> UIBezierPath {
+               widthRadii: Float = Res.size.roundNormal,
+               heightRadii: Float = Res.size.roundNormal) -> UIBezierPath {
     var corners: UIRectCorner = []
     if topLeft {
         corners.insert(UIRectCorner.topLeft)
@@ -260,9 +260,9 @@ extension UIView {
     }
 
     /// 设置边框
-    func setBorder(_ strokeColor: UIColor = Res.Color.colorAccent,
-                   radii: Float = Res.Size.roundNormal,
-                   lineWidth: Float = Res.Size.line,
+    func setBorder(_ strokeColor: UIColor = Res.color.colorAccent,
+                   radii: Float = Res.size.roundNormal,
+                   lineWidth: Float = Res.size.line,
                    fillColor: UIColor = UIColor.clear) {
         if bounds.isEmpty {
             doMain { [self] in
@@ -274,9 +274,9 @@ extension UIView {
         }
     }
 
-    func setBorder(_ strokeColor: UIColor = Res.Color.colorAccent,
-                   radii: Float = Res.Size.roundNormal,
-                   lineWidth: Float = Res.Size.line,
+    func setBorder(_ strokeColor: UIColor = Res.color.colorAccent,
+                   radii: Float = Res.size.roundNormal,
+                   lineWidth: Float = Res.size.line,
                    fillColor: UIColor = UIColor.clear,
                    path: CGPath) {
         if bounds.isEmpty {
@@ -290,6 +290,7 @@ extension UIView {
             borderLayer.lineWidth = CGFloat(lineWidth);
             borderLayer.fillColor = fillColor.cgColor;
             borderLayer.strokeColor = strokeColor.cgColor;
+            //layer.mask = borderLayer
             layer.addSublayer(borderLayer)
         }
     }
@@ -308,7 +309,7 @@ func v(_ color: Any? = nil) -> UIView {
 }
 
 /// 横线, 宽度需要手动约束
-func hLine(height: Float = Res.Size.line, color: UIColor = Res.Color.line) -> UIView {
+func hLine(height: Float = Res.size.line, color: UIColor = Res.color.line) -> UIView {
     let view = v()
     view.makeHeight(height)
     view.setBackground(color)
@@ -316,7 +317,7 @@ func hLine(height: Float = Res.Size.line, color: UIColor = Res.Color.line) -> UI
 }
 
 /// 竖线, 高度需要手动约束
-func vLine(width: Float = Res.Size.line, color: UIColor = Res.Color.line) -> UIView {
+func vLine(width: Float = Res.size.line, color: UIColor = Res.color.line) -> UIView {
     let view = v()
     view.makeWidth()
     view.setBackground(color)

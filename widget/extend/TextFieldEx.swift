@@ -83,8 +83,8 @@ extension UITextField {
 func textFieldView(_ placeholder: String? = "请输入...",
                    borderStyle: UITextField.BorderStyle = .roundedRect) -> UITextField {
     let view = UITextField()
-    view.font = Res.Font.normal
-    view.textColor = Res.Text.normal.color
+    view.font = Res.font.normal
+    view.textColor = Res.text.normal.color
 
     //边框样式
     //UITextBorderStyleNone, // 无边框
