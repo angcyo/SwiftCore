@@ -7,6 +7,15 @@ import UIKit
 
 struct D {
 
+    /// 调试索引值
+    /// switch D.debugIndex {
+    //        case 0: accessoryType = .checkmark
+    //        default:
+    //            ()
+    //        }
+    //        D.debugIndex += 1
+    static var debugIndex = 0
+
     static var debug: Bool {
         #if DEBUG // 判断是否在测试环境下
         return true

@@ -5,8 +5,4 @@
 import Foundation
 
 protocol DslCell {
-
-    var cellIsRegister: Bool { get set }
-
-    var cellIdentifier: String { get set }
 }

@@ -7,14 +7,10 @@ import UIKit
 
 class DslTableCell: UITableViewCell, DslCell {
 
-    var cellIsRegister: Bool = false
-
-    var cellIdentifier: String = "DslTableCell"
-
     override init(style: CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        cellIdentifier = reuseIdentifier ?? cellIdentifier
-        debugPrint("初始化cell:\(self):\(style.rawValue):\(cellIdentifier)")
+        //cellIdentifier = reuseIdentifier ?? NSStringFromClass(Self.self)
+        debugPrint("创建cell:\(self):\(style.rawValue):\(reuseIdentifier)")
 
         initCell()
     }
@@ -23,11 +19,23 @@ class DslTableCell: UITableViewCell, DslCell {
         super.init(coder: coder)
     }
 
-    func initCell() {
-        //no op
+    deinit {
+        debugPrint("\(threadName())->销毁:\(self)")
     }
 
-    func onBindCell(_ tableView: DslTableView, _ indexPath: IndexPath, _ item: DslItem, _ data: Any?) {
+    // 初始化对象
+    func initCell() {
+        accessoryType = .none
+        //右箭头
+        //accessoryType = .disclosureIndicator
+    }
+
+    // 重写此方法, 在复用之前准备cell
+    override func prepareForReuse() {
+        super.prepareForReuse()
+    }
+
+    func onBindCell(_ tableView: DslTableView, _ indexPath: IndexPath, _ item: DslItem) {
         debugPrint("onBindCell:\(indexPath)")
     }
 
@@ -45,7 +53,7 @@ class DslTableCell: UITableViewCell, DslCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        debugPrint("setSelected")
+        debugPrint("setSelected:\(selected):\(animated)")
     }
 
     override func draw(_ rect: CGRect) {

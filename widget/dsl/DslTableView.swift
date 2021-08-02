@@ -9,7 +9,7 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     var itemArray: [DslItem] = []
 
-    override init(frame: CGRect, style: Style = .insetGrouped) {
+    override init(frame: CGRect, style: Style = .plain) {
         super.init(frame: frame, style: style)
         initTableView()
     }
@@ -72,7 +72,7 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         let identifier = item.identifier
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
         let tableCell = cell as! DslTableCell
-        tableCell.onBindCell(self, indexPath, item, item.itemData)
+        tableCell.onBindCell(self, indexPath, item)
         return tableCell
     }
 
@@ -190,7 +190,7 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         return nil
     }
 
-    ///
+    /// 需要cell的样式为:accessoryType = .detailButton 或 .detailDisclosureButton
     func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         debugPrint("点击详情按钮:\(indexPath)")
     }

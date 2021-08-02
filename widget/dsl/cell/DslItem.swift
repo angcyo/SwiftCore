@@ -15,6 +15,7 @@ class DslItem {
     /// data 数据
     var itemData: Any? = nil
 
+    /// itemCell 可复用的标识
     var identifier: String {
         NSStringFromClass(itemCell!)
     }
