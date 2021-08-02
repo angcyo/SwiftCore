@@ -29,6 +29,16 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         estimatedSectionFooterHeight = UITableView.automaticDimension
         sectionFooterHeight = UITableView.automaticDimension
 
+        tableHeaderView = nil
+        tableFooterView = nil
+
+        bounces = true //边界回弹
+        minimumZoomScale = 1
+        maximumZoomScale = 1
+        bouncesZoom = true //当达到最大限制时, 是否开启zoom
+
+        contentInsetAdjustmentBehavior = .never //安全区域的行为
+
         delegate = self
         dataSource = self
     }
