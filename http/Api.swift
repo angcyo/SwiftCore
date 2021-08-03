@@ -4,73 +4,170 @@
 
 import Foundation
 import Alamofire
+import AlamofireImage
+import SwiftyJSON
 
 struct Api {
 
-    /// 弱引用保存
+    /// 请求保存, 否则会被ARC回收
     static var requestHold: [DataRequest] = []
 
+    /// 创建一个请求
     @discardableResult
-    static func request(_ url: String,
-                        _ parameters: Parameters? = nil,
-                        method: HTTPMethod = .get,
-                        config: ((Http) -> Void)? = nil,
-                        _ onResult: @escaping (Dictionary<String, Any>?, Error?) -> Void) -> DataRequest {
-        var request: DataRequest? = nil
-        request = Http.request(url, parameters, method: method) { http in
-                    http.encoding = URLEncoding.default
+    static func create(_ url: String,
+                       _ param: Parameters? = nil, //请求参数, 可以是body, form等
+                       query: Parameters? = nil,
+                       method: HTTPMethod = .get,
+                       config: ((Http) -> Void)? = nil) -> DataRequest {
+        let _url: String
+        if method == .post || method == .put {
+            //手动拼接请求参数
+            _url = connectParam(url, query)
+        } else {
+            _url = url
+        }
+        return Http.request(_url, param, method: method) { http in
+                    if method == .post || method == .put {
+                        http.encoding = JSONEncoding.default
+
+                        http.headers.append(HTTPHeader(name: "Accept", value: "application/json; charset=utf-8"))
+                        //http.headers.append(HTTPHeader(name: "Content-Type", value: "application/json; charset=utf-8"))
+                    } else {
+                        http.encoding = URLEncoding.default
+                    }
                     config?(http)
                 }.validate(statusCode: 200...299)
-                .responseJSON { response in
-                    requestHold.remove(request!)
+                .response { response in
                     debugPrint("[\(threadName())] 请求结束:↓")
                     debugPrint(response)
-                    switch response.result {
-                    case .success:
-                        onResult(response.value as? Dictionary, nil)
-                    case let .failure(error):
-                        onResult(nil, error)
-                    }
                 }
-        requestHold.append(request!)
-        return request!
     }
+}
 
-    @discardableResult
+extension Api {
+
     static func get(_ url: String,
-                    _ parameters: Parameters? = nil,
-                    config: ((Http) -> Void)? = nil,
-                    _ onResult: @escaping (Dictionary<String, Any>?, Error?) -> Void) -> DataRequest {
-        request(url, parameters, method: .get, config: config, onResult)
+                    _ param: Parameters? = nil, //请求参数, 可以是body, form等
+                    config: ((Http) -> Void)? = nil) -> DataRequest {
+        Api.create(url, param, method: .get, config: config)
     }
 
-    @discardableResult
     static func post(_ url: String,
-                     _ body: Parameters? = nil,
+                     _ param: Parameters? = nil, //请求参数, 可以是body, form等
                      query: Parameters? = nil,
-                     config: ((Http) -> Void)? = nil,
-                     _ onResult: @escaping (Dictionary<String, Any>?, Error?) -> Void) -> DataRequest {
-        let _url = connectParam(url, query)
-        return request(_url, body, method: .post, config: { http in
-            http.encoding = JSONEncoding.default
-            http.headers.append(HTTPHeader(name: "Accept", value: "application/json; charset=utf-8"))
-            //http.headers.append(HTTPHeader(name: "Content-Type", value: "application/json; charset=utf-8"))
-            config?(http)
-        }, onResult)
+                     config: ((Http) -> Void)? = nil) -> DataRequest {
+        Api.create(url, param, query: query, method: .post, config: config)
+    }
+
+    static func put(_ url: String,
+                    _ param: Parameters? = nil, //请求参数, 可以是body, form等
+                    query: Parameters? = nil,
+                    config: ((Http) -> Void)? = nil) -> DataRequest {
+        Api.create(url, param, query: query, method: .put, config: config)
+    }
+}
+
+extension DataRequest {
+
+    /// 发送一个请求, 拿到最原始的数据
+    @discardableResult
+    func request(_ onResult: @escaping (AFDataResponse<Data?>?, Error?) -> Void) -> DataRequest {
+        let request: DataRequest = self
+        response { response in
+            Api.requestHold.remove(request)
+            switch response.result {
+            case .success(_):
+                //let json = JSON(value) //获取json对象
+                onResult(response, nil)
+            case .failure(let error):
+                onResult(nil, error)
+            }
+        }
+        Api.requestHold.append(request)
+        return request
     }
 
     @discardableResult
-    static func put(_ url: String,
-                    _ body: Parameters? = nil,
-                    query: Parameters? = nil,
-                    config: ((Http) -> Void)? = nil,
-                    _ onResult: @escaping (Dictionary<String, Any>?, Error?) -> Void) -> DataRequest {
-        let _url = connectParam(url, query)
-        return request(_url, body, method: .put, config: { http in
-            http.encoding = JSONEncoding.default
-            http.headers.append(HTTPHeader(name: "Accept", value: "application/json; charset=utf-8"))
-            //http.headers.append(HTTPHeader(name: "Content-Type", value: "application/json; charset=utf-8"))
-            config?(http)
-        }, onResult)
+    func requestData(_ onResult: @escaping (Data?, Error?) -> Void) -> DataRequest {
+        let request: DataRequest = self
+        responseData { response in
+            Api.requestHold.remove(request)
+            switch response.result {
+            case .success(let value):
+                onResult(value, nil)
+            case .failure(let error):
+                onResult(nil, error)
+            }
+        }
+        Api.requestHold.append(request)
+        return request
+    }
+
+    @discardableResult
+    func requestImage(_ onResult: @escaping (Image?, Error?) -> Void) -> DataRequest {
+        let request: DataRequest = self
+        responseImage { response in
+            Api.requestHold.remove(request)
+            switch response.result {
+            case .success(let value):
+                onResult(value, nil)
+            case .failure(let error):
+                onResult(nil, error)
+            }
+        }
+        Api.requestHold.append(request)
+        return request
+    }
+
+    /// 获取bean of type: T.Type = T.self,
+    @discardableResult
+    func requestDecodable<T: Decodable>(_ onResult: @escaping (T?, Error?) -> Void) -> DataRequest {
+        let request: DataRequest = self
+        responseDecodable { (response: AFDataResponse<T>) in
+            Api.requestHold.remove(request)
+            switch response.result {
+            case .success(let value):
+                onResult(value, nil)
+            case .failure(let error):
+                onResult(nil, error)
+            }
+        }
+        Api.requestHold.append(request)
+        return request
+    }
+
+    /// 获取json 字典
+    @discardableResult
+    func requestJSON(_ onResult: @escaping (Any?, Error?) -> Void) -> DataRequest {
+        let request: DataRequest = self
+
+        responseJSON { response in
+            Api.requestHold.remove(request)
+            switch response.result {
+            case .success(let value):
+                onResult(value, nil)
+            case .failure(let error):
+                onResult(nil, error)
+            }
+        }
+        Api.requestHold.append(request)
+        return request
+    }
+
+    /// 获取json 对象
+    @discardableResult
+    func requestJson(_ onResult: @escaping (JSON?, Error?) -> Void) -> DataRequest {
+        let request: DataRequest = self
+        response { response in
+            Api.requestHold.remove(request)
+            switch response.result {
+            case .success(let value):
+                onResult(JSON(value), nil)
+            case .failure(let error):
+                onResult(nil, error)
+            }
+        }
+        Api.requestHold.append(request)
+        return request
     }
 }

@@ -60,6 +60,8 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         dataSource = self
     }
 
+    // MARK: item操作
+
     func setItems(items: [DslItem]) {
         items.forEach { (item: DslItem) in
             if let itemCell = item.itemCell {
@@ -69,6 +71,10 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         }
         self.itemArray = items
     }
+
+   /* static func +(tableView: DslTableView, item: DslItem) {
+
+    }*/
 
     // MARK: dataSource代理
 

@@ -5,18 +5,23 @@
 import Foundation
 import Alamofire
 
+/// [AuthenticationInterceptor]
 class OAuthAuthenticator: Authenticator {
+
     func apply(_ credential: OAuthCredential, to urlRequest: inout URLRequest) {
         urlRequest.headers.add(.authorization(bearerToken: credential.accessToken))
     }
 
+    /// 请求刷新token
     func refresh(_ credential: OAuthCredential,
                  for session: Session,
                  completion: @escaping (Result<OAuthCredential, Error>) -> Void) {
+        debugPrint("refresh credential:\(credential)")
         // Refresh the credential using the refresh token...then call completion with the new credential.
         //
         // The new credential will automatically be stored within the `AuthenticationInterceptor`. Future requests will
         // be authenticated using the `apply(_:to:)` method using the new credential.
+        completion(.success(credential))
     }
 
     func didRequest(_ urlRequest: URLRequest,

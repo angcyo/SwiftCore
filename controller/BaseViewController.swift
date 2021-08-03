@@ -7,7 +7,7 @@ import UIKit
 import RxSwift
 
 /// base by Rx
-class BaseUIViewController: UIViewController {
+class BaseViewController: UIViewController {
 
     //Rx 自动取消订阅,
     lazy var disposeBag: DisposeBag = {
@@ -20,10 +20,15 @@ class BaseUIViewController: UIViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
         debugPrint("\(threadName())->创建:\(self)")
+        initController()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+    }
+
+    func initController() {
+        //init
     }
 
     /// 保存对象, 防止被ARC回收. 通常delegate都需要保存起来

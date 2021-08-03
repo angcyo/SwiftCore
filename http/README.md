@@ -14,7 +14,14 @@ pod 'RxAlamofire' #, '6.1.1'
 # https://gitee.com/mirrors/alamofire/blob/master/Documentation/Usage.md
 # https://gitee.com/mirrors/alamofire
 
+# https://github.com/SwiftyJSON/SwiftyJSON
+pod 'SwiftyJSON', '~> 5.0.1'
+
 // 待定
 # https://github.com/RxSwiftCommunity/RxSwiftExt
 pod 'RxSwiftExt' #, '6.0.1'
+
+# 网络图片
+# https://github.com/Alamofire/AlamofireImage
+pod 'AlamofireImage', '~> 4.2.0'
 ```

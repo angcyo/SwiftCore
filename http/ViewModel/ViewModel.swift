@@ -8,7 +8,8 @@ import Foundation
 class ViewModel: NSObject {
 
     required override init() {
-        //no op
+        super.init()
+        debugPrint("创建:\(self)")
     }
 
     /// Swift 的ARC, 在创建对象之后, 没有被引用会立马被回收.

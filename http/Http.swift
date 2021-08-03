@@ -6,7 +6,10 @@ import Foundation
 import Alamofire
 import RxAlamofire
 
+/// https://gitee.com/mirrors/alamofire/blob/master/Documentation/Usage.md
 class Http {
+
+    // MARK: 静态配置
 
     /// 单例配置
     static var HOST = ""
@@ -16,6 +19,8 @@ class Http {
 
     /// 固定的请求头
     static var headers: [HTTPHeader] = []
+
+    // MARK: 成员配置
 
     /// 请求的host
     var base: String? = HOST
@@ -65,8 +70,7 @@ class Http {
 
             // Create the interceptor
             let authenticator = OAuthAuthenticator()
-            let interceptor = AuthenticationInterceptor(authenticator: authenticator,
-                    credential: credential)
+            let interceptor = AuthenticationInterceptor(authenticator: authenticator, credential: credential)
 
             interceptors.append(interceptor)
         }
