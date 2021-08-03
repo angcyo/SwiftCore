@@ -73,13 +73,31 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         reloadData()
     }
 
-    func addItem(_ item: DslItem) {
+    @discardableResult
+    func addItem(_ item: DslItem, _ dsl: ((DslItem) -> Void)? = nil) -> DslItem {
         if let itemCell = item.itemCell {
             let identifier = item.identifier
             self.register(itemCell, forCellReuseIdentifier: identifier)
         }
         itemArray.append(item)
+        //init
+        dsl?(item)
         insertRows(at: [IndexPath(row: itemArray.count - 1, section: 0)], with: .automatic)
+        return item
+    }
+
+    /// 删除item
+    @discardableResult
+    func removeItem(_ item: DslItem) -> DslItem? {
+        let index = itemArray.firstIndex {
+            $0 == item
+        }
+        if let index = index {
+            itemArray.remove(at: index)
+            deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+            return item
+        }
+        return nil
     }
 
     // MARK: 操作符重载

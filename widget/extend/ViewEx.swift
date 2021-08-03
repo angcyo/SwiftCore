@@ -313,8 +313,8 @@ extension UIView {
     }
 }
 
-/// 将控件的操作放在动画中执行, 相当于Android的transition
-func animate(_ duration: TimeInterval, _ animations: @escaping () -> Void) {
+/// 将控件的操作放在动画中执行, 相当于Android的transition [duration]秒
+func animate(_ duration: TimeInterval = TimeInterval(0.3), _ animations: @escaping () -> Void) {
     UIView.animate(withDuration: duration, animations: animations)
 }
 

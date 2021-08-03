@@ -52,7 +52,7 @@ class Http {
         if url?.starts(with: "http") == true {
             _url = url
         } else {
-            _url = connectUrl(host: base, url: url)
+            _url = connectUrl(base, url: url)
         }
 
         //适配器
@@ -119,7 +119,7 @@ class Http {
     }
 }
 
-func connectUrl(host: String? = Http.HOST, url: String?) -> String {
+func connectUrl(_ host: String? = Http.HOST, url: String?) -> String {
     var _host = host ?? ""
     var _url = url ?? ""
     if _host.reversed().starts(with: "/") == true {

@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 
 /// 数据和界面关联的item
-class DslItem {
+class DslItem: NSObject {
 
     /// cell 界面
     /// 如果是在DslTableView中, 则必须是UITableViewCell的子类
