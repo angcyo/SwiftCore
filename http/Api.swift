@@ -69,9 +69,9 @@ extension Api {
 
 extension DataRequest {
 
-    /// 发送一个请求, 拿到最原始的数据
+    /// 发送一个请求, 拿到最原始的数据, 请优先判断error
     @discardableResult
-    func request(_ onResult: @escaping (AFDataResponse<Data?>?, Error?) -> Void) -> DataRequest {
+    func request(_ onResult: @escaping (AFDataResponse<Data?>, Error?) -> Void) -> DataRequest {
         let request: DataRequest = self
         response { response in
             Api.requestHold.remove(request)
@@ -80,7 +80,7 @@ extension DataRequest {
                 //let json = JSON(value) //获取json对象
                 onResult(response, nil)
             case .failure(let error):
-                onResult(nil, error)
+                onResult(response, error)
             }
         }
         Api.requestHold.append(request)
@@ -130,6 +130,22 @@ extension DataRequest {
                 onResult(value, nil)
             case .failure(let error):
                 onResult(nil, error)
+            }
+        }
+        Api.requestHold.append(request)
+        return request
+    }
+
+    @discardableResult
+    func requestDecodableRes<T: Decodable>(_ onResult: @escaping (AFDataResponse<T>, Error?) -> Void) -> DataRequest {
+        let request: DataRequest = self
+        responseDecodable { (response: AFDataResponse<T>) in
+            Api.requestHold.remove(request)
+            switch response.result {
+            case .success(_):
+                onResult(response, nil)
+            case .failure(let error):
+                onResult(response, error)
             }
         }
         Api.requestHold.append(request)

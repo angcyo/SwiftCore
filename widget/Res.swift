@@ -31,6 +31,8 @@ struct Res {
         static var white = UIColor.white
         static var line = UIColor.parse("#ECECEC")
         static var bg = UIColor.parse("#F3F5F9")
+
+        static var shadowColor = UIColor.parse("#2B2B2B")
     }
 
     // MARK: - 尺寸资源

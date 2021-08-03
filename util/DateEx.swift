@@ -21,7 +21,7 @@ extension Date {
     }
 }
 
-/// 当前时间秒 1627973675.1392469 978307200
+/// 当前时间秒 1627973675.1392469    //978307200
 var nowTime: Double {
     Date().timeIntervalSince1970
 }

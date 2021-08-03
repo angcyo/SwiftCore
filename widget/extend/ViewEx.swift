@@ -59,7 +59,7 @@ extension UIView {
         }
     }
 
-    /**将UIVIew转换成UIImage*/
+    /// 将UIVIew转换成UIImage UIView截图
     func toImage() -> UIImage? {
         let size = bounds.size
         UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
@@ -172,8 +172,16 @@ extension UIView {
     }
 
     /// 同时设置4个角的圆角
-    func setRadius(_ radius: Float) {
+    func setRadius(_ radius: Float = Res.size.roundNormal) {
         layer.cornerRadius = CGFloat(radius)
+    }
+
+    func setRadiusBorder(_ radius: Float = Res.size.roundNormal,
+                         borderColor: UIColor? = Res.color.colorAccent,
+                         borderWidth: Float = Res.size.line) {
+        layer.cornerRadius = CGFloat(radius)
+        layer.borderColor = borderColor?.cgColor
+        layer.borderWidth = CGFloat(borderWidth)
     }
 
     /// 单独设置4个角的圆角
@@ -295,11 +303,47 @@ extension UIView {
             layer.addSublayer(borderLayer)
         }
     }
+
+    /// 设置阴影
+    func shadow(_ color: UIColor = Res.color.shadowColor, radius: Float = 5, size: CGSize = CGSize(width: 4, height: 4)) {
+        layer.shadowColor = color.cgColor
+        layer.shadowOffset = size
+        layer.shadowOpacity = 1;
+        layer.shadowRadius = CGFloat(radius)
+    }
 }
 
 /// 将控件的操作放在动画中执行, 相当于Android的transition
 func animate(_ duration: TimeInterval, _ animations: @escaping () -> Void) {
     UIView.animate(withDuration: duration, animations: animations)
+}
+
+/// 获取一个渐变 图层
+func gradientLayer(frame: CGRect,
+                   colors: [Any]? = [Res.color.colorPrimary, Res.color.colorPrimaryDark]) -> CAGradientLayer {
+    let layer = CAGradientLayer()
+
+    layer.frame = frame
+    layer.colors = colors
+
+    //layer.cornerRadius
+
+    //layer.locations = []
+
+    layer.startPoint = CGPoint(x: 0, y: 0)
+    layer.endPoint = CGPoint(x: 1, y: 1)
+
+    return layer
+
+    //    CAGradientLayer *graLayer = [CAGradientLayer layer];
+    //    graLayer.frame = CGRectMake(100, 100, 200, 200);
+    //    graLayer.colors = @[
+    //        (__bridge id)[UIColor redColor].CGColor,
+    //    (__bridge id)[UIColor yellowColor].CGColor
+    //    ];
+    ////    graLayer.locations = @[@0, @0.2];
+    //    graLayer.startPoint = CGPointMake(0, 0);
+    //    graLayer.endPoint = CGPointMake(1, 1);
 }
 
 func view(_ color: Any? = nil) -> UIView {

@@ -62,19 +62,33 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     // MARK: item操作
 
-    func setItems(items: [DslItem]) {
+    func setItems(_ items: [DslItem]) {
         items.forEach { (item: DslItem) in
             if let itemCell = item.itemCell {
                 let identifier = item.identifier
                 self.register(itemCell, forCellReuseIdentifier: identifier)
             }
         }
-        self.itemArray = items
+        itemArray = items
+        reloadData()
     }
 
-   /* static func +(tableView: DslTableView, item: DslItem) {
+    func addItem(_ item: DslItem) {
+        if let itemCell = item.itemCell {
+            let identifier = item.identifier
+            self.register(itemCell, forCellReuseIdentifier: identifier)
+        }
+        itemArray.append(item)
+        insertRows(at: [IndexPath(row: itemArray.count - 1, section: 0)], with: .automatic)
+    }
 
-    }*/
+    // MARK: 操作符重载
+
+    @discardableResult
+    static func +(tableView: DslTableView, item: DslItem) -> DslItem {
+        tableView.addItem(item)
+        return item
+    }
 
     // MARK: dataSource代理
 

@@ -42,6 +42,11 @@ class Http {
 
     var encoding: ParameterEncoding = URLEncoding.default
 
+    /// 添加请求头
+    func addHeader(_ name: String, _ value: Any) {
+        headers.append(HTTPHeader(name: name, value: "\(value)"))
+    }
+
     func doIt() -> DataRequest {
         var _url = url
         if url?.starts(with: "http") == true {
@@ -114,7 +119,7 @@ class Http {
     }
 }
 
-func connectUrl(host: String?, url: String?) -> String {
+func connectUrl(host: String? = Http.HOST, url: String?) -> String {
     var _host = host ?? ""
     var _url = url ?? ""
     if _host.reversed().starts(with: "/") == true {
@@ -135,6 +140,14 @@ extension URL {
         return queryItems.reduce(into: [String: String]()) { (result, item) in
             result[item.name] = item.value
         }
+    }
+}
+
+extension Data {
+
+    /// Dta 转换成字符串
+    func toString() -> String {
+        String(decoding: self, as: UTF8.self)
     }
 }
 
