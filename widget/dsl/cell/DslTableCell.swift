@@ -25,14 +25,20 @@ class DslTableCell: UITableViewCell, DslCell {
 
     // 初始化对象
     func initCell() {
+
+        // 右边图标样式
         accessoryType = .none
         //右箭头
         //accessoryType = .disclosureIndicator
+
+        // 选中样式
+        selectionStyle = .blue
     }
 
     // 重写此方法, 在复用之前准备cell
     override func prepareForReuse() {
         super.prepareForReuse()
+        debugPrint("prepareForReuse")
     }
 
     func onBindCell(_ tableView: DslTableView, _ indexPath: IndexPath, _ item: DslItem) {
@@ -49,6 +55,16 @@ class DslTableCell: UITableViewCell, DslCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         debugPrint("awakeFromNib")
+    }
+
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        debugPrint("setEditing:\(editing):\(animated)")
+    }
+
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        debugPrint("setHighlighted:\(highlighted):\(animated)")
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

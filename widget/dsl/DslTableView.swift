@@ -20,14 +20,14 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     func initTableView() {
 
+        // 高度自适应
         estimatedSectionHeaderHeight = UITableView.automaticDimension
         sectionHeaderHeight = UITableView.automaticDimension
+        estimatedSectionFooterHeight = UITableView.automaticDimension
+        sectionFooterHeight = UITableView.automaticDimension
 
         estimatedRowHeight = UITableView.automaticDimension
         rowHeight = UITableView.automaticDimension
-
-        estimatedSectionFooterHeight = UITableView.automaticDimension
-        sectionFooterHeight = UITableView.automaticDimension
 
         tableHeaderView = nil
         tableFooterView = nil
@@ -132,11 +132,13 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     /// section 的头部标题
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "SectionHeader:\(section)"
+        //return "SectionHeader:\(section)"
+        return nil
     }
 
     func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        return "SectionFooter:\(section)"
+        //return "SectionFooter:\(section)"
+        return nil
     }
 
     /// 是否可以编辑
@@ -220,7 +222,7 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        return 20
+        return UITableView.automaticDimension
     }
 
     /// 尾部的高度
@@ -229,7 +231,7 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
-        return 20
+        return UITableView.automaticDimension
     }
 
     // MARK: 首尾试图获取
@@ -252,17 +254,17 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     // MARK: 突出和选中
 
-    /// 是否突出显示行
+    /// 是否突出显示行, 只有返回true, didSelectRowAt 才有机会触发
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        return false
+        return true
     }
 
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
-        debugPrint("已突出:\(indexPath)")
+        debugPrint("突出显示:\(indexPath)")
     }
 
     func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
-        debugPrint("已不突出:\(indexPath)")
+        debugPrint("取消突出:\(indexPath)")
     }
 
     /// 将要选中行

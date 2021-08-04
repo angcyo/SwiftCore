@@ -97,5 +97,33 @@ func showViewController(_ viewControllerToPresent: UIViewController,
 
     //root.show(<#T##vc: UIViewController##UIKit.UIViewController#>, sender: <#T##Any?##Any?#>)
     //root.showDetailViewController(<#T##vc: UIViewController##UIKit.UIViewController#>, sender: <#T##Any?##Any?#>)
-    root.present(viewControllerToPresent, animated: flag, completion: completion)
+    if let nav = root as? UINavigationController {
+        nav.pushViewController(viewControllerToPresent, animated: flag)
+        completion?()
+    } else {
+        root.present(viewControllerToPresent, animated: flag, completion: completion)
+    }
+}
+
+/// 隐藏一个[UIViewController]
+func hideViewController(_ viewControllerToPresent: UIViewController,
+                        animated flag: Bool = true,
+                        completion: (() -> Void)? = nil) {
+    guard let window = UIApplication.mainWindow else {
+        return
+    }
+    guard let root = window.rootViewController else {
+        return
+    }
+    //https://www.jianshu.com/p/c7dc152724b2#comments
+    //viewControllerToPresent.modalPresentationStyle = .fullScreen
+
+    //root.show(<#T##vc: UIViewController##UIKit.UIViewController#>, sender: <#T##Any?##Any?#>)
+    //root.showDetailViewController(<#T##vc: UIViewController##UIKit.UIViewController#>, sender: <#T##Any?##Any?#>)
+    if let nav = root as? UINavigationController {
+        nav.popViewController(animated: flag)
+        completion?()
+    } else {
+        root.dismiss(animated: flag, completion: completion)
+    }
 }

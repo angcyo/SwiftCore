@@ -5,7 +5,8 @@
 import Foundation
 import UIKit
 
-class BaseTabBarController: UITabBarController {
+class BaseTabBarController: UITabBarController, Navigation {
+
     init() {
         super.init(nibName: nil, bundle: nil)
         debugPrint("\(threadName())->创建:\(self)")
@@ -16,8 +17,11 @@ class BaseTabBarController: UITabBarController {
         super.init(coder: coder)
     }
 
+    var showNavigationBar: Bool = false
+
     func initController() {
         //init
+        //tabBarItem = nil
     }
 
     /// Swift 的ARC, 在创建对象之后, 没有被引用会立马被回收.
@@ -25,4 +29,5 @@ class BaseTabBarController: UITabBarController {
     deinit {
         debugPrint("\(threadName())->销毁:\(self)")
     }
+
 }

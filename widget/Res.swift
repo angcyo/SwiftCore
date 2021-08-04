@@ -52,6 +52,12 @@ struct Res {
     // MARK: - 字体资源
 
     struct font {
+
+        static func get(_ size: Float = Float(text.normal.size), _ weight: Float = Float(UIFont.Weight.regular.rawValue)) -> UIFont {
+            UIFont.systemFont(ofSize: CGFloat(size), weight: UIFont.Weight(CGFloat(weight)))
+        }
+
         static var normal = UIFont.systemFont(ofSize: CGFloat(text.normal.size), weight: .regular)
+
     }
 }

@@ -7,7 +7,7 @@ import UIKit
 import RxSwift
 
 /// base by Rx
-class BaseViewController: UIViewController {
+class BaseViewController: UIViewController, Navigation {
 
     //Rx 自动取消订阅,
     lazy var disposeBag: DisposeBag = {
@@ -26,6 +26,8 @@ class BaseViewController: UIViewController {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
+
+    var showNavigationBar: Bool = true
 
     func initController() {
         //init
