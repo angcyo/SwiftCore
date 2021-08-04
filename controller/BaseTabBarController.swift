@@ -22,6 +22,8 @@ class BaseTabBarController: UITabBarController, Navigation {
     func initController() {
         //init
         //tabBarItem = nil
+        //tabBarItem
+        //tabBar
     }
 
     /// Swift 的ARC, 在创建对象之后, 没有被引用会立马被回收.

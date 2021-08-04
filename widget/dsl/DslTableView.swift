@@ -428,6 +428,10 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     /// 内容已经滚动
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         //debugPrint("scrollViewDidScroll:\(scrollView.contentOffset)")
+        /*if let cell = cellForRow(at: IndexPath(row: 0, section: 0)) {
+            debugPrint(cell)
+            cell.frame = CGRect(x: 0, y: 0, width: cell.frame.width, height: 200 - scrollView.contentOffset.y)
+        }*/
     }
 
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
@@ -451,7 +455,7 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     /// 即将开始减速滚动
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        debugPrint("scrollViewWillBeginDecelerating")
+        debugPrint("scrollViewWillBeginDecelerating:\(scrollView.contentOffset):\(scrollView.contentSize):\(scrollView.contentInset):\(scrollView.adjustedContentInset)")
     }
 
     /// 技术减速滚动

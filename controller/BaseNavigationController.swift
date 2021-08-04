@@ -69,12 +69,17 @@ class BaseNavigationController: UINavigationController, UINavigationControllerDe
         //navigationBar.standardAppearance.backgroundColor = UIColor.yellow
         //中间文本的属性
         //navigationBar.standardAppearance.titleTextAttributes[.backgroundColor] = UIColor.red
+        //中间文本的颜色
+        //navigationBar.standardAppearance.titleTextAttributes[.foregroundColor] = UIColor.white
         //返回按钮文本的属性
         //navigationBar.standardAppearance.backButtonAppearance.normal.titleTextAttributes[.foregroundColor] = UIColor.red
         //改变字体大小, 通过改变字体大小, 达到隐藏返回文本的效果
         //navigationBar.standardAppearance.backButtonAppearance.normal.titleTextAttributes[.font] = Res.font.get(0.01)
         //设置返回图片
         //navigationBar.standardAppearance.setBackIndicatorImage(R.image.icon_password(), transitionMaskImage: R.image.icon_password())
+        //阴影图片/颜色
+        //navigationBar.standardAppearance.shadowImage = nil
+        //navigationBar.standardAppearance.shadowColor = UIColor.clear
         //背景图片
         //navigationBar.setBackgroundImage(R.image.icon_password(), for: .default)
     }
