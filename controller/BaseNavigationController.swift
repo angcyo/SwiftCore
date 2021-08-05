@@ -5,7 +5,11 @@
 import Foundation
 import UIKit
 
-class BaseNavigationController: UINavigationController, UINavigationControllerDelegate, UINavigationBarDelegate {
+/// 导航控制器
+class BaseNavigationController: UINavigationController,
+        UINavigationControllerDelegate,
+        UINavigationBarDelegate,
+        UIGestureRecognizerDelegate {
 
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -45,6 +49,10 @@ class BaseNavigationController: UINavigationController, UINavigationControllerDe
 
         //barHideOnSwipeGestureRecognizer
         //barHideOnTapGestureRecognizer
+
+        // 侧滑手势
+        interactivePopGestureRecognizer?.isEnabled = true
+        interactivePopGestureRecognizer?.delegate = self
 
         //toolbar 显示在界面底部的工具栏
         //setToolbarHidden(false, animated: true)
@@ -157,5 +165,43 @@ class BaseNavigationController: UINavigationController, UINavigationControllerDe
     func position(for bar: UIBarPositioning) -> UIBarPosition {
         debugPrint("position:\(bar)")
         return bar.barPosition
+    }
+
+    //MARK: 侧滑手势代理
+
+    /// 是否可以触摸
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if viewControllers.count <= 1 {
+            return false
+        }
+        return true
+    }
+
+    /// 是否需要双指触摸
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
+
+    /// 需要接收触摸的对象
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        return true
+    }
+
+    /// 需要接收按下的对象
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive press: UIPress) -> Bool {
+        return true
+    }
+
+    /// 需要接收对象
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive event: UIEvent) -> Bool {
+        return true
     }
 }
