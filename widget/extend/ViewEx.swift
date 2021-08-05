@@ -7,12 +7,16 @@ import UIKit
 
 class TargetObserver {
     /// dsl
-    var onAction: (() -> Void)? = nil
+    var onAction: ((UIResponder) -> Void)? = nil
 
     /// 回调
-    @objc func onActionInner(sender: UIView) {
+    @objc func onActionInner(sender: UIResponder) {
         debugPrint("onActionInner:\(sender)")
-        onAction?()
+        onAction?(sender)
+    }
+
+    deinit {
+        debugPrint("\(threadName())->销毁:\(self)")
     }
 }
 
@@ -52,10 +56,10 @@ extension UIView {
     ///控件的名字, 可以用来查找控件
     var viewName: String? {
         get {
-            objc_getAssociatedObject(self, &UIView.KEY_VIEW_NAME) as? String
+            getObject(&UIView.KEY_VIEW_NAME) as? String
         }
         set {
-            objc_setAssociatedObject(self, &UIView.KEY_VIEW_NAME, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            setObject(&UIView.KEY_VIEW_NAME, newValue)
         }
     }
 
@@ -239,16 +243,19 @@ extension UIView {
     ///   - controlEvents:
     ///   - action:
     /// - Returns:
-    func onClick(_ controlEvents: UIControl.Event = .touchUpInside, _ action: @escaping () -> Void) -> Any {
+    @discardableResult
+    func onClick(_ controlEvents: UIControl.Event = .touchUpInside, _ action: @escaping (UIResponder) -> Void) -> Any {
         let observer = TargetObserver()
         observer.onAction = action
 
+        var keyOnClick = "key_on_click"
         //self.isUserInteractionEnabled = true
 
         if self is UIControl {
             (self as! UIControl).addTarget(observer,
                     action: #selector(TargetObserver.onActionInner(sender:)),
                     for: controlEvents)
+            setObject(&keyOnClick, observer)
             return observer
         } else {
             let gesture = UITapGestureRecognizer(target: observer,
@@ -264,6 +271,7 @@ extension UIView {
             //添加手势
             addGestureRecognizer(gesture)
 
+            setObject(&keyOnClick, gesture)
             return gesture
         }
     }

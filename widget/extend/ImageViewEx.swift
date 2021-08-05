@@ -64,3 +64,10 @@ func img(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
 func image(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
     img(image, tintColor: tintColor)
 }
+
+/// 图标
+func icon(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
+    let view = img(image, tintColor: tintColor)
+    view.contentMode = .center
+    return view
+}

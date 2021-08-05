@@ -3,7 +3,9 @@
 //
 
 import Foundation
+import UIKit
 import RxSwift
+import RxCocoa
 import RxGesture
 
 ///https://github.com/RxSwiftCommunity/RxGesture
@@ -49,3 +51,16 @@ view.rx.anyGesture(.screenEdgePan(), ...) -> ControlEvent<UIGestureRecognizer>
 view.rx.anyGesture(.hover(), ...)         -> ControlEvent<UIGestureRecognizer>
 
  */
+
+extension UIView {
+
+    /// 点击事件
+    func onClick(bag: DisposeBag, _ action: @escaping (UITapGestureRecognizer) -> Void) {
+        rx.tapGesture()
+                .when(.recognized)
+                .subscribe(onNext: { event in
+                    action(event)
+                })
+                .disposed(by: bag)
+    }
+}

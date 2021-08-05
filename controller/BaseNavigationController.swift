@@ -116,7 +116,8 @@ class BaseNavigationController: UINavigationController,
     }
 
     func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
-        debugPrint("已经显示VC:\(viewController):\(animated)")
+        //"已经显示VC:<Wayto_GBSecurity_iOS.HomeController: 0x117d08390>:true:(0.0, 44.0, 375.0, 44.0)"
+        debugPrint("已经显示VC:\(viewController):\(animated):\(navigationController.navigationBar.frame)")
     }
 
     /// 支持的屏幕方向

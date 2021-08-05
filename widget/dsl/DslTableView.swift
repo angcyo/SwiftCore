@@ -533,7 +533,8 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     }
 
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        debugPrint("viewForZooming:\(scrollView.zoomScale):\(scrollView.minimumZoomScale):\(scrollView.maximumZoomScale)")
+        //这里调用 scrollView.zoomScale 会死循环
+        debugPrint("viewForZooming:\(scrollView.minimumZoomScale):\(scrollView.maximumZoomScale)")
         return nil
     }
 
@@ -542,7 +543,7 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     }
 
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        debugPrint("scrollViewDidEndZooming")
+        debugPrint("scrollViewDidEndZooming:\(view):\(scale)")
     }
 
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {

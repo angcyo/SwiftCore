@@ -51,6 +51,11 @@ extension UIApplication {
     static func isUserInteractionEnabled(_ enable: Bool = true) {
         mainWindow?.isUserInteractionEnabled = enable
     }
+
+    /// 返回状态栏的frame
+    static var statusBarFrame: CGRect? {
+        statusBarManager()?.statusBarFrame
+    }
 }
 
 /// 创建一个新的UIWindow, 返回对象需要hold,否则会被arc回收

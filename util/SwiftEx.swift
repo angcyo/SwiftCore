@@ -39,5 +39,17 @@ extension NSObject {
             }
         }
     }
+
+    // MARK: 对象扩展
+
+    /// 设置对象数据
+    func setObject(_ key: inout  String, _ value: Any?, _ policy: objc_AssociationPolicy = .OBJC_ASSOCIATION_RETAIN_NONATOMIC) {
+        objc_setAssociatedObject(self, &key, value, policy)
+    }
+
+    /// 获取对象数据
+    func getObject(_ key: inout String) -> Any? {
+        objc_getAssociatedObject(self, &key)
+    }
 }
 
