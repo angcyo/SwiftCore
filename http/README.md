@@ -25,3 +25,11 @@ pod 'RxSwiftExt' #, '6.0.1'
 # https://github.com/Alamofire/AlamofireImage
 pod 'AlamofireImage', '~> 4.2.0'
 ```
+
+## RxSwift 中文文档 · RxSwift 中文文档
+
+https://beeth0ven.github.io/RxSwift-Chinese-Documentation/
+
+## RxSwift 生态系统
+
+https://beeth0ven.github.io/RxSwift-Chinese-Documentation/content/rxswift_ecosystem.html

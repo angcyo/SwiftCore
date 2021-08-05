@@ -313,11 +313,6 @@ extension UIView {
     }
 }
 
-/// 将控件的操作放在动画中执行, 相当于Android的transition [duration]秒
-func animate(_ duration: TimeInterval = TimeInterval(0.3), _ animations: @escaping () -> Void) {
-    UIView.animate(withDuration: duration, animations: animations)
-}
-
 /// 获取一个渐变 图层
 func gradientLayer(frame: CGRect,
                    colors: [Any]? = [Res.color.colorPrimary, Res.color.colorPrimaryDark]) -> CAGradientLayer {

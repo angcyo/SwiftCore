@@ -13,14 +13,14 @@ import Foundation
    - delay: 延迟时长, 秒. 支持小数.
    - qos: 调度质量要求
    - action: 执行回调*/
-func doMain(_ delay: TimeInterval = 0, _ qos: DispatchQoS = .userInitiated, action: @escaping () -> Void) {
+func doMain(_ delay: Float = 0, _ qos: DispatchQoS = .userInitiated, action: @escaping () -> Void) {
     //print(delay)
-    DispatchQueue.main.asyncAfter(deadline: .now() + delay, qos: qos, execute: action)
+    DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(delay), qos: qos, execute: action)
 }
 
 /**后台执行*/
-func doBack(_ delay: TimeInterval = 0, _ qos: DispatchQoS = .background, action: @escaping () -> Void) {
-    DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + delay, qos: qos, execute: action)
+func doBack(_ delay: Float = 0, _ qos: DispatchQoS = .background, action: @escaping () -> Void) {
+    DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + TimeInterval(delay), qos: qos, execute: action)
 }
 
 /// 在子线程等待异步方法结束, 再继续执行

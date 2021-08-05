@@ -7,7 +7,16 @@ import UIKit
 
 class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
-    var itemArray: [DslItem] = []
+    /// 所有的数据集合, 但非全部在界面上显示
+    var itemList: [DslItem] = []
+
+    lazy var diffableDataSource: DslTableViewDiffableDataSource = {
+        DslTableViewDiffableDataSource(self)
+    }()
+
+    lazy var sectionHelper: SectionHelper = {
+        SectionHelper()
+    }()
 
     override init(frame: CGRect, style: Style = .plain) {
         super.init(frame: frame, style: style)
@@ -57,44 +66,81 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         allowsMultipleSelectionDuringEditing = false
 
         delegate = self
-        dataSource = self
+        dataSource = diffableDataSource
     }
 
-    // MARK: item操作
+    // MARK: 加载item的机制
 
-    func setItems(_ items: [DslItem]) {
+    /// 是否需要重新加载items
+    var needsReload = true {
+        didSet {
+            if needsReload {
+                // 需要更新数据
+                setNeedsLayout()
+            }
+        }
+    }
+
+    /// 确保一个周期内, 触发一次更新
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if needsReload {
+            loadData(itemList)
+        }
+    }
+
+    /// 强制加载数据
+    func loadData(_ items: [DslItem], animatingDifferences: Bool? = nil, completion: (() -> Void)? = nil) {
+        var animate = true
+        if animatingDifferences == nil {
+            // 智能判断是否要动画
+            animate = !sectionHelper.visibleItems.isEmpty
+        } else {
+            animate = animatingDifferences!
+        }
+
+        registerItemCell(items)
+
+        ///diff 更新数据
+        doMain {
+            let snapshot = self.sectionHelper.createSnapshot(self.itemList)
+            //Please always submit updates either always on the main queue or always off the main queue
+            self.diffableDataSource.apply(snapshot, animatingDifferences: animate, completion: completion)
+        }
+
+        needsReload = false
+    }
+
+    /// 注册cell
+    func registerItemCell(_ items: [DslItem]) {
         items.forEach { (item: DslItem) in
             if let itemCell = item.itemCell {
                 let identifier = item.identifier
                 self.register(itemCell, forCellReuseIdentifier: identifier)
             }
         }
-        itemArray = items
-        reloadData()
     }
+
+    // MARK: item操作
 
     @discardableResult
     func addItem(_ item: DslItem, _ dsl: ((DslItem) -> Void)? = nil) -> DslItem {
-        if let itemCell = item.itemCell {
-            let identifier = item.identifier
-            self.register(itemCell, forCellReuseIdentifier: identifier)
-        }
-        itemArray.append(item)
+        itemList.append(item)
         //init
         dsl?(item)
-        insertRows(at: [IndexPath(row: itemArray.count - 1, section: 0)], with: .automatic)
+        needsReload = true
         return item
     }
 
     /// 删除item
     @discardableResult
     func removeItem(_ item: DslItem) -> DslItem? {
-        let index = itemArray.firstIndex {
+        let index = itemList.firstIndex {
             $0 == item
         }
         if let index = index {
-            itemArray.remove(at: index)
-            deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+            itemList.remove(at: index)
+            needsReload = true
             return item
         }
         return nil
@@ -112,32 +158,49 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     /// section 中的数据行数
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemArray.count
+        return itemList.count
     }
 
     /// 获取cell
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = itemArray[indexPath.row]
+        let item = itemList[indexPath.row]
+        return createTableViewCell(tableView, cellForRowAt: indexPath, item: item)
+    }
+
+    /// 赋值和初始化
+    func createTableViewCell(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, item: DslItem) -> UITableViewCell {
+        //赋值
+        item._dslTableView = self
+
         let identifier = item.identifier
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
-        let tableCell = cell as! DslTableCell
-        tableCell.onBindCell(self, indexPath, item)
-        return tableCell
+        if let dslTableCell = cell as? DslTableCell {
+            dslTableCell.onBindCell(self, indexPath, item)
+            return dslTableCell
+        }
+        //兼容处理
+        if cell.frame.isEmpty {
+            cell.prepareForReuse()
+        }
+        return cell
     }
 
     /// section 的数量
     func numberOfSections(in tableView: UITableView) -> Int {
+        debugPrint("numberOfSections")
         return 1
     }
 
     /// section 的头部标题
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        //return "SectionHeader:\(section)"
+        debugPrint("titleForHeaderInSection:\(section)")
+//        return "SectionHeader:\(section)"
         return nil
     }
 
     func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        //return "SectionFooter:\(section)"
+        debugPrint("titleForFooterInSection:\(section)")
+//        return "SectionFooter:\(section)"
         return nil
     }
 
@@ -425,13 +488,14 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     // MARK: UIScrollView代理
 
+    /// 回调
+    var onScrollViewDidScroll: ((UITableView) -> Void)? = nil
+
     /// 内容已经滚动
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         //debugPrint("scrollViewDidScroll:\(scrollView.contentOffset)")
-        /*if let cell = cellForRow(at: IndexPath(row: 0, section: 0)) {
-            debugPrint(cell)
-            cell.frame = CGRect(x: 0, y: 0, width: cell.frame.width, height: 200 - scrollView.contentOffset.y)
-        }*/
+
+        onScrollViewDidScroll?(self)
     }
 
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
@@ -491,5 +555,43 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     func scrollViewDidChangeAdjustedContentInset(_ scrollView: UIScrollView) {
         debugPrint("scrollViewDidChangeAdjustedContentInset:\(scrollView.contentInset):\(scrollView.adjustedContentInset)")
+    }
+}
+
+///MARK: diff 数据源
+class DslTableViewDiffableDataSource: UITableViewDiffableDataSource<DslSection, DslItem> {
+
+    var dslTableView: DslTableView
+
+    init(_ tableView: DslTableView) {
+        dslTableView = tableView
+
+        //core
+        super.init(tableView: tableView) { view, indexPath, dslItem in
+            debugPrint("获取Cell:\(indexPath)")
+            return tableView.createTableViewCell(tableView, cellForRowAt: indexPath, item: dslItem)
+        }
+    }
+
+    //MARK: 转发
+
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        dslTableView.tableView(tableView, titleForHeaderInSection: section)
+    }
+
+    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        dslTableView.tableView(tableView, titleForFooterInSection: section)
+    }
+}
+
+//MARK: 高度变化的快速方法
+func changeFirstCellHeight(_ tableView: UITableView, defaultHeight: Float) {
+    if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) {
+        //debugPrint(cell)
+        let y = tableView.contentOffset.y
+        if y <= 0 {
+            //下拉的时候, 才放大. 上拉不处理
+            cell.frame = CGRect(x: 0, y: tableView.contentOffset.y, width: cell.frame.width, height: CGFloat(defaultHeight) - tableView.contentOffset.y)
+        }
     }
 }
