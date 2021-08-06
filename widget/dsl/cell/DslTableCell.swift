@@ -43,6 +43,7 @@ class DslTableCell: UITableViewCell, DslCell {
 
     func onBindCell(_ tableView: DslTableView, _ indexPath: IndexPath, _ item: DslItem) {
         debugPrint("onBindCell:\(indexPath)")
+        item.itemUpdate = false
     }
 
     /*override var contentView: UIView {
@@ -59,7 +60,7 @@ class DslTableCell: UITableViewCell, DslCell {
 
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
-        debugPrint("setEditing:\(editing):\(animated)")
+        //debugPrint("setEditing:\(editing):\(animated)")
     }
 
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {

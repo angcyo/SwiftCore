@@ -89,6 +89,11 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         }
     }
 
+    /// 立即更新
+    func loadDataNow(_ animatingDifferences: Bool? = nil, completion: (() -> Void)? = nil) {
+        loadData(itemList, animatingDifferences: animatingDifferences, completion: completion)
+    }
+
     /// 强制加载数据
     func loadData(_ items: [DslItem], animatingDifferences: Bool? = nil, completion: (() -> Void)? = nil) {
         var animate = true

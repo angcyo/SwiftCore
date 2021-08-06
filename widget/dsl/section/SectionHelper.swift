@@ -59,6 +59,17 @@ class SectionHelper {
         for section in _sectionList {
             snapshot.appendItems(section.items, toSection: section)
         }
+
+        // 需要更新的item集合
+        var _updateItemList: [DslItem] = []
+        for item in _itemList {
+            if item.itemUpdate {
+                _updateItemList.append(item)
+            }
+        }
+        snapshot.reloadItems(_updateItemList)
+
+        // 返回
         return snapshot
     }
 }

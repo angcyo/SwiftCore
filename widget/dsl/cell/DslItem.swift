@@ -32,6 +32,15 @@ class DslItem: NSObject {
         }
     }
 
+    /// 是否需要更新item, 在diff判断时使用, 在[@selector(onBindCell:::)]中取消
+    var itemUpdate: Bool = false {
+        willSet {
+            if newValue {
+                _dslTableView?.needsReload = true
+            }
+        }
+    }
+
     /// [自动赋值] 绑定的[DslTableView]视图 [@selector(createTableViewCell:cellForRowAt:item:)]
     var _dslTableView: DslTableView? = nil
 

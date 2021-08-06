@@ -56,7 +56,7 @@ func img(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
     view.clipsToBounds = true
 
     // 内容模式
-    view.contentMode = .scaleAspectFit
+    view.contentMode = .scaleAspectFill
 
     return view
 }

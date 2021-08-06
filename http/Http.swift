@@ -119,16 +119,40 @@ class Http {
     }
 }
 
-func connectUrl(_ host: String? = Http.HOST, url: String?) -> String {
+extension String {
+
+    /// 拼上host返回url
+    func toUrl(_ fileId: Int? = nil, schema: String = "") -> String {
+        let url = connectUrl(url: self, schema: schema)
+        if let id = fileId {
+            return connectParam(url, ["fileId": id])
+        }
+        return url
+    }
+}
+
+func connectUrl(_ host: String? = Http.HOST, url: String?, schema: String = "") -> String {
     var _host = host ?? ""
     var _url = url ?? ""
+
+    // 已经是http开头
+    if _url.starts(with: "http") {
+        return _url
+    }
+
+    // 去掉后面的/
     if _host.reversed().starts(with: "/") == true {
         _host.removeLast()
     }
+    // 去掉前面的/
     if _url.starts(with: "/") == true {
         _url.removeFirst()
     }
-    return "\(_host)/\(_url)"
+
+    if schema.starts(with: "/") {
+        return "\(_host)\(schema)/\(_url)"
+    }
+    return "\(_host)/\(schema)/\(_url)"
 }
 
 extension URL {
