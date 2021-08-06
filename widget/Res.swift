@@ -32,7 +32,11 @@ struct Res {
         static var line = UIColor.parse("#ECECEC")
         static var bg = UIColor.parse("#F3F5F9")
 
+        // 阴影颜色
         static var shadowColor = UIColor.parse("#2B2B2B")
+
+        // 灰色图标颜色
+        static var iconColor = UIColor.parse("#C3C7CF")
     }
 
     // MARK: - 尺寸资源
