@@ -46,7 +46,11 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         maximumZoomScale = 1
         bouncesZoom = true //当达到最大限制时, 是否开启zoom
 
-        contentInsetAdjustmentBehavior = .never //安全区域的行为
+        contentInsetAdjustmentBehavior = .automatic //安全区域的行为
+
+        //边界回弹
+        alwaysBounceVertical = true
+        alwaysBounceHorizontal = false
 
         //分割线
         separatorStyle = .none //取消分割线
@@ -129,6 +133,11 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     // MARK: item操作
 
     @discardableResult
+    func render(_ item: DslItem, _ dsl: ((DslItem) -> Void)? = nil) -> DslItem {
+        addItem(item, dsl)
+    }
+
+    @discardableResult
     func addItem(_ item: DslItem, _ dsl: ((DslItem) -> Void)? = nil) -> DslItem {
         itemList.append(item)
         //init
@@ -156,6 +165,14 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     @discardableResult
     static func +(tableView: DslTableView, item: DslItem) -> DslItem {
         tableView.addItem(item)
+        return item
+    }
+
+    // MARK: 辅助操作
+
+    func getItem(_ indexPath: IndexPath) -> DslItem {
+        let section = sectionHelper.sectionList[indexPath.section]
+        let item = section.items[indexPath.row]
         return item
     }
 
@@ -200,26 +217,24 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     /// section 的头部标题
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         debugPrint("titleForHeaderInSection:\(section)")
-//        return "SectionHeader:\(section)"
-        return nil
+        return sectionHelper.sectionList[section].firstItem?.itemHeaderTitle
     }
 
     func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         debugPrint("titleForFooterInSection:\(section)")
-//        return "SectionFooter:\(section)"
-        return nil
+        return sectionHelper.sectionList[section].firstItem?.itemFooterTitle
     }
 
     /// 是否可以编辑
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         debugPrint("canEditRowAt:\(indexPath)")
-        return false
+        return getItem(indexPath).itemCanEdit
     }
 
     /// 是否可以移动
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         debugPrint("canMoveRowAt:\(indexPath)")
-        return true
+        return getItem(indexPath).itemCanMove
     }
 
     /// titles
@@ -277,42 +292,54 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     /// 指定行高
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
+        //return UITableView.automaticDimension
+        getItem(indexPath).itemHeight
     }
 
     /// 预估的行高
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
+        //return 50
+        getItem(indexPath).itemEstimatedHeight
     }
 
     /// 头部的高度
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return UITableView.automaticDimension
+        //return UITableView.automaticDimension
+        debugPrint("heightForHeaderInSection:\(section)")
+        return sectionHelper.sectionList[section].firstItem?.itemHeaderHeight ?? UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        return UITableView.automaticDimension
+        //return UITableView.automaticDimension
+        debugPrint("estimatedHeightForHeaderInSection:\(section)")
+        return sectionHelper.sectionList[section].firstItem?.itemHeaderEstimatedHeight ?? UITableView.automaticDimension
     }
 
     /// 尾部的高度
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return UITableView.automaticDimension
+        //return UITableView.automaticDimension
+        debugPrint("heightForFooterInSection:\(section)")
+        return sectionHelper.sectionList[section].firstItem?.itemFooterHeight ?? UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
-        return UITableView.automaticDimension
+        //return UITableView.automaticDimension
+        debugPrint("estimatedHeightForFooterInSection:\(section)")
+        return sectionHelper.sectionList[section].firstItem?.itemFooterEstimatedHeight ?? UITableView.automaticDimension
     }
 
     // MARK: 首尾试图获取
 
     /// 返回头部试图
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return nil
+        debugPrint("viewForHeaderInSection:\(section)")
+        return sectionHelper.sectionList[section].firstItem?.itemHeaderView
     }
 
     /// 返回尾部试图
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return nil
+        debugPrint("viewForFooterInSection:\(section)")
+        return sectionHelper.sectionList[section].firstItem?.itemFooterView
     }
 
     /// 需要cell的样式为:accessoryType = .detailButton 或 .detailDisclosureButton
@@ -325,7 +352,7 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     /// 是否突出显示行, 只有返回true, didSelectRowAt 才有机会触发
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        return true
+        getItem(indexPath).itemCanHighlight
     }
 
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
@@ -339,12 +366,18 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     /// 将要选中行
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         debugPrint("即将选中:\(indexPath)")
-        return indexPath
+        if getItem(indexPath).itemCanSelect {
+            return indexPath
+        }
+        return nil
     }
 
     func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
         debugPrint("即将取消选中:\(indexPath)")
-        return indexPath
+        if getItem(indexPath).itemCanDeselect {
+            return indexPath
+        }
+        return nil
     }
 
     /// 选中的cell索引集合
@@ -547,6 +580,7 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     /// 技术减速滚动
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        //(0.0, -88.0):(375.0, 199.0):UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0):UIEdgeInsets(top: 88.0, left: 0.0, bottom: 34.0, right: 0.0)
         debugPrint("scrollViewDidEndDecelerating:\(scrollView.contentOffset):\(scrollView.contentSize):\(scrollView.contentInset):\(scrollView.adjustedContentInset)")
     }
 
@@ -579,6 +613,43 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     func scrollViewDidChangeAdjustedContentInset(_ scrollView: UIScrollView) {
         debugPrint("scrollViewDidChangeAdjustedContentInset:\(scrollView.contentInset):\(scrollView.adjustedContentInset)")
+    }
+
+    //MARK:Touch
+
+    /// 手势应该开始
+    override func touchesShouldBegin(_ touches: Set<UITouch>, with event: UIEvent?, in view: UIView) -> Bool {
+        super.touchesShouldBegin(touches, with: event, in: view)
+    }
+
+    /// 手势应该取消
+    override func touchesShouldCancel(in view: UIView) -> Bool {
+        super.touchesShouldCancel(in: view)
+    }
+
+    /// 手势开始
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        endEditing(true)
+    }
+
+    ///
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event)
+    }
+
+    /// 手势结束
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+    }
+
+    /// 手势取消
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+    }
+
+    override func touchesEstimatedPropertiesUpdated(_ touches: Set<UITouch>) {
+        super.touchesEstimatedPropertiesUpdated(touches)
     }
 }
 

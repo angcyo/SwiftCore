@@ -96,6 +96,9 @@ func textFieldView(_ placeholder: String? = "请输入...",
     view.placeholder = placeholder
     //view.font
     //view.textColor
+    view.tintColor = Res.color.colorAccent // 光标的颜色
+    //view.setValue(UIColor.red, forKeyPath: .pla)
+    //view.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [.foregroundColor: UIColor.red]) //占位文本的颜色
 
     //删除按钮
     //UITextFieldViewModeNever, 重不出现

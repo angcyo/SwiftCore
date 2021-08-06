@@ -48,8 +48,8 @@ extension UILabel {
 }
 
 func labelView(_ text: String? = nil,
-               size: Double = Res.text.des.size,
-               color: UIColor = Res.text.des.color) -> UILabel {
+               size: Double = Res.text.label.size,
+               color: UIColor = Res.text.label.color) -> UILabel {
     let view = UILabel()
     view.text = text
     view.font = UIFont.systemFont(ofSize: CGFloat(size), weight: .regular)

@@ -6,8 +6,11 @@ import Foundation
 import UIKit
 
 struct DslActionData {
+    /// 左边的图片
     var image: UIImage? = nil
+    /// 左边的文本
     var text: String? = nil
+    /// 右边的文本
     var detailText: String? = nil
 }
 
@@ -39,6 +42,14 @@ class DslActionCell: DslTableCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+    }
+}
 
+extension DslItem {
+    static var actionCell: DslItem {
+        let item = DslItem(DslActionCell.self)
+        item.itemHeight = 50
+        item.enableSelect()
+        return item
     }
 }

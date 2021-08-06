@@ -53,3 +53,15 @@ extension NSObject {
     }
 }
 
+/// 打印xxx
+func logIvarList(_ cls: AnyClass?) {
+    var count: UInt32 = 0
+    if let ivars = class_copyIvarList(cls, &count) {
+        for i in 0..<count {
+            let ivar = ivars[Int(i)];
+            debugPrint("name:\(ivar_getName(ivar)) type:\(ivar_getTypeEncoding(ivar))")
+        }
+    }
+}
+
+

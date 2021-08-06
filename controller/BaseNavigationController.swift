@@ -63,7 +63,8 @@ class BaseNavigationController: UINavigationController,
         //navigationBar.standardAppearance
 
         navigationBar.barStyle = .default
-        //navigationBar.isTranslucent = true //透明
+        navigationBar.isTranslucent = true //透明
+        //navigationBar.barTintColor = UIColor.red //背景着色
 
         //navigationBar.tintColor = UIColor.red //着色
         //navigationBar.backItem

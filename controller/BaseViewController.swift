@@ -27,6 +27,8 @@ class BaseViewController: UIViewController, Navigation {
         super.init(coder: coder)
     }
 
+    //MARK: 状态栏
+
     /// 状态栏样式
     override var preferredStatusBarStyle: UIStatusBarStyle {
         // 白色字体的状态栏
@@ -35,6 +37,14 @@ class BaseViewController: UIViewController, Navigation {
         //.darkContent
         //默认
         .default
+    }
+
+    override var prefersStatusBarHidden: Bool {
+        super.prefersStatusBarHidden
+    }
+
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        super.preferredStatusBarUpdateAnimation
     }
 
     var showNavigationBar: Bool = true
