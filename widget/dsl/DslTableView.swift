@@ -180,6 +180,7 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         let identifier = item.identifier
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
         if let dslTableCell = cell as? DslTableCell {
+            dslTableCell._item = item
             dslTableCell.onBindCell(self, indexPath, item)
             return dslTableCell
         }
@@ -346,12 +347,29 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         return indexPath
     }
 
+    /// 选中的cell索引集合
+    var selectList: [IndexPath] = []
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         debugPrint("选中:\(indexPath)")
+        selectList.append(indexPath)
     }
 
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         debugPrint("取消选中:\(indexPath)")
+        selectList.remove(indexPath)
+    }
+
+    /// 取消所有选中的行
+    func cancelSelected(_ animation: UITableView.RowAnimation = .automatic) {
+        //selectRow(at: <#T##IndexPath?##Foundation.IndexPath?#>, animated: <#T##Bool##Swift.Bool#>, scrollPosition: <#T##UITableView.ScrollPosition##UIKit.UITableView.ScrollPosition#>)
+        //deselectRow(at: <#T##IndexPath##Foundation.IndexPath#>, animated: <#T##Bool##Swift.Bool#>)
+        if dataSource != nil {
+            //deleteRows(at: selectList, with: animation)
+            for select in selectList {
+                itemList[select.row].itemUpdate = true
+            }
+        }
     }
 
     // MARK: 编辑和菜单

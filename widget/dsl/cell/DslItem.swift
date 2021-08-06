@@ -64,4 +64,9 @@ class DslItem: NSObject {
         itemCell = cell
         itemData = data
     }
+
+    //MARK: 界面回调 [DslTableCell]
+    var onEditing: ((_ editing: Bool, _ animated: Bool) -> Void)? = nil
+    var onHighlighted: ((_ highlighted: Bool, _ animated: Bool) -> Void)? = nil
+    var onSelected: ((_ selected: Bool, _ animated: Bool) -> Void)? = nil
 }

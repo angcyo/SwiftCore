@@ -26,14 +26,16 @@ func alertAction(_ title: String?,
 func showAlert(title: String? = nil,
                message: String? = nil,
                confirm: String = "确定",
-               cancel: Bool = true,
-               _ confirmAction: ((UIAlertController) -> Void)? = nil) -> UIAlertController {
+               cancel: String? = "取消",
+               _ confirmAction: ((_ alertViewController: UIAlertController, _ cancel: Bool) -> Void)? = nil) -> UIAlertController {
     let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
     alert.addAction(UIAlertAction(title: confirm, style: .default) { action in
-        confirmAction?(alert)
+        confirmAction?(alert, false)
     })
-    if cancel {
-        alert.addAction(UIAlertAction(title: "取消", style: .cancel))
+    if let cancel = cancel {
+        alert.addAction(UIAlertAction(title: cancel, style: .cancel) { action in
+            confirmAction?(alert, true)
+        })
     }
     showViewController(alert)
     return alert
@@ -44,12 +46,12 @@ func showAlert(title: String? = nil,
 func showInputAlert(title: String? = nil,
                     message: String? = nil,
                     confirm: String = "确定",
-                    cancel: Bool = true,
+                    cancel: String? = "取消",
                     placeholder: String? = "请输入...",
                     configTextField: ((UITextField) -> Void)? = nil,
-                    _ confirmAction: ((String?) -> Void)? = nil) -> UIAlertController {
-    let alert = showAlert(title: title, message: message, confirm: confirm, cancel: cancel) { alert in
-        confirmAction?(alert.getFirstText())
+                    _ confirmAction: ((_ text: String?, _ cancel: Bool) -> Void)? = nil) -> UIAlertController {
+    let alert = showAlert(title: title, message: message, confirm: confirm, cancel: cancel) { alert, cancel in
+        confirmAction?(alert.getFirstText(), cancel)
     }
     alert.addTextField { field in
         field.placeholder = placeholder

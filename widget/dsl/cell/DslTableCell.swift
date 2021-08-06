@@ -41,6 +41,9 @@ class DslTableCell: UITableViewCell, DslCell {
         debugPrint("prepareForReuse")
     }
 
+    /// [自动赋值] @selector(createTableViewCell:cellForRowAt:item:)
+    weak var _item: DslItem? = nil
+
     func onBindCell(_ tableView: DslTableView, _ indexPath: IndexPath, _ item: DslItem) {
         debugPrint("onBindCell:\(indexPath)")
         item.itemUpdate = false
@@ -61,16 +64,19 @@ class DslTableCell: UITableViewCell, DslCell {
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         //debugPrint("setEditing:\(editing):\(animated)")
+        _item?.onEditing?(editing, animated)
     }
 
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
         debugPrint("setHighlighted:\(highlighted):\(animated)")
+        _item?.onHighlighted?(highlighted, animated)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         debugPrint("setSelected:\(selected):\(animated)")
+        _item?.onSelected?(selected, animated)
     }
 
     override func draw(_ rect: CGRect) {

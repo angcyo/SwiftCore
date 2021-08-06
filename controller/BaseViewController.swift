@@ -39,8 +39,10 @@ class BaseViewController: UIViewController, Navigation {
 
     var showNavigationBar: Bool = true
 
+    /// 此方法会在[viewDidLoad]之后触发
     func initController() {
         //init
+        debugPrint("initController:\(self):\(view.bounds)")
     }
 
     /// 保存对象, 防止被ARC回收. 通常delegate都需要保存起来
@@ -56,6 +58,7 @@ class BaseViewController: UIViewController, Navigation {
     /// 加载试图
     override func viewDidLoad() {
         super.viewDidLoad()
+        debugPrint("viewDidLoad:\(self):\(view.bounds)")
     }
 
     /// 试图将要显示

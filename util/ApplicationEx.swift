@@ -19,6 +19,16 @@ extension UIApplication {
                 _result = UIApplication.shared.keyWindow
             }
             if _result == nil {
+                _result = sceneWindow
+            }
+            return _result
+        }
+    }
+
+    static var sceneWindow: UIWindow? {
+        get {
+            var _result: UIWindow?
+            if _result == nil {
                 if let scene = CoreSceneDelegate.connectScene {
                     _result = scene.windows.first {
                         $0.isKeyWindow
@@ -28,6 +38,7 @@ extension UIApplication {
             return _result
         }
     }
+
 
     /// 活跃的UIScene
     static var activeScene: UIScene? {
@@ -87,6 +98,11 @@ func hideKeyboard() {
     UIApplication.mainWindow?.endEditing(true)
 }
 
+/// 显示根vc
+func showRootViewController(_ rootViewController: UIViewController) {
+    UIApplication.sceneWindow?.rootViewController = rootViewController
+}
+
 /// 显示一个[UIViewController]
 func showViewController(_ viewControllerToPresent: UIViewController,
                         animated flag: Bool = true,
@@ -100,6 +116,12 @@ func showViewController(_ viewControllerToPresent: UIViewController,
     //https://www.jianshu.com/p/c7dc152724b2#comments
     //viewControllerToPresent.modalPresentationStyle = .fullScreen
 
+
+    if viewControllerToPresent is UIAlertController {
+        root.present(viewControllerToPresent, animated: flag, completion: completion)
+        return
+    }
+
     //root.show(<#T##vc: UIViewController##UIKit.UIViewController#>, sender: <#T##Any?##Any?#>)
     //root.showDetailViewController(<#T##vc: UIViewController##UIKit.UIViewController#>, sender: <#T##Any?##Any?#>)
     if let nav = root as? UINavigationController {
@@ -111,7 +133,7 @@ func showViewController(_ viewControllerToPresent: UIViewController,
 }
 
 /// 隐藏一个[UIViewController]
-func hideViewController(_ viewControllerToPresent: UIViewController,
+func hideViewController(_ viewController: UIViewController,
                         animated flag: Bool = true,
                         completion: (() -> Void)? = nil) {
     guard let window = UIApplication.mainWindow else {
@@ -129,6 +151,6 @@ func hideViewController(_ viewControllerToPresent: UIViewController,
         nav.popViewController(animated: flag)
         completion?()
     } else {
-        root.dismiss(animated: flag, completion: completion)
+        viewController.dismiss(animated: flag, completion: completion)
     }
 }
