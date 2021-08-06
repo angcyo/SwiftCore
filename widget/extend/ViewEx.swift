@@ -189,7 +189,7 @@ extension UIView {
     }
 
     /// 单独设置4个角的圆角
-    func setRound(_ radii: Float,
+    func setRound(_ radii: Float = Res.size.roundNormal,
                   topLeft: Bool = true, topRight: Bool = true,
                   bottomLeft: Bool = true, bottomRight: Bool = true) {
         if bounds.isEmpty {
@@ -220,19 +220,19 @@ extension UIView {
         }
     }
 
-    func setRoundTop(_ radii: Float) {
+    func setRoundTop(_ radii: Float = Res.size.roundNormal) {
         setRound(radii, topLeft: true, topRight: true, bottomLeft: false, bottomRight: false)
     }
 
-    func setRoundBottom(_ radii: Float) {
+    func setRoundBottom(_ radii: Float = Res.size.roundNormal) {
         setRound(radii, topLeft: false, topRight: false, bottomLeft: true, bottomRight: true)
     }
 
-    func setRoundLeft(_ radii: Float) {
+    func setRoundLeft(_ radii: Float = Res.size.roundNormal) {
         setRound(radii, topLeft: true, topRight: false, bottomLeft: true, bottomRight: false)
     }
 
-    func setRoundRight(_ radii: Float) {
+    func setRoundRight(_ radii: Float = Res.size.roundNormal) {
         setRound(radii, topLeft: false, topRight: true, bottomLeft: false, bottomRight: true)
     }
 

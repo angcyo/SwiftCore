@@ -40,7 +40,8 @@ struct Res {
     struct size {
         static var line: Float = 1
 
-        static var roundNormal: Float = 5
+        static var roundMin: Float = 5
+        static var roundNormal: Float = 10
         static var roundCommon: Float = 15
         static var roundMax: Float = 45
 

@@ -27,6 +27,16 @@ class BaseViewController: UIViewController, Navigation {
         super.init(coder: coder)
     }
 
+    /// 状态栏样式
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        // 白色字体的状态栏
+        //.lightContent
+        //黑色字体
+        //.darkContent
+        //默认
+        .default
+    }
+
     var showNavigationBar: Bool = true
 
     func initController() {
