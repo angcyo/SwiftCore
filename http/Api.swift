@@ -170,7 +170,7 @@ extension DataRequest {
         return request
     }
 
-    /// 获取json 对象
+    /// 获取json 对象, Pods/SwiftyJSON/Source/SwiftyJSON/SwiftyJSON.swift:82
     @discardableResult
     func requestJson(_ onResult: @escaping (JSON?, Error?) -> Void) -> DataRequest {
         let request: DataRequest = self

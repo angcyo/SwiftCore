@@ -19,7 +19,7 @@ class BaseViewController: UIViewController, Navigation {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        debugPrint("\(threadName())->创建:\(self)")
+        debugPrint("\(threadName())->创建:\(self):\(modalPresentationStyle.rawValue)") //pageSheet
         initController()
     }
 
@@ -58,6 +58,22 @@ class BaseViewController: UIViewController, Navigation {
     /// 保存对象, 防止被ARC回收. 通常delegate都需要保存起来
     func holdObj(_ obj: Any) {
         controllerData.append(obj)
+    }
+
+    /// 隐藏导航栏下的阴影
+    func hideNavigationShadow() {
+        setNavigationShadowColor(UIColor.clear)
+    }
+
+    func ensureNavigationStyle() {
+        if navigationItem.standardAppearance == nil {
+            navigationItem.standardAppearance = UINavigationBarAppearance()
+        }
+    }
+
+    func setNavigationShadowColor(_ color: UIColor?) {
+        ensureNavigationStyle()
+        navigationItem.standardAppearance?.shadowColor = color
     }
 
     override func loadView() {

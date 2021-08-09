@@ -8,8 +8,9 @@ import UIKit
 /// 数据和界面关联的item
 class DslItem: NSObject {
 
-    /// cell 界面
+    /// cell 界面, 必须
     /// 如果是在DslTableView中, 则必须是UITableViewCell的子类
+    /// 如果是在DslCollectionView中, 则必须是UICollectionViewCell的子类
     var itemCell: AnyClass? = nil
 
     /// itemCell 可复用的标识
@@ -28,6 +29,7 @@ class DslItem: NSObject {
         willSet {
             if itemHidden != newValue {
                 _dslTableView?.needsReload = true
+                _dslCollectionView?.needsReload = true
             }
         }
     }
@@ -37,12 +39,14 @@ class DslItem: NSObject {
         willSet {
             if newValue {
                 _dslTableView?.needsReload = true
+                _dslCollectionView?.needsReload = true
             }
         }
     }
 
     /// [自动赋值] 绑定的[DslTableView]视图 [@selector(createTableViewCell:cellForRowAt:item:)]
     var _dslTableView: DslTableView? = nil
+    var _dslCollectionView: DslCollectionView? = nil
 
     /// [自动赋值] 分组完成之后, 所在的section.
     var _itemSection: DslSection? = nil
@@ -65,48 +69,9 @@ class DslItem: NSObject {
         itemData = data
     }
 
-    //MARK: [DslTableView] 代理配置
-    var itemCanEdit: Bool = false
-    var itemCanMove: Bool = false
-    var itemCanHighlight: Bool = false
-    var itemCanSelect: Bool = false
-    var itemCanDeselect: Bool = false
-
-    /// 激活item的选择
-    func enableSelect(_ enable: Bool = true) {
-        itemCanHighlight = enable
-        itemCanSelect = enable
-        itemCanDeselect = enable
-    }
-
-    var itemHeight: CGFloat = UITableView.automaticDimension
-    var itemEstimatedHeight: CGFloat = 50
-
-    //MARK: [DslTableView] 代理配置-Header
-    var itemHeaderView: UIView? = nil
-    var itemHeaderTitle: String? = nil
-    var itemHeaderHeight: CGFloat = UITableView.automaticDimension
-    var itemHeaderEstimatedHeight: CGFloat = 0
-
-    //MARK: [DslTableView] 代理配置-Footer
-    var itemFooterView: UIView? = nil
-    var itemFooterTitle: String? = nil
-    var itemFooterHeight: CGFloat = UITableView.automaticDimension
-    var itemFooterEstimatedHeight: CGFloat = 0
-
-    //MARK: 界面回调 [DslTableCell]
-
-    /// [自动赋值]
-    var _itemEditing: Bool = false
-    /// [自动赋值]
-    var _itemHighlighted: Bool = false
-    /// [自动赋值]
-    var _itemSelected: Bool = false
-
     ///
-    var onBindCell: ((_ cell: DslTableCell, _ indexPath: IndexPath) -> Void)? = nil
+    var onBindTableCell: ((_ cell: DslTableCell, _ indexPath: IndexPath) -> Void)? = nil
 
-    var onEditing: ((_ editing: Bool, _ animated: Bool) -> Void)? = nil
-    var onHighlighted: ((_ highlighted: Bool, _ animated: Bool) -> Void)? = nil
-    var onSelected: ((_ selected: Bool, _ animated: Bool) -> Void)? = nil
+    //MARK: 回调 [DslCollectionCell]
+    var onBindCollectionCell: ((_ cell: DslCollectionCell, _ indexPath: IndexPath) -> Void)? = nil
 }

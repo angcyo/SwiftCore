@@ -6,8 +6,9 @@ import Foundation
 import UIKit
 
 /// 将控件的操作放在动画中执行, 相当于Android的transition [duration]秒
-func animate(_ duration: TimeInterval = TimeInterval(0.3), _ animations: @escaping () -> Void) {
-    UIView.animate(withDuration: duration, animations: animations)
+/// 注意: 需要调用 self.view.layoutIfNeeded() 触发动画
+func animate(_ duration: Double = 0.3, delay: Double = 0, options: UIView.AnimationOptions = [], _ animations: @escaping () -> Void) {
+    UIView.animate(withDuration: duration, delay: delay, options: options, animations: animations)
 }
 
 extension UIView {

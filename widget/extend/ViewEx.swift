@@ -349,6 +349,12 @@ func gradientLayer(frame: CGRect,
     //    graLayer.endPoint = CGPointMake(1, 1);
 }
 
+func emptyView(width: Float = Float.min, height: Float = Float.min) -> UIView {
+    let view = v()
+    view.frame = CGRect(x: 0, y: 0, width: CGFloat(width), height: CGFloat(height))
+    return view
+}
+
 func view(_ color: Any? = nil) -> UIView {
     v(color)
 }

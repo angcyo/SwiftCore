@@ -31,8 +31,8 @@ class DslActionCell: DslTableCell {
         accessoryType = .disclosureIndicator
     }
 
-    override func onBindCell(_ tableView: DslTableView, _ indexPath: IndexPath, _ item: DslItem) {
-        super.onBindCell(tableView, indexPath, item)
+    override func onBindTableCell(_ tableView: DslTableView, _ indexPath: IndexPath, _ item: DslItem) {
+        super.onBindTableCell(tableView, indexPath, item)
         if let data = item.itemData as? DslActionData {
             imageView?.image = data.image
             textLabel?.text = data.text
@@ -46,8 +46,8 @@ class DslActionCell: DslTableCell {
 }
 
 extension DslItem {
-    static var actionCell: DslItem {
-        let item = DslItem(DslActionCell.self)
+    static var actionCell: DslTableItem {
+        let item = DslTableItem(DslActionCell.self)
         item.itemHeight = 50
         item.enableSelect()
         return item

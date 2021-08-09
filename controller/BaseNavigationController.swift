@@ -63,7 +63,7 @@ class BaseNavigationController: UINavigationController,
         //navigationBar.standardAppearance
 
         navigationBar.barStyle = .default
-        navigationBar.isTranslucent = true //透明
+        //navigationBar.isTranslucent = true //透明
         //navigationBar.barTintColor = UIColor.red //背景着色
 
         //navigationBar.tintColor = UIColor.red //着色
@@ -108,6 +108,10 @@ class BaseNavigationController: UINavigationController,
             //navigationController.isNavigationBarHidden = !navigation.showNavigationBar
             navigationController.setNavigationBarHidden(!navigation.showNavigationBar, animated: animated)
         }
+
+        //viewController.navigationItem.standardAppearance?.shadowColor = UIColor.clear
+        //navigationController.navigationBar.standardAppearance.shadowImage = viewController.navigationItem.standardAppearance?.shadowImage
+        //navigationController.navigationBar.standardAppearance.shadowColor = viewController.navigationItem.standardAppearance?.shadowColor
 
         //在这里可以修改返回按钮
         //let backItem = UIBarButtonItem()

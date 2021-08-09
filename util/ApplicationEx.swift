@@ -103,39 +103,44 @@ func showRootViewController(_ rootViewController: UIViewController) {
     UIApplication.sceneWindow?.rootViewController = rootViewController
 }
 
-/// 显示一个[UIViewController]
-func showViewController(_ viewControllerToPresent: UIViewController,
-                        animated flag: Bool = true,
-                        completion: (() -> Void)? = nil) {
+/// 优先push, 否则show
+func push(_ viewControllerToPresent: UIViewController,
+          animated flag: Bool = true) {
     guard let window = UIApplication.mainWindow else {
         return
     }
     guard let root = window.rootViewController else {
         return
     }
-    //https://www.jianshu.com/p/c7dc152724b2#comments
-    //viewControllerToPresent.modalPresentationStyle = .fullScreen
-
-
-    if viewControllerToPresent is UIAlertController {
-        root.present(viewControllerToPresent, animated: flag, completion: completion)
-        return
-    }
-
-    //root.show(<#T##vc: UIViewController##UIKit.UIViewController#>, sender: <#T##Any?##Any?#>)
-    //root.showDetailViewController(<#T##vc: UIViewController##UIKit.UIViewController#>, sender: <#T##Any?##Any?#>)
     if let nav = root as? UINavigationController {
         nav.pushViewController(viewControllerToPresent, animated: flag)
-        completion?()
     } else {
-        root.present(viewControllerToPresent, animated: flag, completion: completion)
+        show(viewControllerToPresent, animated: flag)
     }
 }
 
-/// 隐藏一个[UIViewController]
-func hideViewController(_ viewController: UIViewController,
+/// show
+func show(_ viewControllerToPresent: UIViewController,
+          animated flag: Bool = true,
+          completion: (() -> Void)? = nil) {
+    guard let window = UIApplication.mainWindow else {
+        return
+    }
+    guard let root = window.rootViewController else {
+        return
+    }
+    root.present(viewControllerToPresent, animated: flag, completion: completion)
+}
+
+/// 显示一个[UIViewController]
+func showViewController(_ viewControllerToPresent: UIViewController,
                         animated flag: Bool = true,
                         completion: (() -> Void)? = nil) {
+    show(viewControllerToPresent, animated: flag, completion: completion)
+}
+
+func pop(_ viewController: UIViewController,
+         animated flag: Bool = true) {
     guard let window = UIApplication.mainWindow else {
         return
     }
@@ -149,8 +154,20 @@ func hideViewController(_ viewController: UIViewController,
     //root.showDetailViewController(<#T##vc: UIViewController##UIKit.UIViewController#>, sender: <#T##Any?##Any?#>)
     if let nav = root as? UINavigationController {
         nav.popViewController(animated: flag)
-        completion?()
     } else {
-        viewController.dismiss(animated: flag, completion: completion)
+        hide(viewController, animated: flag)
     }
+}
+
+func hide(_ viewController: UIViewController,
+          animated flag: Bool = true,
+          completion: (() -> Void)? = nil) {
+    viewController.dismiss(animated: flag, completion: completion)
+}
+
+/// 隐藏一个[UIViewController]
+func hideViewController(_ viewController: UIViewController,
+                        animated flag: Bool = true,
+                        completion: (() -> Void)? = nil) {
+    hide(viewController, animated: flag, completion: completion)
 }

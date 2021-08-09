@@ -49,10 +49,10 @@ class DslTableCell: UITableViewCell, DslCell {
     /// [自动赋值] @selector(createTableViewCell:cellForRowAt:item:)
     weak var _item: DslItem? = nil
 
-    func onBindCell(_ tableView: DslTableView, _ indexPath: IndexPath, _ item: DslItem) {
-        debugPrint("onBindCell:\(indexPath)")
+    func onBindTableCell(_ tableView: DslTableView, _ indexPath: IndexPath, _ item: DslItem) {
+        debugPrint("onBindTableCell:\(indexPath)")
         item.itemUpdate = false
-        item.onBindCell?(self, indexPath)
+        item.onBindTableCell?(self, indexPath)
     }
 
     /*override var contentView: UIView {
@@ -70,22 +70,22 @@ class DslTableCell: UITableViewCell, DslCell {
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         //debugPrint("setEditing:\(editing):\(animated)")
-        _item?._itemEditing = editing
-        _item?.onEditing?(editing, animated)
+        (_item as? DslTableItem)?._itemEditing = editing
+        (_item as? DslTableItem)?.onEditing?(editing, animated)
     }
 
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
         debugPrint("setHighlighted:\(highlighted):\(animated)")
-        _item?._itemHighlighted = highlighted
-        _item?.onHighlighted?(highlighted, animated)
+        (_item as? DslTableItem)?._itemHighlighted = highlighted
+        (_item as? DslTableItem)?.onHighlighted?(highlighted, animated)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         debugPrint("setSelected:\(selected):\(animated)")
-        _item?._itemSelected = selected
-        _item?.onSelected?(selected, animated)
+        (_item as? DslTableItem)?._itemSelected = selected
+        (_item as? DslTableItem)?.onSelected?(selected, animated)
     }
 
     override func draw(_ rect: CGRect) {

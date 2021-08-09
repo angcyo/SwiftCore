@@ -5,7 +5,7 @@
 import Foundation
 import UIKit
 
-class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
+class DslTableView: UITableView, UITableViewDelegate/*, UITableViewDataSource*/ {
 
     /// 所有的数据集合, 但非全部在界面上显示
     var itemList: [DslItem] = []
@@ -38,7 +38,9 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         estimatedRowHeight = UITableView.automaticDimension
         rowHeight = UITableView.automaticDimension
 
+        // 表头
         tableHeaderView = nil
+        // 表尾
         tableFooterView = nil
 
         bounces = true //边界回弹
@@ -133,12 +135,12 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     // MARK: item操作
 
     @discardableResult
-    func render(_ item: DslItem, _ dsl: ((DslItem) -> Void)? = nil) -> DslItem {
+    func load<Item: DslItem>(_ item: Item, _ dsl: ((Item) -> Void)? = nil) -> Item {
         addItem(item, dsl)
     }
 
     @discardableResult
-    func addItem(_ item: DslItem, _ dsl: ((DslItem) -> Void)? = nil) -> DslItem {
+    func addItem<Item: DslItem>(_ item: Item, _ dsl: ((Item) -> Void)? = nil) -> Item {
         itemList.append(item)
         //init
         dsl?(item)
@@ -176,11 +178,20 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         return item
     }
 
+    func getTableItem(_ indexPath: IndexPath) -> DslTableItem {
+        getItem(indexPath) as! DslTableItem
+    }
+
+    func getSectionFirstItem(_ section: Int) -> DslTableItem? {
+        return sectionHelper.sectionList[section].firstItem as? DslTableItem
+    }
+
     // MARK: dataSource代理
 
     /// section 中的数据行数
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemList.count
+        //return itemList.count
+        return sectionHelper.sectionList[section].items.count
     }
 
     /// 获取cell
@@ -198,7 +209,7 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
         if let dslTableCell = cell as? DslTableCell {
             dslTableCell._item = item
-            dslTableCell.onBindCell(self, indexPath, item)
+            dslTableCell.onBindTableCell(self, indexPath, item)
             return dslTableCell
         }
         //兼容处理
@@ -211,30 +222,30 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     /// section 的数量
     func numberOfSections(in tableView: UITableView) -> Int {
         debugPrint("numberOfSections")
-        return 1
+        return sectionHelper.sectionList.count
     }
 
     /// section 的头部标题
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         debugPrint("titleForHeaderInSection:\(section)")
-        return sectionHelper.sectionList[section].firstItem?.itemHeaderTitle
+        return getSectionFirstItem(section)?.itemHeaderTitle
     }
 
     func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         debugPrint("titleForFooterInSection:\(section)")
-        return sectionHelper.sectionList[section].firstItem?.itemFooterTitle
+        return getSectionFirstItem(section)?.itemFooterTitle
     }
 
     /// 是否可以编辑
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         debugPrint("canEditRowAt:\(indexPath)")
-        return getItem(indexPath).itemCanEdit
+        return getTableItem(indexPath).itemCanEdit
     }
 
     /// 是否可以移动
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         debugPrint("canMoveRowAt:\(indexPath)")
-        return getItem(indexPath).itemCanMove
+        return getTableItem(indexPath).itemCanMove
     }
 
     /// titles
@@ -257,6 +268,8 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         debugPrint("moveRowAt:\(sourceIndexPath) to:\(destinationIndexPath)")
     }
+
+    //end--UITableViewDataSource
 
     // MARK: cell header footer 显示和隐藏
 
@@ -293,39 +306,39 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     /// 指定行高
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         //return UITableView.automaticDimension
-        getItem(indexPath).itemHeight
+        getTableItem(indexPath).itemHeight
     }
 
     /// 预估的行高
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         //return 50
-        getItem(indexPath).itemEstimatedHeight
+        getTableItem(indexPath).itemEstimatedHeight
     }
 
     /// 头部的高度
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         //return UITableView.automaticDimension
         debugPrint("heightForHeaderInSection:\(section)")
-        return sectionHelper.sectionList[section].firstItem?.itemHeaderHeight ?? UITableView.automaticDimension
+        return getSectionFirstItem(section)?.itemHeaderHeight ?? UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         //return UITableView.automaticDimension
         debugPrint("estimatedHeightForHeaderInSection:\(section)")
-        return sectionHelper.sectionList[section].firstItem?.itemHeaderEstimatedHeight ?? UITableView.automaticDimension
+        return getSectionFirstItem(section)?.itemHeaderEstimatedHeight ?? UITableView.automaticDimension
     }
 
     /// 尾部的高度
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         //return UITableView.automaticDimension
         debugPrint("heightForFooterInSection:\(section)")
-        return sectionHelper.sectionList[section].firstItem?.itemFooterHeight ?? UITableView.automaticDimension
+        return getSectionFirstItem(section)?.itemFooterHeight ?? UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
         //return UITableView.automaticDimension
         debugPrint("estimatedHeightForFooterInSection:\(section)")
-        return sectionHelper.sectionList[section].firstItem?.itemFooterEstimatedHeight ?? UITableView.automaticDimension
+        return getSectionFirstItem(section)?.itemFooterEstimatedHeight ?? UITableView.automaticDimension
     }
 
     // MARK: 首尾试图获取
@@ -333,13 +346,19 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     /// 返回头部试图
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         debugPrint("viewForHeaderInSection:\(section)")
-        return sectionHelper.sectionList[section].firstItem?.itemHeaderView
+        //return getSectionFirstItem(section)?.itemHeaderView
+        let view = UIView()
+        view.frame = CGRect(x: 0, y: 0, width: 1, height: 1)
+        return view
     }
 
     /// 返回尾部试图
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         debugPrint("viewForFooterInSection:\(section)")
-        return sectionHelper.sectionList[section].firstItem?.itemFooterView
+        //return getSectionFirstItem(section)?.itemFooterView
+        let view = UIView()
+        view.frame = CGRect(x: 0, y: 0, width: 1, height: 1)
+        return view
     }
 
     /// 需要cell的样式为:accessoryType = .detailButton 或 .detailDisclosureButton
@@ -352,7 +371,7 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     /// 是否突出显示行, 只有返回true, didSelectRowAt 才有机会触发
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        getItem(indexPath).itemCanHighlight
+        getTableItem(indexPath).itemCanHighlight
     }
 
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
@@ -366,7 +385,7 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     /// 将要选中行
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         debugPrint("即将选中:\(indexPath)")
-        if getItem(indexPath).itemCanSelect {
+        if getTableItem(indexPath).itemCanSelect {
             return indexPath
         }
         return nil
@@ -374,7 +393,7 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
         debugPrint("即将取消选中:\(indexPath)")
-        if getItem(indexPath).itemCanDeselect {
+        if getTableItem(indexPath).itemCanDeselect {
             return indexPath
         }
         return nil
@@ -445,7 +464,7 @@ class DslTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     /// 缩进级别量
     func tableView(_ tableView: UITableView, indentationLevelForRowAt indexPath: IndexPath) -> Int {
         debugPrint("缩进:indentationLevelForRowAt:\(indexPath)")
-        return 0
+        return getTableItem(indexPath).itemIndentationLevel
     }
 
     /// 即将进入编辑模式
@@ -662,13 +681,28 @@ class DslTableViewDiffableDataSource: UITableViewDiffableDataSource<DslSection, 
         dslTableView = tableView
 
         //core
-        super.init(tableView: tableView) { view, indexPath, dslItem in
-            debugPrint("获取Cell:\(indexPath)")
-            return tableView.createTableViewCell(tableView, cellForRowAt: indexPath, item: dslItem)
+        super.init(tableView: tableView) { view, path, item in
+            debugPrint("获取Cell:\(path)")
+            return tableView.createTableViewCell(tableView, cellForRowAt: path, item: item)
         }
     }
 
     //MARK: 转发
+
+    /// 获取section的数量
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        super.numberOfSections(in: tableView)
+    }
+
+    /// 获取section中items的数量
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        super.tableView(tableView, numberOfRowsInSection: section)
+    }
+
+    /// 获取对应的cell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        super.tableView(tableView, cellForRowAt: indexPath)
+    }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         dslTableView.tableView(tableView, titleForHeaderInSection: section)
