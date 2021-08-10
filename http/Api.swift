@@ -184,7 +184,7 @@ extension DataRequest {
             if Http.PARSE_DATA_CODE, let data = response.data {
                 if let json = try? JSON(data: data) {
                     let code = json[Http.KEY_CODE].intValue
-                    if code > 200 && code <= 299 {
+                    if code >= 200 && code <= 299 {
                         //成功
                     } else {
                         let msg = json[Http.KEY_MSG].string ?? "接口异常"
