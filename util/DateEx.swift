@@ -4,6 +4,12 @@
 
 import Foundation
 
+extension Locale {
+    static var cn: Locale {
+        Locale(identifier: "zh_Hans_CN")
+    }
+}
+
 extension Date {
 
     /// 获取当前 秒级 时间戳 - 10位
@@ -18,6 +24,21 @@ extension Date {
         let timeInterval: TimeInterval = self.timeIntervalSince1970
         let millisecond = CLongLong(round(timeInterval * 1000))
         return "\(millisecond)"
+    }
+
+    /// 格式化时间
+    func format(_ pattern: String = "yyyy-MM-dd HH:mm:ss") -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = pattern
+        let dateStr = dateFormatter.string(from: Date())
+        return dateStr
+    }
+
+    static func from(_ string: String, pattern: String = "yyyy-MM-dd HH:mm:ss") -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = pattern
+        let date = dateFormatter.date(from: string)
+        return date
     }
 }
 
