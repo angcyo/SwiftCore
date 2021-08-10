@@ -12,9 +12,35 @@ extension NSData {
     }
 }
 
+extension Data {
+
+    /// Data 转换成字符串
+    func toString(_ encoding: String.Encoding = .utf8) -> String {
+        String(data: self, encoding: encoding)!
+        //String(decoding: self, as: UTF8.self)
+    }
+}
+
 extension String {
+
     func toData() -> Data? {
         data(using: .utf8, allowLossyConversion: false)
+    }
+
+    /// 可解码
+    func toBean<Bean>() -> Bean where Bean: Decodable {
+        let decoder = JSONDecoder()
+        let decoded = try! decoder.decode(Bean.self, from: toData()!)
+        return decoded
+    }
+}
+
+/// 可编码
+extension Encodable {
+    func toJson() -> String {
+        let encoder = JSONEncoder()
+        let encoded = try! encoder.encode(self)
+        return encoded.toString()
     }
 }
 

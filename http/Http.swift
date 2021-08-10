@@ -177,14 +177,6 @@ extension URL {
     }
 }
 
-extension Data {
-
-    /// Dta 转换成字符串
-    func toString() -> String {
-        String(decoding: self, as: UTF8.self)
-    }
-}
-
 /// 在url上拼接参数
 func connectParam(_ url: String, _ parameters: [String: Any]?) -> String {
 
