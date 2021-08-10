@@ -5,10 +5,10 @@
 import Foundation
 import UIKit
 
-class DslCollectionView: UICollectionView, UICollectionViewDelegate {
+class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDelegate {
 
     /// 所有的数据集合, 但非全部在界面上显示
-    var itemList: [DslItem] = []
+    var _itemList: [DslItem] = []
 
     lazy var diffableDataSource: DslCollectionViewDiffableDataSource = {
         DslCollectionViewDiffableDataSource(self)
@@ -46,19 +46,11 @@ class DslCollectionView: UICollectionView, UICollectionViewDelegate {
     /// 赋值和初始化
     func createCollectionViewCell(_ collectionView: UICollectionView, cellForRowAt indexPath: IndexPath, item: DslItem) -> UICollectionViewCell {
         //赋值
-        item._dslCollectionView = self
+        item._dslRecyclerView = self
 
         let identifier = item.identifier
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
-        if let dslCollectionCell = cell as? DslCollectionCell {
-            dslCollectionCell._item = item
-            dslCollectionCell.onBindCollectionCell(self, indexPath, item)
-            return dslCollectionCell
-        }
-        //兼容处理
-        if cell.frame.isEmpty {
-            cell.prepareForReuse()
-        }
+        item.bindCell(cell, indexPath)
         return cell
     }
 
@@ -78,13 +70,13 @@ class DslCollectionView: UICollectionView, UICollectionViewDelegate {
     override func layoutSubviews() {
         super.layoutSubviews()
         if needsReload {
-            loadData(itemList)
+            loadData(_itemList)
         }
     }
 
     /// 立即更新
     func loadDataNow(_ animatingDifferences: Bool? = nil, completion: (() -> Void)? = nil) {
-        loadData(itemList, animatingDifferences: animatingDifferences, completion: completion)
+        loadData(_itemList, animatingDifferences: animatingDifferences, completion: completion)
     }
 
     /// 强制加载数据
@@ -101,68 +93,12 @@ class DslCollectionView: UICollectionView, UICollectionViewDelegate {
 
         ///diff 更新数据
         doMain {
-            let snapshot = self.sectionHelper.createSnapshot(self.itemList)
+            let snapshot = self.sectionHelper.createSnapshot(self._itemList)
             //Please always submit updates either always on the main queue or always off the main queue
             self.diffableDataSource.apply(snapshot, animatingDifferences: animate, completion: completion)
         }
 
         needsReload = false
-    }
-
-    /// 注册cell
-    func registerItemCell(_ items: [DslItem]) {
-        items.forEach { (item: DslItem) in
-            if let itemCell = item.itemCell {
-                let identifier = item.identifier
-                self.register(itemCell, forCellWithReuseIdentifier: identifier)
-            }
-        }
-    }
-
-    // MARK: item操作
-
-    @discardableResult
-    func load<Item: DslItem>(_ item: Item, _ dsl: ((Item) -> Void)? = nil) -> Item {
-        addItem(item, dsl)
-    }
-
-    @discardableResult
-    func addItem<Item: DslItem>(_ item: Item, _ dsl: ((Item) -> Void)? = nil) -> Item {
-        itemList.append(item)
-        //init
-        dsl?(item)
-        needsReload = true
-        return item
-    }
-
-    /// 删除item
-    @discardableResult
-    func removeItem(_ item: DslItem) -> DslItem? {
-        let index = itemList.firstIndex {
-            $0 == item
-        }
-        if let index = index {
-            itemList.remove(at: index)
-            needsReload = true
-            return item
-        }
-        return nil
-    }
-
-    // MARK: 操作符重载
-
-    @discardableResult
-    static func +(collectionView: DslCollectionView, item: DslItem) -> DslItem {
-        collectionView.addItem(item)
-        return item
-    }
-
-    // MARK: 辅助操作
-
-    func getItem(_ indexPath: IndexPath) -> DslItem {
-        let section = sectionHelper.sectionList[indexPath.section]
-        let item = section.items[indexPath.row]
-        return item
     }
 
     // MARK: 代理 UICollectionViewDelegate

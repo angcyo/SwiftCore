@@ -171,16 +171,36 @@ extension DataRequest {
     }
 
     /// 获取json 对象, Pods/SwiftyJSON/Source/SwiftyJSON/SwiftyJSON.swift:82
+    /// parseDataCode 解析数据code码
     @discardableResult
     func requestJson(_ onResult: @escaping (JSON?, Error?) -> Void) -> DataRequest {
         let request: DataRequest = self
         response { response in
             Api.requestHold.remove(request)
-            switch response.result {
-            case .success(let value):
-                onResult(JSON(value), nil)
-            case .failure(let error):
-                onResult(nil, error)
+
+            // 默认处理
+            var defHandle = true
+
+            if Http.PARSE_DATA_CODE, let data = response.data {
+                if let json = try? JSON(data: data) {
+                    let code = json[Http.KEY_CODE].intValue
+                    if code > 200 && code <= 299 {
+                        //成功
+                    } else {
+                        let msg = json[Http.KEY_MSG].string ?? "接口异常"
+                        onResult(nil, messageError(msg))
+                        defHandle = false
+                    }
+                }
+            }
+
+            if (defHandle) {
+                switch response.result {
+                case .success(let value):
+                    onResult(JSON(value), nil)
+                case .failure(let error):
+                    onResult(nil, error)
+                }
             }
         }
         Api.requestHold.append(request)

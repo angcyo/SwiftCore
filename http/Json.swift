@@ -65,4 +65,11 @@ extension JSON {
             }
         }
     }
+
+    func rawStringOrNil() -> String? {
+        if self.exists() {
+            return rawString()
+        }
+        return nil
+    }
 }

@@ -9,17 +9,6 @@ import RxAlamofire
 /// https://gitee.com/mirrors/alamofire/blob/master/Documentation/Usage.md
 class Http {
 
-    // MARK: 静态配置
-
-    /// 单例配置
-    static var HOST = ""
-
-    /// 授权请求
-    static var credential: OAuthCredential? = nil
-
-    /// 固定的请求头
-    static var headers: [HTTPHeader] = []
-
     // MARK: 成员配置
 
     /// 请求的host
@@ -117,6 +106,27 @@ class Http {
         dsl?(http)
         return http.doIt()
     }
+}
+
+// MARK: 静态配置
+
+extension Http {
+
+    /// 单例配置
+    static var HOST = ""
+
+    /// 授权请求
+    static var credential: OAuthCredential? = nil
+
+    /// 固定的请求头
+    static var headers: [HTTPHeader] = []
+
+    /// {"msg":"身份认证失败","code":401,"data":null}
+    static var PARSE_DATA_CODE = true
+
+    static var KEY_CODE = "code"
+
+    static var KEY_MSG = "msg"
 }
 
 extension String {

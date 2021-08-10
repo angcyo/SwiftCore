@@ -33,6 +33,12 @@ struct Res {
         static var line = UIColor.parse("#ECECEC")
         static var bg = UIColor.parse("#F3F5F9")
 
+        static var info = UIColor.parse("#4b7efe")
+        static var success = UIColor.parse("#44CB5C")
+        static var warning = UIColor.parse("#febf00")
+        static var error = UIColor.parse("#ff4d3f")
+        static var fairly = UIColor.parse("#c3c9cf")
+
         // 阴影颜色
         static var shadowColor = UIColor.parse("#2B2B2B")
 

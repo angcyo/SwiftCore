@@ -13,7 +13,7 @@ extension UIImageView {
 
     /// 显示网络图片
     func setImageUrl(_ url: String?) {
-        if url?.isEmpty == true {
+        if nilOrEmpty(url) {
             image = nil
         } else {
             debugPrint("加载图片:\(url)")

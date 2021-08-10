@@ -5,7 +5,7 @@
 import Foundation
 import UIKit
 
-class DslCollectionCell: UICollectionViewCell, DslCell {
+class DslCollectionCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -32,14 +32,5 @@ class DslCollectionCell: UICollectionViewCell, DslCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         debugPrint("prepareForReuse")
-    }
-
-    /// [自动赋值] @selector(createTableViewCell:cellForRowAt:item:)
-    weak var _item: DslItem? = nil
-
-    func onBindCollectionCell(_ tableView: DslCollectionView, _ indexPath: IndexPath, _ item: DslItem) {
-        debugPrint("onBindCollectionCell:\(indexPath)")
-        item.itemUpdate = false
-        item.onBindCollectionCell?(self, indexPath)
     }
 }

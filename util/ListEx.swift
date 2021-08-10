@@ -17,3 +17,11 @@ extension Array where Element: Equatable {
         return index ?? -1
     }
 }
+
+func nilOrEmpty(_ value: Array<Any>?) -> Bool {
+    value == nil || value?.isEmpty == true
+}
+
+func nilOrEmpty(_ value: Dictionary<String, Any>?) -> Bool {
+    value == nil || value?.isEmpty == true
+}

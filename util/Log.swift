@@ -38,7 +38,7 @@ extension Int {
 /// 线程名
 func threadName() -> String {
     let name = Thread.current.name
-    if name?.isEmpty == true {
+    if nilOrEmpty(name) {
         return Thread.current.description
     }
     return name!

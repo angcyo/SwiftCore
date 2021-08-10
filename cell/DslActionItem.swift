@@ -14,6 +14,28 @@ struct DslActionData {
     var detailText: String? = nil
 }
 
+class DslActionItem: DslTableItem {
+    override func initItem() {
+        itemCell = DslActionCell.self
+        itemHeight = 50
+        enableSelect()
+    }
+
+    override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
+        super.bindCell(cell, indexPath)
+
+        guard let cell = cell as? DslActionCell else {
+            return
+        }
+
+        if let data = itemData as? DslActionData {
+            cell.imageView?.image = data.image
+            cell.textLabel?.text = data.text
+            cell.detailTextLabel?.text = data.detailText
+        }
+    }
+}
+
 /// 系统标准样式的cell
 class DslActionCell: DslTableCell {
 
@@ -31,25 +53,7 @@ class DslActionCell: DslTableCell {
         accessoryType = .disclosureIndicator
     }
 
-    override func onBindTableCell(_ tableView: DslTableView, _ indexPath: IndexPath, _ item: DslItem) {
-        super.onBindTableCell(tableView, indexPath, item)
-        if let data = item.itemData as? DslActionData {
-            imageView?.image = data.image
-            textLabel?.text = data.text
-            detailTextLabel?.text = data.detailText
-        }
-    }
-
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-    }
-}
-
-extension DslItem {
-    static var actionCell: DslTableItem {
-        let item = DslTableItem(DslActionCell.self)
-        item.itemHeight = 50
-        item.enableSelect()
-        return item
     }
 }

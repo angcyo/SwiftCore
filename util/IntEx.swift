@@ -61,3 +61,18 @@ public extension Double {
         return Double(-greatestFiniteMagnitude)
     }
 }
+
+/// 随机产生一个int类型的数, 3628967563
+func randomInt() -> Int {
+    Int(arc4random())
+}
+
+/// [from~to]
+func nextInt(_ from: Int = 0, to: Int) -> Int {
+    from + Int(arc4random_uniform(UInt32(to - from)))
+}
+
+/// 返回0～1内的Double类型数据 0.39646477376027534
+func randomDouble() -> Double {
+    drand48()
+}

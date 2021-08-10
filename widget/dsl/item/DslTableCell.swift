@@ -5,7 +5,7 @@
 import Foundation
 import UIKit
 
-class DslTableCell: UITableViewCell, DslCell {
+class DslTableCell: UITableViewCell {
 
     override init(style: CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -46,15 +46,6 @@ class DslTableCell: UITableViewCell, DslCell {
         debugPrint("prepareForReuse")
     }
 
-    /// [自动赋值] @selector(createTableViewCell:cellForRowAt:item:)
-    weak var _item: DslItem? = nil
-
-    func onBindTableCell(_ tableView: DslTableView, _ indexPath: IndexPath, _ item: DslItem) {
-        debugPrint("onBindTableCell:\(indexPath)")
-        item.itemUpdate = false
-        item.onBindTableCell?(self, indexPath)
-    }
-
     /*override var contentView: UIView {
         //debugPrint("contentView:\(self)")
         let view = UIView()
@@ -66,6 +57,9 @@ class DslTableCell: UITableViewCell, DslCell {
         super.awakeFromNib()
         debugPrint("awakeFromNib")
     }
+
+    /// [自动赋值]
+    weak var _item: DslItem? = nil
 
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)

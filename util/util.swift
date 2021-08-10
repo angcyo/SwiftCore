@@ -42,6 +42,14 @@ extension Array {
         }
         return nil
     }
+
+    /// 支持负数索引
+    func get2(_ index: Int) -> Element? {
+        if index < 0 {
+            return get(index + count)
+        }
+        return get(index)
+    }
 }
 
 extension Collection {

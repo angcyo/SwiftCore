@@ -5,10 +5,10 @@
 import Foundation
 import UIKit
 
-class DslTableView: UITableView, UITableViewDelegate/*, UITableViewDataSource*/ {
+class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableViewDataSource*/ {
 
     /// 所有的数据集合, 但非全部在界面上显示
-    var itemList: [DslItem] = []
+    var _itemList: [DslItem] = []
 
     lazy var diffableDataSource: DslTableViewDiffableDataSource = {
         DslTableViewDiffableDataSource(self)
@@ -91,13 +91,13 @@ class DslTableView: UITableView, UITableViewDelegate/*, UITableViewDataSource*/ 
     override func layoutSubviews() {
         super.layoutSubviews()
         if needsReload {
-            loadData(itemList)
+            loadData(_itemList)
         }
     }
 
     /// 立即更新
     func loadDataNow(_ animatingDifferences: Bool? = nil, completion: (() -> Void)? = nil) {
-        loadData(itemList, animatingDifferences: animatingDifferences, completion: completion)
+        loadData(_itemList, animatingDifferences: animatingDifferences, completion: completion)
     }
 
     /// 强制加载数据
@@ -114,7 +114,7 @@ class DslTableView: UITableView, UITableViewDelegate/*, UITableViewDataSource*/ 
 
         ///diff 更新数据
         doMain {
-            let snapshot = self.sectionHelper.createSnapshot(self.itemList)
+            let snapshot = self.sectionHelper.createSnapshot(self._itemList)
             //Please always submit updates either always on the main queue or always off the main queue
             self.diffableDataSource.apply(snapshot, animatingDifferences: animate, completion: completion)
         }
@@ -122,61 +122,7 @@ class DslTableView: UITableView, UITableViewDelegate/*, UITableViewDataSource*/ 
         needsReload = false
     }
 
-    /// 注册cell
-    func registerItemCell(_ items: [DslItem]) {
-        items.forEach { (item: DslItem) in
-            if let itemCell = item.itemCell {
-                let identifier = item.identifier
-                self.register(itemCell, forCellReuseIdentifier: identifier)
-            }
-        }
-    }
-
-    // MARK: item操作
-
-    @discardableResult
-    func load<Item: DslItem>(_ item: Item, _ dsl: ((Item) -> Void)? = nil) -> Item {
-        addItem(item, dsl)
-    }
-
-    @discardableResult
-    func addItem<Item: DslItem>(_ item: Item, _ dsl: ((Item) -> Void)? = nil) -> Item {
-        itemList.append(item)
-        //init
-        dsl?(item)
-        needsReload = true
-        return item
-    }
-
-    /// 删除item
-    @discardableResult
-    func removeItem(_ item: DslItem) -> DslItem? {
-        let index = itemList.firstIndex {
-            $0 == item
-        }
-        if let index = index {
-            itemList.remove(at: index)
-            needsReload = true
-            return item
-        }
-        return nil
-    }
-
-    // MARK: 操作符重载
-
-    @discardableResult
-    static func +(tableView: DslTableView, item: DslItem) -> DslItem {
-        tableView.addItem(item)
-        return item
-    }
-
     // MARK: 辅助操作
-
-    func getItem(_ indexPath: IndexPath) -> DslItem {
-        let section = sectionHelper.sectionList[indexPath.section]
-        let item = section.items[indexPath.row]
-        return item
-    }
 
     func getTableItem(_ indexPath: IndexPath) -> DslTableItem {
         getItem(indexPath) as! DslTableItem
@@ -196,26 +142,18 @@ class DslTableView: UITableView, UITableViewDelegate/*, UITableViewDataSource*/ 
 
     /// 获取cell
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = itemList[indexPath.row]
+        let item = _itemList[indexPath.row]
         return createTableViewCell(tableView, cellForRowAt: indexPath, item: item)
     }
 
     /// 赋值和初始化
     func createTableViewCell(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, item: DslItem) -> UITableViewCell {
         //赋值
-        item._dslTableView = self
+        item._dslRecyclerView = self
 
         let identifier = item.identifier
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
-        if let dslTableCell = cell as? DslTableCell {
-            dslTableCell._item = item
-            dslTableCell.onBindTableCell(self, indexPath, item)
-            return dslTableCell
-        }
-        //兼容处理
-        if cell.frame.isEmpty {
-            cell.prepareForReuse()
-        }
+        item.bindCell(cell, indexPath)
         return cell
     }
 
@@ -419,7 +357,7 @@ class DslTableView: UITableView, UITableViewDelegate/*, UITableViewDataSource*/ 
         if dataSource != nil {
             //deleteRows(at: selectList, with: animation)
             for select in selectList {
-                itemList[select.row].itemUpdate = true
+                _itemList[select.row].itemUpdate = true
             }
         }
     }

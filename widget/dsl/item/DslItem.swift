@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 
 /// 数据和界面关联的item
-class DslItem: NSObject {
+class DslItem: NSObject, IDslItem {
 
     /// cell 界面, 必须
     /// 如果是在DslTableView中, 则必须是UITableViewCell的子类
@@ -28,8 +28,7 @@ class DslItem: NSObject {
     var itemHidden: Bool = false {
         willSet {
             if itemHidden != newValue {
-                _dslTableView?.needsReload = true
-                _dslCollectionView?.needsReload = true
+                _dslRecyclerView?.needsReload = true
             }
         }
     }
@@ -38,22 +37,20 @@ class DslItem: NSObject {
     var itemUpdate: Bool = false {
         willSet {
             if newValue {
-                _dslTableView?.needsReload = true
-                _dslCollectionView?.needsReload = true
+                _dslRecyclerView?.needsReload = true
             }
         }
     }
 
     /// [自动赋值] 绑定的[DslTableView]视图 [@selector(createTableViewCell:cellForRowAt:item:)]
-    var _dslTableView: DslTableView? = nil
-    var _dslCollectionView: DslCollectionView? = nil
+    var _dslRecyclerView: DslRecycleView? = nil
 
     /// [自动赋值] 分组完成之后, 所在的section.
     var _itemSection: DslSection? = nil
 
     /// index
     var itemIndexOfSection: IndexPath? {
-        if let section = _itemSection, let tableView = _dslTableView {
+        if let section = _itemSection, let tableView = _dslRecyclerView {
             //在第几个section中, 从0开始
             let s = tableView.sectionHelper.sectionList.indexOf(section)
             //在section中的第几个
@@ -64,14 +61,39 @@ class DslItem: NSObject {
         }
     }
 
-    init(_ cell: AnyClass, _ data: Any? = nil) {
-        itemCell = cell
-        itemData = data
+    override init() {
+        super.init()
+        initItem()
     }
 
-    ///
-    var onBindTableCell: ((_ cell: DslTableCell, _ indexPath: IndexPath) -> Void)? = nil
+    /// 初始化
+    init(_ cell: AnyClass, _ data: Any? = nil) {
+        super.init()
+        itemCell = cell
+        itemData = data
+        initItem()
+    }
 
-    //MARK: 回调 [DslCollectionCell]
-    var onBindCollectionCell: ((_ cell: DslCollectionCell, _ indexPath: IndexPath) -> Void)? = nil
+    func initItem() {
+
+    }
+
+    //MARK: - cell界面绑定
+
+    /// item与cell绑定
+    func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
+        onBindCell?(cell, indexPath)
+        bindCellOverride(cell, indexPath)
+
+        /*guard let cell = cell as? DslCell else {
+            return
+        }*/
+    }
+
+    func bindCellOverride(_ cell: DslCell, _ indexPath: IndexPath) {
+        onBindCellOverride?(cell, indexPath)
+    }
+
+    var onBindCell: ((_ cell: DslCell, _ indexPath: IndexPath) -> Void)? = nil
+    var onBindCellOverride: ((_ cell: DslCell, _ indexPath: IndexPath) -> Void)? = nil
 }
