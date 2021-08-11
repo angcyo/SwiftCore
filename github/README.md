@@ -22,4 +22,7 @@ pod 'Toast-Swift', '~> 5.0.1'
 
 # https://github.com/SwiftKickMobile/SwiftMessages
 pod 'SwiftMessages' //9.0.3
+
+# https://github.com/malcommac/SwiftRichString
+pod 'SwiftRichString' //3.7.2
 ```
