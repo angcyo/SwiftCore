@@ -4,6 +4,7 @@
 
 import Foundation
 import RxSwift
+import SwiftyJSON
 
 /// 用来判断对象是否为nil
 protocol NilObject {
@@ -29,7 +30,22 @@ extension BehaviorSubject {
     }
 }
 
-///
-func liveData<Element: NilObject>(_ value: Element) -> BehaviorSubject<Element> {
-    BehaviorSubject<Element>(value: value)
+extension JSON: NilObject {
+    var isNil: Bool {
+        if null != nil || !exists() {
+            return true
+        }
+        if let d = dictionary {
+            return d.isEmpty
+        }
+        if let a = array {
+            return a.isEmpty
+        }
+        return false
+    }
+}
+
+/// 可以观察的数据对象
+func liveData<Bean: NilObject>(_ value: Bean) -> BehaviorSubject<Bean> {
+    BehaviorSubject<Bean>(value: value)
 }

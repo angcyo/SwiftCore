@@ -43,7 +43,7 @@ extension String {
                  textColor: UIColor = Res.color.white,
                  size: Float = Float(Res.text.title.size),
                  gravity: Int = Gravity.Center) -> UIImage? {
-        let text = self.toNSString()
+        let text = toNSString()
         let attributes = [
             NSAttributedString.Key.foregroundColor: textColor,
             NSAttributedString.Key.font: UIFont.systemFont(ofSize: CGFloat(size))

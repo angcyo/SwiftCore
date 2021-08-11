@@ -5,6 +5,8 @@
 import Foundation
 import Alamofire
 import AlamofireImage
+import RxSwift
+import RxAlamofire
 import SwiftyJSON
 
 struct Api {
@@ -19,14 +21,9 @@ struct Api {
                        query: Parameters? = nil,
                        method: HTTPMethod = .get,
                        config: ((Http) -> Void)? = nil) -> DataRequest {
-        let _url: String
-        if method == .post || method == .put {
-            //手动拼接请求参数
-            _url = connectParam(url, query)
-        } else {
-            _url = url
-        }
-        return Http.request(_url, param, method: method) { http in
+        let _url = Http.wrapUrlQuery(url, method: method, query: query)
+        let _param = Http.wrapParam(method: method, param: param, query: query)
+        return Http.request(_url, _param, method: method) { http in
                     if method == .post || method == .put {
                         http.encoding = JSONEncoding.default
 
@@ -214,5 +211,184 @@ extension DataRequest {
         }
         Api.requestHold.append(request)
         return request
+    }
+}
+
+//MARK: - 使用RxAlamofire扩展
+
+extension Api {
+
+    static func request(_ url: String,
+                        _ param: Parameters? = nil, //请求参数, 可以是body, form等
+                        query: Parameters? = nil,
+                        method: HTTPMethod = .get,
+                        encoding: ParameterEncoding = URLEncoding.default,
+                        headers: HTTPHeaders? = nil,
+                        interceptor: RequestInterceptor? = nil) -> Observable<DataRequest> {
+        let _url = Http.wrapUrlQuery(url, method: method, query: query)
+        let _param = Http.wrapParam(method: method, param: param, query: query)
+        return RxAlamofire.request(method, connectUrl(url: _url),
+                parameters: _param,
+                encoding: encoding,
+                headers: headers,
+                interceptor: Http.wrapInterceptor(interceptor: interceptor))
+    }
+
+    /// 获取JSON对象
+    static func requestJson(_ url: String,
+                            _ param: Parameters? = nil, //请求参数, 可以是body, form等
+                            query: Parameters? = nil,
+                            method: HTTPMethod = .post,
+                            encoding: ParameterEncoding = URLEncoding.default,
+                            headers: HTTPHeaders? = nil,
+                            interceptor: RequestInterceptor? = nil) -> Observable<JSON> {
+        request(url, param, query: query, method: method,
+                encoding: encoding, headers: headers, interceptor: interceptor)
+                .flatMap {
+                    $0.rx.swiftyJSON()
+                }
+    }
+
+    static func json(_ url: String,
+                     _ param: Parameters? = nil, //请求参数, 可以是body, form等
+                     query: Parameters? = nil,
+                     method: HTTPMethod = .post,
+                     encoding: ParameterEncoding = URLEncoding.default,
+                     headers: HTTPHeaders? = nil,
+                     interceptor: RequestInterceptor? = nil,
+                     _ onResult: @escaping (JSON?, Error?) -> Void) -> Disposable {
+        request(url, param, query: query, method: method,
+                encoding: encoding, headers: headers, interceptor: interceptor)
+                .flatMap {
+                    $0.rx.swiftyJSON()
+                }
+                .subscribe(onNext: { data in
+                    onResult(data, nil)
+                }, onError: { error in
+                    onResult(nil, error)
+                })
+    }
+
+    static func requestResponseJson(_ url: String,
+                                    _ param: Parameters? = nil, //请求参数, 可以是body, form等
+                                    query: Parameters? = nil,
+                                    method: HTTPMethod = .post,
+                                    encoding: ParameterEncoding = URLEncoding.default,
+                                    headers: HTTPHeaders? = nil,
+                                    interceptor: RequestInterceptor? = nil) -> Observable<(HTTPURLResponse, JSON)> {
+        request(url, param, query: query, method: method,
+                encoding: encoding, headers: headers, interceptor: interceptor)
+                .flatMap {
+                    $0.rx.responseSwiftyJSON()
+                }
+    }
+
+    /// 获取bean
+    static func requestBean<T: Decodable>(_ url: String,
+                                          _ param: Parameters? = nil, //请求参数, 可以是body, form等
+                                          query: Parameters? = nil,
+                                          method: HTTPMethod = .post,
+                                          encoding: ParameterEncoding = URLEncoding.default,
+                                          headers: HTTPHeaders? = nil,
+                                          interceptor: RequestInterceptor? = nil) -> Observable<T> {
+        request(url, param, query: query, method: method,
+                encoding: encoding, headers: headers, interceptor: interceptor)
+                .flatMap {
+                    $0.rx.decodable()
+                }
+    }
+
+    static func bean<T: Decodable>(_ url: String,
+                                   _ param: Parameters? = nil, //请求参数, 可以是body, form等
+                                   query: Parameters? = nil,
+                                   method: HTTPMethod = .post,
+                                   encoding: ParameterEncoding = URLEncoding.default,
+                                   headers: HTTPHeaders? = nil,
+                                   interceptor: RequestInterceptor? = nil,
+                                   _ onResult: @escaping (T?, Error?) -> Void) -> Disposable {
+        request(url, param, query: query, method: method,
+                encoding: encoding, headers: headers, interceptor: interceptor)
+                .flatMap {
+                    $0.rx.decodable()
+                }
+                .subscribe(onNext: { data in
+                    onResult(data, nil)
+                }, onError: { error in
+                    onResult(nil, error)
+                })
+    }
+
+    static func requestResponseBean<T: Decodable>(_ url: String,
+                                                  _ param: Parameters? = nil, //请求参数, 可以是body, form等
+                                                  query: Parameters? = nil,
+                                                  method: HTTPMethod = .post,
+                                                  encoding: ParameterEncoding = URLEncoding.default,
+                                                  headers: HTTPHeaders? = nil,
+                                                  interceptor: RequestInterceptor? = nil) -> Observable<(HTTPURLResponse, T)> {
+        request(url, param, query: query, method: method,
+                encoding: encoding, headers: headers, interceptor: interceptor)
+                .flatMap {
+                    $0.rx.responseDecodable()
+                }
+    }
+}
+
+extension Reactive where Base: DataRequest {
+
+    func responseSwiftyJSON() -> Observable<(HTTPURLResponse, JSON)> {
+        return responseResult(responseSerializer: JSONResponseSerializer())
+    }
+
+    func swiftyJSON() -> Observable<JSON> {
+        return result(responseSerializer: JSONResponseSerializer())
+    }
+}
+
+/// [JSON]
+class JSONResponseSerializer: ResponseSerializer {
+
+    public let dataPreprocessor: DataPreprocessor
+    public let emptyResponseCodes: Set<Int>
+    public let emptyRequestMethods: Set<HTTPMethod>
+    /// `JSONSerialization.ReadingOptions` used when serializing a response.
+    public let options: JSONSerialization.ReadingOptions
+
+    /// Creates an instance with the provided values.
+    ///
+    /// - Parameters:
+    ///   - dataPreprocessor:    `DataPreprocessor` used to prepare the received `Data` for serialization.
+    ///   - emptyResponseCodes:  The HTTP response codes for which empty responses are allowed. `[204, 205]` by default.
+    ///   - emptyRequestMethods: The HTTP request methods for which empty responses are allowed. `[.head]` by default.
+    ///   - options:             The options to use. `.allowFragments` by default.
+    public init(dataPreprocessor: DataPreprocessor = JSONResponseSerializer.defaultDataPreprocessor,
+                emptyResponseCodes: Set<Int> = JSONResponseSerializer.defaultEmptyResponseCodes,
+                emptyRequestMethods: Set<HTTPMethod> = JSONResponseSerializer.defaultEmptyRequestMethods,
+                options: JSONSerialization.ReadingOptions = .allowFragments) {
+        self.dataPreprocessor = dataPreprocessor
+        self.emptyResponseCodes = emptyResponseCodes
+        self.emptyRequestMethods = emptyRequestMethods
+        self.options = options
+    }
+
+    func serialize(request: URLRequest?, response: HTTPURLResponse?, data: Data?, error: Error?) throws -> JSON {
+        guard error == nil else {
+            throw error!
+        }
+
+        guard var data = data, !data.isEmpty else {
+            guard emptyResponseAllowed(forRequest: request, response: response) else {
+                throw AFError.responseSerializationFailed(reason: .inputDataNilOrZeroLength)
+            }
+
+            return JSON()
+        }
+
+        data = try dataPreprocessor.preprocess(data)
+
+        do {
+            return try JSON(data: data)
+        } catch {
+            throw AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: error))
+        }
     }
 }

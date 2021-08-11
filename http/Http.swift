@@ -37,55 +37,15 @@ class Http {
     }
 
     func doIt() -> DataRequest {
-        var _url = url
-        if url?.starts(with: "http") == true {
-            _url = url
-        } else {
-            _url = connectUrl(base, url: url)
-        }
-
-        //适配器
-        let adapters: [RequestAdapter] = []
-
-        //重试器
-        let retriers: [RequestRetrier] = []
-
-        //------------------------------拦截器----------------------------
-
-        //拦截器
-        var interceptors: [RequestInterceptor] = []
-
-        if D.isDebug {
-            interceptors.append(LogInterceptor())
-        }
-
-        //auth
-        if let credential = Http.credential {
-
-            // Create the interceptor
-            let authenticator = OAuthAuthenticator()
-            let interceptor = AuthenticationInterceptor(authenticator: authenticator, credential: credential)
-
-            interceptors.append(interceptor)
-        }
-
-        interceptor.forEach { interceptor in
-            interceptors.append((interceptor))
-        }
-
-        //------------------------------拦截器end----------------------------
-
-        let interceptor = Interceptor(
-                adapters: adapters,
-                retriers: retriers,
-                interceptors: interceptors)
+        var _url = connectUrl(base, url: url)
 
         //-----------------------请求头---------------------------
+
         let h: HTTPHeaders = HTTPHeaders(Http.headers + headers)
 
-        return httpSession.request(_url!, method: method, parameters: param,
+        return httpSession.request(_url, method: method, parameters: param,
                 encoding: encoding, headers: h,
-                interceptor: interceptor)
+                interceptor: Http.wrapInterceptor(interceptors: interceptor))
     }
 
     /// Swift 的ARC, 在创建对象之后, 没有被引用会立马被回收.
@@ -105,6 +65,79 @@ class Http {
         http.param = parameters
         dsl?(http)
         return http.doIt()
+    }
+}
+
+extension Http {
+
+    /// 将查询参数, 手动拼接到url中
+    static func wrapUrlQuery(_ url: String,
+                             method: HTTPMethod,
+                             query: Parameters?) -> String {
+        let _url: String
+        if method == .post || method == .put {
+            //手动拼接请求参数
+            _url = connectParam(url, query)
+        } else {
+            _url = url
+        }
+        return _url
+    }
+
+    static func wrapParam(method: HTTPMethod,
+                          param: Parameters? = nil,
+                          query: Parameters? = nil) -> Parameters? {
+        if method == .post || method == .put {
+            return param
+        } else {
+            return query ?? param
+        }
+    }
+
+    static func wrapInterceptor(interceptor: RequestInterceptor?) -> RequestInterceptor {
+        if let _i = interceptor {
+            return wrapInterceptor(interceptors: [_i])
+        }
+        return wrapInterceptor(interceptors: nil)
+    }
+
+    static func wrapInterceptor(interceptors: [RequestInterceptor]?) -> RequestInterceptor {
+        //适配器
+        let _adapters: [RequestAdapter] = []
+
+        //重试器
+        let _retriers: [RequestRetrier] = []
+
+        //------------------------------拦截器----------------------------
+
+        //拦截器
+        var _interceptors: [RequestInterceptor] = []
+
+        if D.isDebug {
+            _interceptors.append(LogInterceptor())
+        }
+
+        //auth
+        if let credential = Http.credential {
+
+            // Create the interceptor
+            let authenticator = OAuthAuthenticator()
+            let interceptor = AuthenticationInterceptor(authenticator: authenticator, credential: credential)
+
+            _interceptors.append(interceptor)
+        }
+
+        interceptors?.forEach { interceptor in
+            _interceptors.append((interceptor))
+        }
+
+        //------------------------------拦截器end----------------------------
+
+        let interceptor = Interceptor(
+                adapters: _adapters,
+                retriers: _retriers,
+                interceptors: _interceptors)
+        return interceptor
     }
 }
 
@@ -161,8 +194,11 @@ func connectUrl(_ host: String? = Http.HOST, url: String?, schema: String = "") 
 
     if schema.starts(with: "/") {
         return "\(_host)\(schema)/\(_url)"
+    } else if schema.isEmpty {
+        return "\(_host)/\(_url)"
+    } else {
+        return "\(_host)/\(schema)/\(_url)"
     }
-    return "\(_host)/\(schema)/\(_url)"
 }
 
 extension URL {
