@@ -121,6 +121,11 @@ extension DataRequest {
 
     /// 获取bean of type: T.Type = T.self,
     @discardableResult
+    func requestBean<T: Decodable>(_ onResult: @escaping (T?, Error?) -> Void) -> DataRequest {
+        requestDecodable(onResult)
+    }
+
+    @discardableResult
     func requestDecodable<T: Decodable>(_ onResult: @escaping (T?, Error?) -> Void) -> DataRequest {
         let request: DataRequest = self
         responseDecodable { (response: AFDataResponse<T>) in
@@ -134,6 +139,10 @@ extension DataRequest {
         }
         Api.requestHold.append(request)
         return request
+    }
+
+    func requestBeanRes<T: Decodable>(_ onResult: @escaping (AFDataResponse<T>, Error?) -> Void) -> DataRequest {
+        requestDecodableRes(onResult)
     }
 
     @discardableResult
