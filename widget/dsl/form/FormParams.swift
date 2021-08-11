@@ -16,9 +16,6 @@ class FormParams {
 
     /// 数据存储
     var jsonData = JSON()
-
-    /// 错误时的回调
-    var onError: ((Error) -> Void)? = nil
 }
 
 extension FormParams {

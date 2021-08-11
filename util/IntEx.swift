@@ -9,18 +9,38 @@ protocol Number {
 }
 
 extension Int: Number {
+    func have(_ other: Int) -> Bool {
+        if self == other {
+            return true
+        }
+        if self == 0 || other == 0 {
+            return false
+        }
+        return self & other == other
+    }
 }
 
 extension UInt: Number {
 }
 
 extension Float: Number {
+    func toCGFloat() -> CGFloat {
+        CGFloat(self)
+    }
 }
 
 extension Double: Number {
 }
 
 extension CGFloat: Number {
+
+    func toInt() -> Int {
+        Int(self)
+    }
+
+    func toFloat() -> Float {
+        Float(self)
+    }
 }
 
 public extension Int32 {

@@ -112,13 +112,12 @@ class FormHelper {
 
     var _animLayer: CALayer? = nil
 
-    /// 数据获取到之后, 才会返回, 如有错误. 直接消化
-    func checkAndObtain(tableView: DslTableView, _ params: FormParams? = nil, _ end: (FormParams) -> Void) {
+    /// 数据获取
+    func checkAndObtain(tableView: DslTableView, _ params: FormParams? = nil, _ end: (FormParams, Error?) -> Void) {
         let p = params ?? FormParams()
         tableView.checkAndObtainData(p) { path, error in
             if let error = error {
                 debugPrint(error.message)
-                p.onError?(error)
                 // 不通过
                 if let path = path {
                     // 有路径
@@ -128,8 +127,9 @@ class FormHelper {
                     //无路径
                     toast(error.message, position: .top)
                 }
+                end(p, error)
             } else {
-                end(p)
+                end(p, nil)
             }
         }
     }

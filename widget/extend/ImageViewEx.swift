@@ -22,6 +22,24 @@ extension UIImageView {
                     placeholderImage: image)
         }
     }
+
+    /// 显示头像
+    func setAvatarUrl(_ url: String?, name: String) {
+        if nilOrEmpty(url) {
+            image = nil
+        } else {
+            if bounds.isEmpty {
+                doMain {
+                    self.setAvatarUrl(url, name: name)
+                }
+            } else {
+                let nameImage = name.toImage(rect: bounds)
+                af.setImage(withURL: URL(string: url!)!,
+                        cacheKey: url,
+                        placeholderImage: nameImage)
+            }
+        }
+    }
 }
 
 /// image 支持[UIImage] 支持本地图片, 支持在线图片

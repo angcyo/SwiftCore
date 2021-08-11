@@ -28,19 +28,19 @@ extension String {
     }
 
     /// 可解码
-    func toBean<Bean>() -> Bean where Bean: Decodable {
+    func toBean<Bean>() -> Bean? where Bean: Decodable {
         let decoder = JSONDecoder()
-        let decoded = try! decoder.decode(Bean.self, from: toData()!)
+        let decoded = try? decoder.decode(Bean.self, from: toData()!)
         return decoded
     }
 }
 
 /// 可编码
 extension Encodable {
-    func toJson() -> String {
+    func toJson() -> String? {
         let encoder = JSONEncoder()
-        let encoded = try! encoder.encode(self)
-        return encoded.toString()
+        let encoded = try? encoder.encode(self)
+        return encoded?.toString()
     }
 }
 

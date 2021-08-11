@@ -66,10 +66,13 @@ extension UIView {
     /// 将UIVIew转换成UIImage UIView截图
     func toImage() -> UIImage? {
         let size = bounds.size
+        //如果图片需要有透明通道, 则opaque设置为false,否则true
         UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
         layer.render(in: UIGraphicsGetCurrentContext()!)
         let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
+        defer {
+            UIGraphicsEndImageContext()
+        }
         return image
     }
 
@@ -313,11 +316,18 @@ extension UIView {
     }
 
     /// 设置阴影
-    func shadow(_ color: UIColor = Res.color.shadowColor, radius: Float = 5, size: CGSize = CGSize(width: 4, height: 4)) {
+    func shadow(_ color: UIColor = Res.color.shadowColor, radius: Float = 5, size: CGSize = CGSize(width: 0, height: 2)) {
         layer.shadowColor = color.cgColor
         layer.shadowOffset = size
-        layer.shadowOpacity = 1;
+        layer.shadowOpacity = 0.4;
         layer.shadowRadius = CGFloat(radius)
+        layer.masksToBounds = false
+
+        //layer.shadowColor = UIColor.black.cgColor
+        //layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
+        //layer.shadowRadius = 6.0
+        //layer.shadowOpacity = 0.4
+        //layer.masksToBounds = false
     }
 }
 
