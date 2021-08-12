@@ -8,11 +8,6 @@ import RxSwift
 /// vm
 class ViewModel: NSObject {
 
-    //Rx 自动取消订阅,
-    lazy var disposeBag: DisposeBag = {
-        DisposeBag()
-    }()
-
     required override init() {
         super.init()
         debugPrint("创建:\(self)")
@@ -23,6 +18,11 @@ class ViewModel: NSObject {
     deinit {
         debugPrint("销毁:\(self)")
     }
+
+    //Rx 自动取消订阅,
+    lazy var disposeBag: DisposeBag = {
+        DisposeBag()
+    }()
 
     /// 取消所有订阅
     func reset() {

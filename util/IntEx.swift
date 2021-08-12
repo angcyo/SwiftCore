@@ -8,6 +8,12 @@ import UIKit
 protocol Number {
 }
 
+extension Number {
+    func toString() -> String {
+        "\(self)"
+    }
+}
+
 extension Int: Number {
     func have(_ other: Int) -> Bool {
         if self == other {
@@ -30,6 +36,9 @@ extension Float: Number {
 }
 
 extension Double: Number {
+    func toCGFloat() -> CGFloat {
+        CGFloat(self)
+    }
 }
 
 extension CGFloat: Number {

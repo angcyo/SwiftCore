@@ -28,6 +28,26 @@ extension BehaviorSubject {
             return nil
         }
     }
+
+    /// 设置值
+    func setValue(_ value: Element) {
+        onNext(value)
+    }
+
+    /// 观察value or nil
+    func observe(_ on: @escaping (Element?) -> Void) -> Disposable {
+        subscribe(onNext: { value in
+            if let nilObj = value as? NilObject {
+                if nilObj.isNil {
+                    on(nil)
+                } else {
+                    on(value)
+                }
+            } else {
+                on(nil)
+            }
+        })
+    }
 }
 
 extension JSON: NilObject {

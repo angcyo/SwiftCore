@@ -48,3 +48,11 @@ extension CGRect {
         Float(size.height)
     }
 }
+
+func rect(_ x: Float, _ y: Float, _ width: Float, _ height: Float) -> CGRect {
+    CGRect(x: x.toCGFloat(), y: y.toCGFloat(), width: width.toCGFloat(), height: height.toCGFloat())
+}
+
+func rect(_ width: Float, _ height: Float) -> CGRect {
+    rect(0, 0, width, height)
+}

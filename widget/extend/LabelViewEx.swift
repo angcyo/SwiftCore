@@ -28,7 +28,7 @@ extension UIFont {
 extension UILabel {
 
     /// 加粗
-    func bold(_ bold: Bool = true) {
+    func setBold(_ bold: Bool = true) {
         if bold {
             font = font.bold()
         } else {
@@ -36,9 +36,17 @@ extension UILabel {
         }
     }
 
+    func bold(_ bold: Bool = true) {
+        setBold(bold)
+    }
+
     /// 设置字体大小
-    func setTextSize(_ size: CGFloat) {
-        font = font.withSize(size)
+    func setTextSize(_ size: Double) {
+        font = font.withSize(size.toCGFloat())
+    }
+
+    func setTextSize(_ size: Float) {
+        font = font.withSize(size.toCGFloat())
     }
 
     /// 设置文本颜色, 支持UIColor 支持hex颜色
@@ -55,5 +63,15 @@ func labelView(_ text: String? = nil,
     view.font = UIFont.systemFont(ofSize: CGFloat(size), weight: .regular)
     view.textColor = color
     view.numberOfLines = 0 //任意行
+    return view
+}
+
+func titleView() -> UILabel {
+    let view = labelView(size: Res.text.title.size, color: Res.text.title.color)
+    return view
+}
+
+func desView() -> UILabel {
+    let view = labelView(size: Res.text.des.size, color: Res.text.des.color)
     return view
 }

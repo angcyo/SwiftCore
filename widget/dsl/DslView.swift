@@ -25,6 +25,13 @@ extension UIView {
     /// 添加一个view, 并且返回.
     @discardableResult
     func render<T: UIView>(_ view: T, _ action: ((T) -> Void)? = nil) -> T {
+        if let superview = view.superview {
+            if superview != self {
+                //parent改变了, 先从其他地方移除
+                view.removeFromSuperview()
+            }
+        }
+
         if view.superview == nil {
             if self is UIStackView {
                 (self as! UIStackView).addArrangedSubview(view)

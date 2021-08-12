@@ -227,7 +227,7 @@ extension Api {
                         interceptor: RequestInterceptor? = nil) -> Observable<DataRequest> {
         let _url = Http.wrapUrlQuery(url, method: method, query: query)
         let _param = Http.wrapParam(method: method, param: param, query: query)
-        return RxAlamofire.request(method, connectUrl(url: _url),
+        return httpSession.rx.request(method, connectUrl(url: _url),
                 parameters: _param,
                 encoding: encoding,
                 headers: headers,
@@ -249,6 +249,7 @@ extension Api {
                 }
     }
 
+    /// 获取JSON对象
     static func json(_ url: String,
                      _ param: Parameters? = nil, //请求参数, 可以是body, form等
                      query: Parameters? = nil,
@@ -263,7 +264,19 @@ extension Api {
                     $0.rx.swiftyJSON()
                 }
                 .subscribe(onNext: { data in
-                    onResult(data, nil)
+                    if Http.PARSE_DATA_CODE {
+                        let json = data
+                        let code = json[Http.KEY_CODE].intValue
+                        if code >= 200 && code <= 299 {
+                            //成功
+                            onResult(data, nil)
+                        } else {
+                            let msg = json[Http.KEY_MSG].string ?? "接口异常"
+                            onResult(nil, messageError(msg))
+                        }
+                    } else {
+                        onResult(data, nil)
+                    }
                 }, onError: { error in
                     onResult(nil, error)
                 })
@@ -311,8 +324,19 @@ extension Api {
                 .flatMap {
                     $0.rx.decodable()
                 }
-                .subscribe(onNext: { data in
-                    onResult(data, nil)
+                .subscribe(onNext: { (data: T) in
+                    if Http.PARSE_DATA_CODE, let bean = data as? HttpCodeProtocol {
+                        let code = bean.code ?? 0
+                        if code >= 200 && code <= 299 {
+                            //成功
+                            onResult(data, nil)
+                        } else {
+                            let msg = bean.msg ?? "接口异常"
+                            onResult(nil, messageError(msg))
+                        }
+                    } else {
+                        onResult(data, nil)
+                    }
                 }, onError: { error in
                     onResult(nil, error)
                 })

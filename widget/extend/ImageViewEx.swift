@@ -89,3 +89,19 @@ func icon(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
     view.contentMode = .center
     return view
 }
+
+/// 创建一个圆形头像
+/// - Parameters:
+///   - size:  头像大小
+///   - borderColor: 边框颜色
+/// - Returns:
+func avatarView(size: Float = Res.size.avatar,
+                borderColor: UIColor = UIColor.white) -> UIImageView {
+    let view = image()
+    view.frame = rect(size, size)
+    view.clipsToBounds = true
+    view.contentMode = .scaleAspectFill
+    view.setRound(size / 2)
+    view.setBorder(UIColor.white, radii: size / 2)
+    return view
+}

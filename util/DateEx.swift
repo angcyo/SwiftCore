@@ -46,3 +46,7 @@ extension Date {
 var nowTime: Double {
     Date().timeIntervalSince1970
 }
+
+func nowTimeString(_ pattern: String = "yyyy-MM-dd HH:mm:ss") -> String {
+    Date().format(pattern)
+}

@@ -53,7 +53,7 @@ func showBottomLoading(_ status: String? = "正在操作...") {
             //maker.sizeToFit()
             view.makeBottomToBottomOf(nil, offset: -Float(root.safeAreaInsets.bottom) - Res.size.xx)
             //maker.makeGravityBottom(offset: -10)
-            view.makeGravityHorizontal(offset: Int(Res.size.xxx))
+            view.makeGravityHorizontal(offset: Res.size.xxx)
             view.setRound(Res.size.roundMax)
             view.setBorder(radii: Res.size.roundMax)
 

@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import RxSwift
 
 /// 数据和界面关联的item
 class DslItem: NSObject, IDslItem {
@@ -17,6 +18,9 @@ class DslItem: NSObject, IDslItem {
     var identifier: String {
         NSStringFromClass(itemCell!)
     }
+
+    /// 标识, 可以用来find
+    var itemTag: String? = nil
 
     /// data 数据
     var itemData: Any? = nil
@@ -96,4 +100,16 @@ class DslItem: NSObject, IDslItem {
 
     var onBindCell: ((_ cell: DslCell, _ indexPath: IndexPath) -> Void)? = nil
     var onBindCellOverride: ((_ cell: DslCell, _ indexPath: IndexPath) -> Void)? = nil
+
+    //MARK: - Rx
+
+    //Rx 自动取消订阅,
+    lazy var disposeBag: DisposeBag = {
+        DisposeBag()
+    }()
+
+    /// 取消所有订阅
+    func reset() {
+        disposeBag = DisposeBag()
+    }
 }

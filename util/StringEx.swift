@@ -17,6 +17,10 @@ extension String {
         NSString(string: self)
     }
 
+    func toNSAttributedString() -> NSAttributedString {
+        NSAttributedString(string: self)
+    }
+
     /// 如果为空时则返回[empty]
     func ifEmpty(_ empty: String) -> String {
         if self.isEmpty || self.lowercased() == "null" {

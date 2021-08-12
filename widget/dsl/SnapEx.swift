@@ -74,6 +74,30 @@ extension UIView {
         }
     }
 
+    func makeEdge(_ target: ConstraintRelatableTarget = 0, inset: UIEdgeInsets? = nil) {
+        make { maker in
+            if let inset = inset {
+                maker.edges.equalTo(target).inset(inset)
+            } else {
+                maker.edges.equalTo(target)
+            }
+        }
+    }
+
+    func makeEdge(left: Float = 0, right: Float = 0, top: Float = 0, bottom: Float = 0) {
+        make { maker in
+            maker.edges.equalTo(UIEdgeInsets(top: top.toCGFloat(), left: left.toCGFloat(), bottom: bottom.toCGFloat(), right: right.toCGFloat()))
+        }
+    }
+
+    func makeEdgeHorizontal(size: Float = 0) {
+        makeEdge(left: size, right: size, top: 0, bottom: 0)
+    }
+
+    func makeEdgeVertical(size: Float = 0) {
+        makeEdge(left: 0, right: 0, top: size, bottom: size)
+    }
+
     /// 约束宽度, 支持最大宽度, 最小宽度
     func makeWidth(_ width: ConstraintRelatableTarget? = nil,
                    minWidth: ConstraintRelatableTarget? = nil,
@@ -205,7 +229,7 @@ extension UIView {
         }
     }
 
-    func makeGravityHorizontal(_ parent: ConstraintRelatableTarget? = nil, offset: Int = 0) {
+    func makeGravityHorizontal(_ parent: ConstraintRelatableTarget? = nil, offset: Float = 0) {
         make { maker in
             let parent = toConstraintTarget(parent)
             maker.left.equalTo(parent).offset(offset)
@@ -213,7 +237,7 @@ extension UIView {
         }
     }
 
-    func makeGravityVertical(_ parent: ConstraintRelatableTarget? = nil, offset: Int = 0) {
+    func makeGravityVertical(_ parent: ConstraintRelatableTarget? = nil, offset: Float = 0) {
         make { maker in
             let parent = toConstraintTarget(parent)
             maker.top.equalTo(parent).offset(offset)
@@ -224,14 +248,22 @@ extension UIView {
     /// 注意offset可能需要是负值
     func makeGravityRight(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
         make { maker in
-            maker.right.equalTo(parent ?? superview!).offset(offset)
+            if let num = offset as? Float {
+                maker.right.equalTo(parent ?? superview!).offset(-num)
+            } else {
+                maker.right.equalTo(parent ?? superview!).offset(offset)
+            }
         }
     }
 
     /// 注意offset可能需要是负值
     func makeGravityBottom(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
         make { maker in
-            maker.bottom.equalTo(parent ?? superview!).offset(offset)
+            if let num = offset as? Float {
+                maker.bottom.equalTo(parent ?? superview!).offset(-num)
+            } else {
+                maker.bottom.equalTo(parent ?? superview!).offset(offset)
+            }
         }
     }
 
@@ -256,7 +288,12 @@ extension UIView {
                             offset: ConstraintOffsetTarget = 0) {
         make { maker in
             let parent = toConstraintTargetView(parent)
-            maker.right.equalTo(parent.snp.right).offset(offset)
+
+            if let num = offset as? Float {
+                maker.right.equalTo(parent.snp.right).offset(-num)
+            } else {
+                maker.right.equalTo(parent.snp.right).offset(offset)
+            }
         }
     }
 
@@ -290,7 +327,12 @@ extension UIView {
                               offset: ConstraintOffsetTarget = 0) {
         make { maker in
             let parent = toConstraintTargetView(parent)
-            maker.bottom.equalTo(parent.snp.bottom).offset(offset)
+
+            if let num = offset as? Float {
+                maker.bottom.equalTo(parent.snp.bottom).offset(-num)
+            } else {
+                maker.bottom.equalTo(parent.snp.bottom).offset(offset)
+            }
         }
     }
 

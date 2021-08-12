@@ -14,9 +14,9 @@ struct Res {
     struct text {
         static var normal = (size: 17.0, color: UIColor.parse("#222222"))
         static var title = (size: 20.0, color: UIColor.parse("#222222"))
-        static var big = (size: 22.0, color: UIColor.parse("#000000"))
+        static var big = (size: 24.0, color: UIColor.parse("#000000"))
         static var subTitle = (size: 14.0, color: UIColor.parse("#666666"))
-        static var des = (size: 12.0, color: UIColor.parse("#ACB0B7"))
+        static var des = (size: 13.0, color: UIColor.parse("#53575F"))
         static var label = (size: 15.0, color: UIColor.parse("#ACB0B7"))
         static var tip = (size: 12.0, color: UIColor.parse("#ACB0B7"))
         static var body = (size: 16.0, color: UIColor.parse("#161D26"))
@@ -60,7 +60,16 @@ struct Res {
         static var xx: Float = 20
         static var xxx: Float = 30
 
+        // 表单左边距
         static var leftMargin: Float = 16
+        static var leadingMargin: Float = 16 //头
+        static var trailingMargin: Float = 16 //尾
+
+        // 头像的默认大小
+        static var avatar: Float = 68
+        // 图标的大小
+        static var icon: Float = 18
+        static var iconMin: Float = 15 //小图标
     }
 
     // MARK: - 字体资源
