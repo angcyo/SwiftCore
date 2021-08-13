@@ -86,6 +86,7 @@ class DslItem: NSObject, IDslItem {
 
     /// item与cell绑定
     func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
+        debugPrint("绑定cell:\(cell):\(indexPath)")
         onBindCell?(cell, indexPath)
         bindCellOverride(cell, indexPath)
 

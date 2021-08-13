@@ -71,6 +71,30 @@ extension UIColor {
                 blue: CGFloat(b) / 255.0,
                 alpha: CGFloat(a) / 255.0);
     }
+
+    var r: CGFloat {
+        cgColor.components![0]
+    }
+    var g: CGFloat {
+        cgColor.components![1]
+    }
+    var b: CGFloat {
+        cgColor.components![2]
+    }
+
+    /// 修改颜色透明度, 并返回新的颜色
+    /// 颜色对象的不透明度值，指定为 0.0 到 1.0 之间的值。 低于 0.0 的 Alpha 值被解释为 0.0，高于 1.0 的值被解释为 1.0
+    /// 不透明度 1:完全不透明, 0:完全透明
+    func alpha(_ alpha: Float = 0.3) -> UIColor {
+        let components = cgColor.components!
+        return UIColor(red: components[0], green: components[1], blue: components[2], alpha: alpha.toCGFloat())
+    }
+}
+
+extension String {
+    func toColor() -> UIColor {
+        UIColor.parse(self)
+    }
 }
 
 /// 颜色转换

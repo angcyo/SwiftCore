@@ -23,8 +23,8 @@ func hStackView(_ alignment: UIStackView.Alignment = .center,
     //case fillProportionally = 2 //比例填满控件
     //case equalSpacing = 3 //空隙平分
     //case equalCentering = 4 //中心距离平分
-    if distribution != nil {
-        view.distribution = distribution! //.fill
+    if let distribution = distribution {
+        view.distribution = distribution //.fill
     }
     return view
 }

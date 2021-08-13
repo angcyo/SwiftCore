@@ -74,9 +74,12 @@ extension UIView {
         }
     }
 
-    func makeEdge(_ target: ConstraintRelatableTarget = 0, inset: UIEdgeInsets? = nil) {
+    func makeEdge(_ target: ConstraintRelatableTarget? = nil, inset: UIEdgeInsets? = nil) {
         make { maker in
-            if let inset = inset {
+            let target = target ?? superview!
+            if let num = target as? Float {
+                makeEdge(left: num, right: num, top: num, bottom: num)
+            } else if let inset = inset {
                 maker.edges.equalTo(target).inset(inset)
             } else {
                 maker.edges.equalTo(target)
@@ -86,7 +89,8 @@ extension UIView {
 
     func makeEdge(left: Float = 0, right: Float = 0, top: Float = 0, bottom: Float = 0) {
         make { maker in
-            maker.edges.equalTo(UIEdgeInsets(top: top.toCGFloat(), left: left.toCGFloat(), bottom: bottom.toCGFloat(), right: right.toCGFloat()))
+            maker.edges.equalTo(UIEdgeInsets(top: top.toCGFloat(), left: left.toCGFloat(),
+                    bottom: bottom.toCGFloat(), right: right.toCGFloat()))
         }
     }
 

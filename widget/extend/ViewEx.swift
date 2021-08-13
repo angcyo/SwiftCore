@@ -48,6 +48,8 @@ func roundPath(bounds: CGRect,
     return maskPath
 }
 
+// MARK: - 控件属性/方法扩展
+
 extension UIView {
 
     ///key
@@ -181,12 +183,14 @@ extension UIView {
     /// 同时设置4个角的圆角
     func setRadius(_ radius: Float = Res.size.roundNormal) {
         layer.cornerRadius = CGFloat(radius)
+        clipsToBounds = true
     }
 
     func setRadiusBorder(_ radius: Float = Res.size.roundNormal,
                          borderColor: UIColor? = Res.color.colorAccent,
                          borderWidth: Float = Res.size.line) {
         layer.cornerRadius = CGFloat(radius)
+        clipsToBounds = true
         layer.borderColor = borderColor?.cgColor
         layer.borderWidth = CGFloat(borderWidth)
     }
@@ -328,6 +332,16 @@ extension UIView {
         //layer.shadowRadius = 6.0
         //layer.shadowOpacity = 0.4
         //layer.masksToBounds = false
+    }
+}
+
+//MARK: - 控件布局扩展
+
+extension UIView {
+    func removeAllView() {
+        for view in subviews {
+            view.removeFromSuperview()
+        }
     }
 }
 

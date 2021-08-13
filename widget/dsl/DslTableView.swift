@@ -132,22 +132,14 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
         return sectionHelper.sectionList[section].firstItem as? DslTableItem
     }
 
-    // MARK: dataSource代理
-
-    /// section 中的数据行数
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //return itemList.count
-        return sectionHelper.sectionList[section].items.count
-    }
-
-    /// 获取cell
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = _itemList[indexPath.row]
-        return createTableViewCell(tableView, cellForRowAt: indexPath, item: item)
+    override func cellForRow(at indexPath: IndexPath) -> UITableViewCell? {
+        super.cellForRow(at: indexPath)
+        //diffableDataSource.tableView(<#T##tableView: UITableView##UIKit.UITableView#>, cellForRowAt: <#T##IndexPath##Foundation.IndexPath#>)
     }
 
     /// 赋值和初始化
     func createTableViewCell(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, item: DslItem) -> UITableViewCell {
+        debugPrint("获取Cell:\(indexPath)")
         //赋值
         item._dslRecyclerView = self
 
@@ -156,58 +148,6 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
         item.bindCell(cell, indexPath)
         return cell
     }
-
-    /// section 的数量
-    func numberOfSections(in tableView: UITableView) -> Int {
-        debugPrint("numberOfSections")
-        return sectionHelper.sectionList.count
-    }
-
-    /// section 的头部标题
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        debugPrint("titleForHeaderInSection:\(section)")
-        return getSectionFirstItem(section)?.itemHeaderTitle
-    }
-
-    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        debugPrint("titleForFooterInSection:\(section)")
-        return getSectionFirstItem(section)?.itemFooterTitle
-    }
-
-    /// 是否可以编辑
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        debugPrint("canEditRowAt:\(indexPath)")
-        return getTableItem(indexPath).itemCanEdit
-    }
-
-    /// 是否可以移动
-    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        debugPrint("canMoveRowAt:\(indexPath)")
-        return getTableItem(indexPath).itemCanMove
-    }
-
-    /// titles
-    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        debugPrint("sectionIndexTitles")
-        return nil
-    }
-
-    /// 根据title 获取 索引
-    func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
-        debugPrint("sectionForSectionIndexTitle:\(title):\(index)")
-        return index
-    }
-
-    /// 点击了侧滑按钮
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        debugPrint("commit editingStyle:\(editingStyle.rawValue):\(indexPath)")
-    }
-
-    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        debugPrint("moveRowAt:\(sourceIndexPath) to:\(destinationIndexPath)")
-    }
-
-    //end--UITableViewDataSource
 
     // MARK: cell header footer 显示和隐藏
 
@@ -244,13 +184,15 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     /// 指定行高
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         //return UITableView.automaticDimension
-        getTableItem(indexPath).itemHeight
+        debugPrint("heightForRowAt:\(indexPath)")
+        return getTableItem(indexPath).itemHeight
     }
 
     /// 预估的行高
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         //return 50
-        getTableItem(indexPath).itemEstimatedHeight
+        debugPrint("estimatedHeightForRowAt:\(indexPath)")
+        return getTableItem(indexPath).itemEstimatedHeight
     }
 
     /// 头部的高度
@@ -340,9 +282,16 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     /// 选中的cell索引集合
     var selectList: [IndexPath] = []
 
+    /// 自动取消选择, 默认为true
+    var autoCancelSelect = true
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         debugPrint("选中:\(indexPath)")
         selectList.append(indexPath)
+
+        if autoCancelSelect {
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
     }
 
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
@@ -620,12 +569,11 @@ class DslTableViewDiffableDataSource: UITableViewDiffableDataSource<DslSection, 
 
         //core
         super.init(tableView: tableView) { view, path, item in
-            debugPrint("获取Cell:\(path)")
-            return tableView.createTableViewCell(tableView, cellForRowAt: path, item: item)
+            tableView.createTableViewCell(tableView, cellForRowAt: path, item: item)
         }
     }
 
-    //MARK: 转发
+    //MARK: DslTableViewDiffableDataSource 转发
 
     /// 获取section的数量
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -642,12 +590,48 @@ class DslTableViewDiffableDataSource: UITableViewDiffableDataSource<DslSection, 
         super.tableView(tableView, cellForRowAt: indexPath)
     }
 
+    /// section 的头部标题
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        dslTableView.tableView(tableView, titleForHeaderInSection: section)
+        debugPrint("titleForHeaderInSection:\(section)")
+        return dslTableView.getSectionFirstItem(section)?.itemHeaderTitle
     }
 
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        dslTableView.tableView(tableView, titleForFooterInSection: section)
+        debugPrint("titleForFooterInSection:\(section)")
+        return dslTableView.getSectionFirstItem(section)?.itemFooterTitle
+    }
+
+    /// titles
+    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        debugPrint("sectionIndexTitles")
+        return nil
+    }
+
+    /// 根据title 获取 索引
+    override func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
+        debugPrint("sectionForSectionIndexTitle:\(title):\(index)")
+        return index
+    }
+
+    /// 点击了侧滑按钮
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        debugPrint("commit editingStyle:\(editingStyle.rawValue):\(indexPath)")
+    }
+
+    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        debugPrint("moveRowAt:\(sourceIndexPath) to:\(destinationIndexPath)")
+    }
+
+    /// 是否可以编辑
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        debugPrint("canEditRowAt:\(indexPath)")
+        return dslTableView.getTableItem(indexPath).itemCanEdit
+    }
+
+    /// 是否可以移动
+    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        debugPrint("canMoveRowAt:\(indexPath)")
+        return dslTableView.getTableItem(indexPath).itemCanMove
     }
 }
 

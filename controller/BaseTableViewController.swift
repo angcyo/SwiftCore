@@ -12,7 +12,7 @@ class BaseTableViewController: BaseViewController {
     }()
 
     /// 清理选中状态
-    var clearsSelectionOnViewWillAppear: Bool = true
+    var clearsSelectionOnViewWillAppear: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -63,15 +63,45 @@ func labelView(_ text: String? = nil,
     view.font = UIFont.systemFont(ofSize: CGFloat(size), weight: .regular)
     view.textColor = color
     view.numberOfLines = 0 //任意行
+    view.sizeToFit()
     return view
 }
 
-func titleView() -> UILabel {
-    let view = labelView(size: Res.text.title.size, color: Res.text.title.color)
+func titleView(_ text: String? = nil) -> UILabel {
+    let view = labelView(text, size: Res.text.title.size, color: Res.text.title.color)
     return view
 }
 
-func desView() -> UILabel {
-    let view = labelView(size: Res.text.des.size, color: Res.text.des.color)
+func bodyTextView(_ text: String? = nil) -> UILabel {
+    let view = labelView(text, size: Res.text.body.size, color: Res.text.body.color)
+    return view
+}
+
+func desView(_ text: String? = nil) -> UILabel {
+    let view = labelView(text, size: Res.text.des.size, color: Res.text.des.color)
+    return view
+}
+
+/// 填充色 提示性质的Label
+func fillTipLabel(_ text: String?, textColor: UIColor, fillColor: UIColor? = nil) -> PaddingLabel {
+    let backColor = fillColor ?? textColor.alpha(0.3)
+    let color = textColor
+    let view = PaddingLabel()
+
+    view.text = text
+    view.font = UIFont.systemFont(ofSize: CGFloat(Res.text.tip.size), weight: .regular)
+    view.numberOfLines = 0 //任意行
+
+    view.setRadius(Res.size.roundLittle)
+    view.setBackground(backColor)
+    view.textColor = color
+
+    view.sizeToFit()
+
+    /*let button = UIButton()
+    button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+    button.setTitle("title", for: .normal)
+    button.tintColor = .white // this will be the textColor
+    button.isUserInteractionEnabled = false*/
     return view
 }

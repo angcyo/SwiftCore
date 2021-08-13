@@ -42,6 +42,18 @@ extension UILabel {
     }
 }
 
+extension Style {
+
+    // 填充提示
+    func fillTip(_ textColor: UIColor, fillColor: UIColor? = nil) {
+        backColor = fillColor ?? textColor.alpha(0.3)
+        color = textColor
+
+        //lineSpacing //行间距
+        //kerning = .adobe(<#T##CGFloat##CoreGraphics.CGFloat#>) //字间距
+    }
+}
+
 func style(_ builder: (RichStringBuilder) -> Void) -> AttributedString? {
     let _builder = RichStringBuilder()
     builder(_builder)

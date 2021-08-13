@@ -19,7 +19,7 @@ struct Res {
         static var des = (size: 13.0, color: UIColor.parse("#53575F"))
         static var label = (size: 15.0, color: UIColor.parse("#ACB0B7"))
         static var tip = (size: 12.0, color: UIColor.parse("#ACB0B7"))
-        static var body = (size: 16.0, color: UIColor.parse("#161D26"))
+        static var body = (size: 14.0, color: UIColor.parse("#161D26"))
     }
 
     // MARK: - 颜色资源
@@ -51,6 +51,7 @@ struct Res {
     struct size {
         static var line: Float = 1
 
+        static var roundLittle: Float = 2
         static var roundMin: Float = 5
         static var roundNormal: Float = 10
         static var roundCommon: Float = 15
@@ -59,6 +60,11 @@ struct Res {
         static var x: Float = 10
         static var xx: Float = 20
         static var xxx: Float = 30
+
+        // 行间距
+        static var lineSpacing: Float = 6
+        // Flow间隙
+        static var space: Float = 8
 
         // 表单左边距
         static var leftMargin: Float = 16
