@@ -190,7 +190,7 @@ extension UIView {
                          borderColor: UIColor? = Res.color.colorAccent,
                          borderWidth: Float = Res.size.line) {
         layer.cornerRadius = CGFloat(radius)
-        clipsToBounds = true
+        layer.masksToBounds = true
         layer.borderColor = borderColor?.cgColor
         layer.borderWidth = CGFloat(borderWidth)
     }
@@ -386,6 +386,13 @@ func view(_ color: Any? = nil) -> UIView {
 func v(_ color: Any? = nil) -> UIView {
     let view = UIView()
     //view.backgroundColor = UIColor()
+    view.setBackground(color)
+    return view
+}
+
+/// 线, 宽高需要手动设置
+func lineView(_ color: UIColor = Res.color.line) -> UIView {
+    let view = v()
     view.setBackground(color)
     return view
 }
