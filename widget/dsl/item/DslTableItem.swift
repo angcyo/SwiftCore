@@ -52,9 +52,15 @@ class DslTableItem: DslItem {
 
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
-        if let tableCell = cell as? DslTableCell {
-            tableCell._item = self
+        _bindTableCell(cell, indexPath)
+
+    }
+
+    func _bindTableCell(_ cell: DslCell, _ indexPath: IndexPath) {
+        guard let cell = cell as? DslTableCell else {
+            return
         }
+        cell._item = self
     }
 }
 
@@ -123,25 +129,38 @@ class DslTableCell: UITableViewCell {
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         //debugPrint("setEditing:\(editing):\(animated)")
-        (_item as? DslTableItem)?._itemEditing = editing
-        (_item as? DslTableItem)?.onEditing?(editing, animated)
+
+        if let item = _item as? DslTableItem {
+            item._itemEditing = editing
+            item.onEditing?(editing, animated)
+        }
     }
 
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
         debugPrint("setHighlighted:\(highlighted):\(animated)")
-        (_item as? DslTableItem)?._itemHighlighted = highlighted
-        (_item as? DslTableItem)?.onHighlighted?(highlighted, animated)
+
+        if let item = _item as? DslTableItem {
+            item._itemHighlighted = highlighted
+            item.onHighlighted?(highlighted, animated)
+        }
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         debugPrint("setSelected:\(selected):\(animated)")
-        (_item as? DslTableItem)?._itemSelected = selected
-        (_item as? DslTableItem)?.onSelected?(selected, animated)
+
+        if let item = _item as? DslTableItem {
+            item._itemSelected = selected
+            item.onSelected?(selected, animated)
+        }
     }
 
     override func draw(_ rect: CGRect) {
         super.draw(rect)
+    }
+
+    override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
+        super.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
     }
 }

@@ -26,7 +26,7 @@ class DslItem: NSObject, IDslItem {
     var itemData: Any? = nil
 
     /// 分组, 相同的sectionName会分配在同一个section中, 分组只和上下item之间判断
-    var itemSectionName: String? = nil
+    var itemSectionName: String = "default"
 
     /// 是否隐藏item
     var itemHidden: Bool = false {

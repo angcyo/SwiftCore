@@ -90,6 +90,10 @@ func icon(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
     return view
 }
 
+func iconView() -> UIImageView {
+    icon()
+}
+
 /// 创建一个圆形头像
 /// - Parameters:
 ///   - size:  头像大小

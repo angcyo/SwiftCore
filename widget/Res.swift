@@ -76,6 +76,8 @@ struct Res {
         // 图标的大小
         static var icon: Float = 18
         static var iconMin: Float = 15 //小图标
+
+        static var itemMinHeight: Float = 35 //dsl item 最小的高度
     }
 
     // MARK: - 字体资源
