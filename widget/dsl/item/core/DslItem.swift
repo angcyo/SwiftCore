@@ -16,7 +16,10 @@ class DslItem: NSObject, IDslItem {
 
     /// itemCell 可复用的标识
     var identifier: String {
-        NSStringFromClass(itemCell!)
+        if itemCell == nil {
+            debugPrint("请配置[itemCell]")
+        }
+        return NSStringFromClass(itemCell!)
     }
 
     /// 标识, 可以用来find
@@ -79,7 +82,9 @@ class DslItem: NSObject, IDslItem {
     }
 
     func initItem() {
-
+        if itemCell == nil {
+            itemCell = cellClass()
+        }
     }
 
     //MARK: - cell界面绑定
@@ -112,5 +117,17 @@ class DslItem: NSObject, IDslItem {
     /// 取消所有订阅
     func reset() {
         disposeBag = DisposeBag()
+    }
+}
+
+extension DslItem {
+
+    /// 获取对应名称的cell
+    func cellClass() -> AnyClass? {
+        var name = className
+        name.removeLast(4)
+        let cellName = name + "Cell"
+        let cls: AnyClass? = cellName.toClass()
+        return cls
     }
 }

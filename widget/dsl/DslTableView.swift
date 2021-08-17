@@ -124,8 +124,8 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
 
     // MARK: 辅助操作
 
-    func getTableItem(_ indexPath: IndexPath) -> DslTableItem {
-        getItem(indexPath) as! DslTableItem
+    func getTableItem(_ indexPath: IndexPath) -> DslTableItem? {
+        getItem(indexPath) as? DslTableItem
     }
 
     func getSectionFirstItem(_ section: Int) -> DslTableItem? {
@@ -185,14 +185,14 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         //return UITableView.automaticDimension
         debugPrint("heightForRowAt:\(indexPath)")
-        return getTableItem(indexPath).itemHeight
+        return getTableItem(indexPath)?.itemHeight ?? UITableView.automaticDimension
     }
 
     /// 预估的行高
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         //return 50
         debugPrint("estimatedHeightForRowAt:\(indexPath)")
-        return getTableItem(indexPath).itemEstimatedHeight
+        return getTableItem(indexPath)?.itemEstimatedHeight ?? 50
     }
 
     /// 头部的高度
@@ -251,7 +251,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
 
     /// 是否突出显示行, 只有返回true, didSelectRowAt 才有机会触发
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        getTableItem(indexPath).itemCanHighlight
+        getTableItem(indexPath)?.itemCanHighlight ?? false
     }
 
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
@@ -265,7 +265,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     /// 将要选中行
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         debugPrint("即将选中:\(indexPath)")
-        if getTableItem(indexPath).itemCanSelect {
+        if getTableItem(indexPath)?.itemCanSelect ?? false {
             return indexPath
         }
         return nil
@@ -273,7 +273,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
 
     func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
         debugPrint("即将取消选中:\(indexPath)")
-        if getTableItem(indexPath).itemCanDeselect {
+        if getTableItem(indexPath)?.itemCanDeselect ?? false {
             return indexPath
         }
         return nil
@@ -351,7 +351,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     /// 缩进级别量
     func tableView(_ tableView: UITableView, indentationLevelForRowAt indexPath: IndexPath) -> Int {
         debugPrint("缩进:indentationLevelForRowAt:\(indexPath)")
-        return getTableItem(indexPath).itemIndentationLevel
+        return getTableItem(indexPath)?.itemIndentationLevel ?? 0
     }
 
     /// 即将进入编辑模式
@@ -625,13 +625,13 @@ class DslTableViewDiffableDataSource: UITableViewDiffableDataSource<DslSection, 
     /// 是否可以编辑
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         debugPrint("canEditRowAt:\(indexPath)")
-        return dslTableView.getTableItem(indexPath).itemCanEdit
+        return dslTableView.getTableItem(indexPath)?.itemCanEdit ?? false
     }
 
     /// 是否可以移动
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         debugPrint("canMoveRowAt:\(indexPath)")
-        return dslTableView.getTableItem(indexPath).itemCanMove
+        return dslTableView.getTableItem(indexPath)?.itemCanMove  ?? false
     }
 }
 

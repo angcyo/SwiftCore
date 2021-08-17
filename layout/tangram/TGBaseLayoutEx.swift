@@ -7,14 +7,32 @@ import TangramKit
 
 extension UIView {
 
-    func wrap_content() {
-        tg_width.equal(.wrap)
-        tg_height.equal(.wrap)
+    func wrap_content(minWidth: Float? = nil, minHeight: Float? = nil) {
+        if let min = minWidth {
+            tg_width.min(min.toCGFloat())
+        } else {
+            tg_width.equal(.wrap)
+        }
+
+        if let min = minHeight {
+            tg_height.min(min.toCGFloat())
+        } else {
+            tg_height.equal(.wrap)
+        }
     }
 
-    func match_parent() {
-        tg_width.equal(.fill)
-        tg_height.equal(.fill)
+    func match_parent(maxWidth: Float? = nil, maxHeight: Float? = nil) {
+        if let max = maxWidth {
+            tg_width.max(max.toCGFloat())
+        } else {
+            tg_width.equal(.fill)
+        }
+
+        if let max = maxHeight {
+            tg_height.max(max.toCGFloat())
+        } else {
+            tg_height.equal(.fill)
+        }
     }
 
     func wh(width: Float? = nil, height: Float? = nil) {
@@ -61,23 +79,50 @@ extension UIView {
 
 extension TGBaseLayout {
 
+    //MARK: padding
+
     func setPadding(_ padding: Float) {
         setPadding(left: padding, top: padding, right: padding, bottom: padding)
     }
 
     func setPaddingHorizontal(_ padding: Float) {
-        setPadding(left: padding, top: tg_topPadding.toFloat(), right: padding, bottom: tg_bottomPadding.toFloat())
+        setPadding(left: padding, top: tg_padding.top.toFloat(), right: padding, bottom: tg_padding.bottom.toFloat())
     }
 
     func setPaddingVertical(_ padding: Float) {
-        setPadding(left: tg_leadingPadding.toFloat(), top: padding, right: tg_trailingPadding.toFloat(), bottom: padding)
+        setPadding(left: tg_padding.left.toFloat(), top: padding, right: tg_padding.right.toFloat(), bottom: padding)
     }
 
     func setPadding(left: Float = 0, top: Float = 0, right: Float = 0, bottom: Float = 0) {
-        tg_leadingPadding = left.toCGFloat()
-        tg_topPadding = top.toCGFloat()
-        tg_trailingPadding = right.toCGFloat()
-        tg_bottomPadding = bottom.toCGFloat()
+        //tg_leadingPadding = left.toCGFloat()
+        //tg_topPadding = top.toCGFloat()
+        //tg_trailingPadding = right.toCGFloat()
+        //tg_bottomPadding = bottom.toCGFloat()
+        tg_padding = UIEdgeInsets(top: top.toCGFloat(), left: left.toCGFloat(), bottom: bottom.toCGFloat(), right: right.toCGFloat())
     }
 
+    //MARK: margin
+
+    func setMargin(_ margin: Float) {
+        setMargin(left: margin, top: margin, right: margin, bottom: margin)
+    }
+
+    func setMarginHorizontal(_ margin: Float) {
+        setMargin(left: margin, top: tg_top.numberVal?.toFloat() ?? 0, right: margin, bottom: tg_bottom.numberVal?.toFloat() ?? 0)
+    }
+
+    func setMarginVertical(_ margin: Float) {
+        setMargin(left: tg_leading.numberVal?.toFloat() ?? 0, top: margin, right: tg_trailing.numberVal?.toFloat() ?? 0, bottom: margin)
+    }
+
+    func setMargin(left: Float = 0, top: Float = 0, right: Float = 0, bottom: Float = 0) {
+        //tg_left.equal(left.toCGFloat())
+        tg_leading.equal(left.toCGFloat())
+
+        //tg_right.equal(right.toCGFloat())
+        tg_trailing.equal(right.toCGFloat())
+
+        tg_top.equal(top.toCGFloat())
+        tg_bottom.equal(bottom.toCGFloat())
+    }
 }

@@ -7,6 +7,12 @@
 
 import Foundation
 
+extension String {
+    func toClass() -> AnyClass? {
+        NSClassFromString(self)
+    }
+}
+
 extension NSObject {
 
     /// 模拟kotlin的apply
@@ -27,9 +33,16 @@ extension NSObject {
 
     // MARK:返回className
 
+    /// 返回全包名类名 //"Wayto_GBSecurity_iOS.LoginController"
     var className: String {
         get {
-            //"Wayto_GBSecurity_iOS.LoginController"
+            type(of: self).description()
+        }
+    }
+
+    /// 返回无包名的类名 //"LoginController"
+    var simpleClassName: String {
+        get {
             //NSStringFromClass(type(of: self))
             let name = type(of: self).description()
             if (name.contains(".")) {

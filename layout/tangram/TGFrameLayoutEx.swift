@@ -6,9 +6,15 @@ import Foundation
 import TangramKit
 
 ///https://github.com/youngsoft/TangramKit/blob/master/README.zh.md#%E6%A1%86%E6%9E%B6%E5%B8%83%E5%B1%80tgframelayout
-func frameLayout() -> TGFrameLayout {
+func frameLayout(padding: Float = 0) -> TGFrameLayout {
+    frameLayout(paddingHorizontal: padding, paddingVertical: padding)
+}
+
+func frameLayout(paddingHorizontal: Float = 0, paddingVertical: Float = 0) -> TGFrameLayout {
     let layout = TGFrameLayout()
     layout.wrap_content()
+    layout.setPaddingHorizontal(paddingHorizontal)
+    layout.setPaddingVertical(paddingVertical)
     return layout
 }
 

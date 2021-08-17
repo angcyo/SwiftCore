@@ -32,6 +32,7 @@ struct Res {
         static var white = UIColor.white
         static var line = UIColor.parse("#ECECEC")
         static var bg = UIColor.parse("#F3F5F9")
+        static var desBg = UIColor.parse("#F3F5F9")
 
         static var info = UIColor.parse("#4b7efe")
         static var success = UIColor.parse("#44CB5C")

@@ -53,7 +53,6 @@ class DslTableItem: DslItem {
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
         _bindTableCell(cell, indexPath)
-
     }
 
     func _bindTableCell(_ cell: DslCell, _ indexPath: IndexPath) {
@@ -162,5 +161,6 @@ class DslTableCell: UITableViewCell {
 
     override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
         super.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
+        //root.sizeThatFits(CGSize(width: targetSize.width - safeAreaInsets.left - safeAreaInsets.right, height: targetSize.height))
     }
 }

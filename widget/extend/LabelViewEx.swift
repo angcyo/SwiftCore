@@ -83,7 +83,7 @@ func desView(_ text: String? = nil) -> UILabel {
 }
 
 /// 填充色 提示性质的Label
-func fillTipLabel(_ text: String?, textColor: UIColor, fillColor: UIColor? = nil) -> PaddingLabel {
+func fillTipLabel(_ text: String? = nil, textColor: UIColor = Res.color.info, fillColor: UIColor? = nil) -> PaddingLabel {
     let backColor = fillColor ?? textColor.alpha(0.3)
     let color = textColor
     let view = PaddingLabel()
@@ -103,5 +103,26 @@ func fillTipLabel(_ text: String?, textColor: UIColor, fillColor: UIColor? = nil
     button.setTitle("title", for: .normal)
     button.tintColor = .white // this will be the textColor
     button.isUserInteractionEnabled = false*/
+    return view
+}
+
+/// 边框色 提示性质的Label
+func borderTipLabel(_ text: String? = nil, textColor: UIColor = Res.color.info, borderColor: UIColor? = nil) -> PaddingLabel {
+    let borderColor = borderColor ?? textColor
+    let color = textColor
+    let view = PaddingLabel()
+    view.topInset = 3
+    view.bottomInset = view.topInset
+    view.leftInset = 5
+    view.rightInset = view.leftInset
+
+    view.text = text
+    view.font = UIFont.systemFont(ofSize: CGFloat(Res.text.tip.size), weight: .regular)
+    view.numberOfLines = 0 //任意行
+
+    view.setRadiusBorder(Res.size.roundLittle, borderColor: borderColor)
+    view.textColor = color
+
+    view.sizeToFit()
     return view
 }
