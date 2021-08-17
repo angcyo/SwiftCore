@@ -21,28 +21,27 @@ class LineItem: DslItem {
             return
         }
 
-        cell.frameLayout.setPadding(left: itemPaddingLeft, top: itemPaddingTop, right: itemPaddingRight, bottom: itemPaddingBottom)
+        cell.root.setPadding(left: itemPaddingLeft, top: itemPaddingTop, right: itemPaddingRight, bottom: itemPaddingBottom)
     }
 }
 
 class LineCell: DslTableCell, IFrameCell {
 
-    var frameLayout: TGFrameLayout = TGFrameLayout()
-
-    var line = lineView()
+    let root = frameLayout()
+    let line = lineView()
 
     override func initCell() {
         super.initCell()
 
-        frameLayout.mWwH()
-        frameLayout.render(line) {
+        root.mWwH()
+        root.render(line) {
             $0.mWwH(height: Res.size.line)
         }
 
-        renderCell(frameLayout)
+        renderCell(root)
     }
 
     override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
-        frameLayout.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
+        root.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
     }
 }

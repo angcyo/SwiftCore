@@ -75,9 +75,34 @@ extension UIView {
             tg_width.min(min.toCGFloat())
         }
     }
+
+    /// 设置可见性
+    func setVisible(_ visible: TGVisibility = .gone) {
+        tg_visibility = visible
+    }
+
+    func gone(_ gone: Bool) {
+        if gone {
+            setVisible(.gone)
+        } else {
+            setVisible(.visible)
+        }
+    }
+
+    func visible(_ visible: Bool) {
+        if visible {
+            setVisible(.visible)
+        } else {
+            setVisible(.gone)
+        }
+    }
 }
 
 extension TGBaseLayout {
+
+    func cacheRect(_ bool: Bool = true) {
+        tg_cacheEstimatedRect = bool
+    }
 
     //MARK: padding
 

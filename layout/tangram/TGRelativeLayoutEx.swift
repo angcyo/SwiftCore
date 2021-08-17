@@ -14,8 +14,15 @@ C.tg_height.equal(B.tg_height, multiple:0.5)
 S.addSubview(C)
  */
 ///https://github.com/youngsoft/TangramKit/blob/master/README.zh.md#%E7%9B%B8%E5%AF%B9%E5%B8%83%E5%B1%80tgrelativelayout
-func relativeLayout() -> TGRelativeLayout {
+func relativeLayout(padding: Float = 0) -> TGRelativeLayout {
+    relativeLayout(paddingHorizontal: padding, paddingVertical: padding)
+}
+
+func relativeLayout(paddingHorizontal: Float = 0, paddingVertical: Float = 0) -> TGRelativeLayout {
     let layout = TGRelativeLayout()
+    layout.wrap_content()
+    layout.setPaddingHorizontal(paddingHorizontal)
+    layout.setPaddingVertical(paddingVertical)
     return layout
 }
 
@@ -115,6 +122,20 @@ extension UIView {
     func leftToLeftOf(_ target: UIView? = nil, offset: Float = 0) {
         if let target = target ?? superview {
             tg_leading.equal(target.tg_leading, offset: offset.toCGFloat())
+        }
+    }
+
+    /// y轴对齐, 垂直方向中心点一致
+    func centerYOf(_ target: UIView? = nil, offset: Float = 0) {
+        if let target = target ?? superview {
+            tg_centerY.equal(target.tg_centerY, offset: offset.toCGFloat())
+        }
+    }
+
+    /// x轴对齐, 水平方向中心点一致
+    func centerXOf(_ target: UIView? = nil, offset: Float = 0) {
+        if let target = target ?? superview {
+            tg_centerX.equal(target.tg_centerX, offset: offset.toCGFloat())
         }
     }
 }

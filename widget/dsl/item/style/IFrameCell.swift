@@ -7,5 +7,4 @@ import UIKit
 import TangramKit
 
 protocol IFrameCell {
-    var frameLayout: TGFrameLayout { get set }
 }

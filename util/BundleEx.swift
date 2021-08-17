@@ -27,6 +27,15 @@ extension Bundle {
         get("CFBundleDisplayName") as! String
     }
 
+    /// 获取应用名
+    static func appName() -> String {
+        get("CFBundleName") as! String
+    }
+
+    static func bundleId() -> String {
+        get("CFBundleIdentifier") as! String
+    }
+
     /// 从 info plist 中读取value
     static func getPlist(_ key: String) -> Any? {
         let path = Bundle.main.path(forResource: "Info", ofType: "plist")!
@@ -41,4 +50,8 @@ extension Bundle {
 //        }
         UIImage(named: fileName)
     }
+}
+
+func bundleOf(_ key: String) -> Any? {
+    Bundle.get(key)
 }

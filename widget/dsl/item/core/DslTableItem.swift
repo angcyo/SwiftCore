@@ -56,6 +56,7 @@ class DslTableItem: DslItem {
     }
 
     func _bindTableCell(_ cell: DslCell, _ indexPath: IndexPath) {
+        //bind
         guard let cell = cell as? DslTableCell else {
             return
         }

@@ -19,6 +19,11 @@ extension UIScreen {
     static var height: Float {
         UIScreen.main.bounds.h
     }
+
+    /// 屏幕的缩放比例
+    static var scale_: Float {
+        UIScreen.main.scale.toFloat()
+    }
 }
 
 extension CGSize {

@@ -48,7 +48,9 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
         maximumZoomScale = 1
         bouncesZoom = true //当达到最大限制时, 是否开启zoom
 
+        //automaticallyAdjustsScrollIndicatorInsets
         contentInsetAdjustmentBehavior = .automatic //安全区域的行为
+        //adjustedContentInset
 
         //边界回弹
         alwaysBounceVertical = true
@@ -631,7 +633,7 @@ class DslTableViewDiffableDataSource: UITableViewDiffableDataSource<DslSection, 
     /// 是否可以移动
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         debugPrint("canMoveRowAt:\(indexPath)")
-        return dslTableView.getTableItem(indexPath)?.itemCanMove  ?? false
+        return dslTableView.getTableItem(indexPath)?.itemCanMove ?? false
     }
 }
 

@@ -63,6 +63,7 @@ func labelView(_ text: String? = nil,
     view.font = UIFont.systemFont(ofSize: CGFloat(size), weight: .regular)
     view.textColor = color
     view.numberOfLines = 0 //任意行
+    view.lineBreakMode = .byWordWrapping
     view.sizeToFit()
     return view
 }
@@ -72,13 +73,24 @@ func titleView(_ text: String? = nil) -> UILabel {
     return view
 }
 
+func subTitleView(_ text: String? = nil) -> UILabel {
+    let view = labelView(text, size: Res.text.subTitle.size, color: Res.text.subTitle.color)
+    return view
+}
+
 func bodyTextView(_ text: String? = nil) -> UILabel {
     let view = labelView(text, size: Res.text.body.size, color: Res.text.body.color)
     return view
 }
 
-func desView(_ text: String? = nil) -> UILabel {
-    let view = labelView(text, size: Res.text.des.size, color: Res.text.des.color)
+func desLabel(_ text: String? = nil) -> UILabel {
+    desView(text)
+}
+
+func desView(_ text: String? = nil,
+             size: Double = Res.text.des.size,
+             color: UIColor = Res.text.des.color) -> UILabel {
+    let view = labelView(text, size: size, color: color)
     return view
 }
 
@@ -91,6 +103,7 @@ func fillTipLabel(_ text: String? = nil, textColor: UIColor = Res.color.info, fi
     view.text = text
     view.font = UIFont.systemFont(ofSize: CGFloat(Res.text.tip.size), weight: .regular)
     view.numberOfLines = 0 //任意行
+    view.lineBreakMode = .byWordWrapping
 
     view.setRadius(Res.size.roundLittle)
     view.setBackground(backColor)
@@ -119,6 +132,7 @@ func borderTipLabel(_ text: String? = nil, textColor: UIColor = Res.color.info, 
     view.text = text
     view.font = UIFont.systemFont(ofSize: CGFloat(Res.text.tip.size), weight: .regular)
     view.numberOfLines = 0 //任意行
+    view.lineBreakMode = .byWordWrapping
 
     view.setRadiusBorder(Res.size.roundLittle, borderColor: borderColor)
     view.textColor = color

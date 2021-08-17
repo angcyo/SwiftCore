@@ -19,6 +19,7 @@ class BaseViewController: UIViewController, Navigation {
 
     init() {
         super.init(nibName: nil, bundle: nil)
+        //bounds:(0.0, 0.0, 375.0, 812.0)
         debugPrint("\(threadName())->创建:\(self):\(modalPresentationStyle.rawValue)") //pageSheet
         initController()
     }
@@ -52,7 +53,8 @@ class BaseViewController: UIViewController, Navigation {
     /// 此方法会在[viewDidLoad]之后触发
     func initController() {
         //init
-        debugPrint("initController:\(self):\(view.bounds)")
+        debugPrint("initController:\(self)")
+        view.backgroundColor = Res.color.controllerBackgroundColor
     }
 
     /// 保存对象, 防止被ARC回收. 通常delegate都需要保存起来
@@ -84,7 +86,7 @@ class BaseViewController: UIViewController, Navigation {
     /// 加载试图
     override func viewDidLoad() {
         super.viewDidLoad()
-        debugPrint("viewDidLoad:\(self):\(view.bounds)")
+        debugPrint("viewDidLoad:\(self):\(view.bounds):\(view.safeAreaLayoutGuide)")
     }
 
     /// 试图将要显示

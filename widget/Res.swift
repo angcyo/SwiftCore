@@ -15,7 +15,7 @@ struct Res {
         static var normal = (size: 17.0, color: UIColor.parse("#222222"))
         static var title = (size: 20.0, color: UIColor.parse("#222222"))
         static var big = (size: 24.0, color: UIColor.parse("#000000"))
-        static var subTitle = (size: 14.0, color: UIColor.parse("#666666"))
+        static var subTitle = (size: 16.0, color: UIColor.parse("#161D26"))
         static var des = (size: 13.0, color: UIColor.parse("#53575F"))
         static var label = (size: 15.0, color: UIColor.parse("#ACB0B7"))
         static var tip = (size: 12.0, color: UIColor.parse("#ACB0B7"))
@@ -28,6 +28,8 @@ struct Res {
         static var colorPrimary = UIColor.parse("#2D52F2")
         static var colorPrimaryDark = UIColor.parse("#162bf2ff")
         static var colorAccent = UIColor.parse("#2D52F2")
+        /// 控制器的默认背景颜色
+        static var controllerBackgroundColor = UIColor.white
 
         static var white = UIColor.white
         static var line = UIColor.parse("#ECECEC")
