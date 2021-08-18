@@ -95,6 +95,8 @@ class DslItem: NSObject, IDslItem {
         onBindCell?(cell, indexPath)
         bindCellOverride(cell, indexPath)
 
+        //bindItemGesture(cell)
+
         /*guard let cell = cell as? DslCell else {
             return
         }*/
@@ -118,6 +120,14 @@ class DslItem: NSObject, IDslItem {
     func reset() {
         disposeBag = DisposeBag()
     }
+
+    //MARK: 事件回调, 无法自动触发. 需要手动触发调用
+
+    /// 点击事件的回调
+    var onItemClick: (() -> Void)? = nil
+
+    /// 长按事件的回调
+    var onItemLongClick: (() -> Void)? = nil
 }
 
 extension DslItem {
@@ -129,5 +139,30 @@ extension DslItem {
         let cellName = name + "Cell"
         let cls: AnyClass? = cellName.toClass()
         return cls
+    }
+}
+
+extension DslItem {
+
+    /// 绑定点击, 长按事件回调
+    func bindItemGesture(_ view: UIView) {
+        bindItemClick(view)
+        bindItemLongClick(view)
+    }
+
+    func bindItemClick(_ view: UIView) {
+        if let click = onItemClick {
+            view.onClick(bag: disposeBag) { _ in
+                click()
+            }
+        }
+    }
+
+    func bindItemLongClick(_ view: UIView) {
+        if let longClick = onItemLongClick {
+            view.onLongClick(bag: disposeBag) { _ in
+                longClick()
+            }
+        }
     }
 }

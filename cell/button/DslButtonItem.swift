@@ -7,6 +7,8 @@ import UIKit
 
 class DslButtonItem: DslTableItem {
 
+    var itemButtonText: String? = "保存"
+
     override func initItem() {
         itemCell = DslButtonCell.self
         itemHeight = 45
@@ -17,6 +19,12 @@ class DslButtonItem: DslTableItem {
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
         (cell as? UIView)?.backgroundColor = UIColor.clear
+
+        guard let cell = cell as? DslButtonCell else {
+            return
+        }
+        bindItemGesture(cell.button)
+        cell.button.setText(itemButtonText)
     }
 }
 

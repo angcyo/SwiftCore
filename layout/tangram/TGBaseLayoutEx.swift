@@ -96,12 +96,44 @@ extension UIView {
             setVisible(.gone)
         }
     }
+
+    //MARK: margin
+
+    func setMargin(_ margin: Float) {
+        setMargin(left: margin, top: margin, right: margin, bottom: margin)
+    }
+
+    func setMarginHorizontal(_ margin: Float) {
+        tg_leading.equal(margin.toCGFloat())
+        tg_trailing.equal(margin.toCGFloat())
+    }
+
+    func setMarginVertical(_ margin: Float) {
+        tg_top.equal(margin.toCGFloat())
+        tg_bottom.equal(margin.toCGFloat())
+    }
+
+    func setMargin(left: Float = 0, top: Float = 0, right: Float = 0, bottom: Float = 0) {
+        //tg_left.equal(left.toCGFloat())
+        tg_leading.equal(left.toCGFloat())
+
+        //tg_right.equal(right.toCGFloat())
+        tg_trailing.equal(right.toCGFloat())
+
+        tg_top.equal(top.toCGFloat())
+        tg_bottom.equal(bottom.toCGFloat())
+    }
 }
 
 extension TGBaseLayout {
 
     func cacheRect(_ bool: Bool = true) {
         tg_cacheEstimatedRect = bool
+    }
+
+    /// TGGravity.horz.center TGGravity.vert.center
+    func setGravity(_ gravity: TGGravity = .center) {
+        tg_gravity = gravity
     }
 
     //MARK: padding
@@ -124,30 +156,5 @@ extension TGBaseLayout {
         //tg_trailingPadding = right.toCGFloat()
         //tg_bottomPadding = bottom.toCGFloat()
         tg_padding = UIEdgeInsets(top: top.toCGFloat(), left: left.toCGFloat(), bottom: bottom.toCGFloat(), right: right.toCGFloat())
-    }
-
-    //MARK: margin
-
-    func setMargin(_ margin: Float) {
-        setMargin(left: margin, top: margin, right: margin, bottom: margin)
-    }
-
-    func setMarginHorizontal(_ margin: Float) {
-        setMargin(left: margin, top: tg_top.numberVal?.toFloat() ?? 0, right: margin, bottom: tg_bottom.numberVal?.toFloat() ?? 0)
-    }
-
-    func setMarginVertical(_ margin: Float) {
-        setMargin(left: tg_leading.numberVal?.toFloat() ?? 0, top: margin, right: tg_trailing.numberVal?.toFloat() ?? 0, bottom: margin)
-    }
-
-    func setMargin(left: Float = 0, top: Float = 0, right: Float = 0, bottom: Float = 0) {
-        //tg_left.equal(left.toCGFloat())
-        tg_leading.equal(left.toCGFloat())
-
-        //tg_right.equal(right.toCGFloat())
-        tg_trailing.equal(right.toCGFloat())
-
-        tg_top.equal(top.toCGFloat())
-        tg_bottom.equal(bottom.toCGFloat())
     }
 }

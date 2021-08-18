@@ -74,4 +74,21 @@ extension UIView {
         tg_trailing.equal(offsetRight.toCGFloat())
         tg_bottom.equal(offsetBottom.toCGFloat())
     }
+
+    func frameGravityLeft(offset: Float = 0) {
+        tg_leading.equal(0, offset: offset.toCGFloat())
+    }
+
+    func frameGravityTop(offset: Float = 0) {
+        tg_top.equal(0, offset: offset.toCGFloat())
+    }
+
+    func frameGravityRight(offset: Float = 0) {
+        tg_trailing.equal(0, offset: offset.toCGFloat())
+    }
+
+    func frameGravityBottom(offset: Float = 0) {
+        tg_bottom.equal(0, offset: offset.toCGFloat())
+    }
+
 }

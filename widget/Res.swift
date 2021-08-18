@@ -83,7 +83,10 @@ struct Res {
         static var icon: Float = 18
         static var iconMin: Float = 15 //小图标
 
-        static var itemMinHeight: Float = 35 //dsl item 最小的高度
+        static var minHeight: Float = 35 //控件 最小的高度
+
+        static var itemMinHeight: Float = 52 //dsl item 最小的高度
+        static var itemMinLabelWidth: Float = 65 //dsl item label最小的宽度
     }
 
     // MARK: - 字体资源

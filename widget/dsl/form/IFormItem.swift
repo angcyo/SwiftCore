@@ -5,6 +5,7 @@
 import Foundation
 import SwiftyJSON
 
+/// 表单控件接口, 用来获取表单数据
 protocol IFormItem: IDslItem {
 
     /// 表单item的配置项
@@ -23,7 +24,7 @@ class FormItemConfig {
     var onGetFormValue: (_ params: FormParams) -> Any? = { params in
         if let item = params.formItem {
             if let editItem = item as? IEditItem {
-                return editItem.itemEditText
+                return editItem.editItemConfig.itemEditText
             }
             return nil
         } else {

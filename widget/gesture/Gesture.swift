@@ -57,7 +57,67 @@ extension UIView {
     /// 点击事件
     func onClick(bag: DisposeBag, _ action: @escaping (UITapGestureRecognizer) -> Void) {
         rx.tapGesture()
-                .when(.recognized)
+                .when(.recognized) //UIGestureRecognizer.State
+                .subscribe(onNext: { event in
+                    action(event)
+                })
+                .disposed(by: bag)
+    }
+
+    /// 长按事件
+    func onLongClick(bag: DisposeBag, _ action: @escaping (UILongPressGestureRecognizer) -> Void) {
+        rx.longPressGesture()
+                .when(.recognized) //UIGestureRecognizer.State
+                .subscribe(onNext: { event in
+                    action(event)
+                })
+                .disposed(by: bag)
+    }
+
+    /// 捏合手势
+    func onPinch(bag: DisposeBag, _ action: @escaping (UIPinchGestureRecognizer) -> Void) {
+        rx.pinchGesture()
+                .when(.recognized) //UIGestureRecognizer.State
+                .subscribe(onNext: { event in
+                    action(event)
+                })
+                .disposed(by: bag)
+    }
+
+    /// 轻扫手势, 通常用来实现侧滑菜单
+    func onSwipe(_ directions: SwipeDirection = .left, bag: DisposeBag, _ action: @escaping (UISwipeGestureRecognizer) -> Void) {
+        rx.swipeGesture(directions)
+                .when(.recognized) //UIGestureRecognizer.State
+                .subscribe(onNext: { event in
+                    action(event)
+                })
+                .disposed(by: bag)
+    }
+
+    /// 平移手势, 拖动/拖拽手势
+    func onPan(bag: DisposeBag, _ action: @escaping (UIPanGestureRecognizer) -> Void) {
+        rx.panGesture()
+                .when(.recognized) //UIGestureRecognizer.State
+                .subscribe(onNext: { event in
+                    action(event)
+                })
+                .disposed(by: bag)
+    }
+
+    /// 边界平移手势
+    func onEdgePan(bag: DisposeBag, _ action: @escaping (UIScreenEdgePanGestureRecognizer) -> Void) {
+        rx.screenEdgePanGesture()
+                .when(.recognized) //UIGestureRecognizer.State
+                .subscribe(onNext: { event in
+                    action(event)
+                })
+                .disposed(by: bag)
+    }
+
+    /// 旋转手势
+    func onRotation(bag: DisposeBag, _ action: @escaping (UIRotationGestureRecognizer) -> Void) {
+        rx.rotationGesture()
+                .when(.recognized) //UIGestureRecognizer.State
                 .subscribe(onNext: { event in
                     action(event)
                 })

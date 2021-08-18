@@ -18,7 +18,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
         SectionHelper()
     }()
 
-    override init(frame: CGRect, style: Style = .plain) {
+    override init(frame: CGRect = .zero, style: Style = .plain) {
         super.init(frame: frame, style: style)
         initTableView()
     }
@@ -38,10 +38,19 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
         estimatedRowHeight = UITableView.automaticDimension
         rowHeight = UITableView.automaticDimension
 
-        // 表头
-        tableHeaderView = nil
-        // 表尾
-        tableFooterView = nil
+        if style == .grouped || style == .insetGrouped {
+            if tableHeaderView == nil {
+                tableHeaderView = emptyView(height: Res.size.leftMargin)
+            }
+            if tableFooterView == nil {
+                tableFooterView = emptyView(height: Res.size.leftMargin)
+            }
+        } else {
+            // 表头, 在 style = insetGrouped 时有效
+            tableHeaderView = nil
+            // 表尾
+            tableFooterView = nil
+        }
 
         bounces = true //边界回弹
         minimumZoomScale = 1
@@ -155,7 +164,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
 
     /// cell 即将显示
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        debugPrint("cell即将显示:\(indexPath):\(cell)")
+        debugPrint("cell即将显示:\(indexPath):\(cell):\(cell.layer.cornerRadius)")
     }
 
     /// cell即将不可见
