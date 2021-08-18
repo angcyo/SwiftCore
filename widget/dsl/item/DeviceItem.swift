@@ -21,10 +21,19 @@ class DeviceItem: DslTableItem {
             $0.append("/")
             $0.append(Bundle.appName())
             $0.append("\n")
+
             $0.append(Bundle.bundleId())
             $0.append("/")
             $0.append("\(Bundle.versionName())/\(Bundle.versionCode()) ")
             $0.append("w:\(UIScreen.width) h:\(UIScreen.height) s:\(UIScreen.scale_)")
+            $0.append("\n")
+
+            $0.append("statusBar:")
+            $0.append(UIApplication.statusBarFrame)
+            $0.append("\n")
+
+            //$0.append("windowSafeArea:")
+            $0.append(UIApplication.sceneWindow?.safeAreaInsets)
         }
     }
 }

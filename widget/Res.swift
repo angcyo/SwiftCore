@@ -36,6 +36,9 @@ struct Res {
         static var bg = UIColor.parse("#F3F5F9")
         static var desBg = UIColor.parse("#F3F5F9")
 
+        /// 按压时的颜色
+        static var press = UIColor.parse("#20000000")
+
         static var info = UIColor.parse("#4b7efe")
         static var success = UIColor.parse("#44CB5C")
         static var warning = UIColor.parse("#febf00")

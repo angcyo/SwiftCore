@@ -7,12 +7,14 @@ import UIKit
 
 extension UIViewController {
 
+    /// 高度
     static var HEIGHT: Float = 44
 
     var defaultNavWidth: Float {
         Float(UIScreen.width)
     }
 
+    ///https://www.jianshu.com/p/7c826a792a6c
     /// 默认的导航栏高度, 包含了状态栏和标题栏
     var defaultNavHeight: Float {
         //获取状态栏的rect

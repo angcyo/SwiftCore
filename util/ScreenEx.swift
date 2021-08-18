@@ -61,3 +61,7 @@ func rect(_ x: Float, _ y: Float, _ width: Float, _ height: Float) -> CGRect {
 func rect(_ width: Float, _ height: Float) -> CGRect {
     rect(0, 0, width, height)
 }
+
+func insets(left: Float = 0, top: Float = 0, right: Float = 0, bottom: Float = 0) -> UIEdgeInsets {
+    UIEdgeInsets(top: top.toCGFloat(), left: left.toCGFloat(), bottom: bottom.toCGFloat(), right: right.toCGFloat())
+}
