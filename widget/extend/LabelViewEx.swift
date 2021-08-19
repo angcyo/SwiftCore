@@ -68,13 +68,17 @@ func labelView(_ text: String? = nil,
     return view
 }
 
-func titleView(_ text: String? = nil) -> UILabel {
-    let view = labelView(text, size: Res.text.title.size, color: Res.text.title.color)
+func titleView(_ text: String? = nil,
+               size: Double = Res.text.title.size,
+               color: UIColor = Res.text.title.color) -> UILabel {
+    let view = labelView(text, size: size, color: color)
     return view
 }
 
-func subTitleView(_ text: String? = nil) -> UILabel {
-    let view = labelView(text, size: Res.text.subTitle.size, color: Res.text.subTitle.color)
+func subTitleView(_ text: String? = nil,
+                  size: Double = Res.text.subTitle.size,
+                  color: UIColor = Res.text.subTitle.color) -> UILabel {
+    let view = labelView(text, size: size, color: color)
     return view
 }
 

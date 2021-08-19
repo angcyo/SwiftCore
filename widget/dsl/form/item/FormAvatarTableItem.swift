@@ -62,8 +62,6 @@ class FormAvatarCellConfig: BaseFormItemCellConfig {
         wrap.render(avatar)
 
         formRoot.render(formArrow) {
-            $0.contentMode = .scaleAspectFit
-            $0.wh(width: 16, height: 16)
             $0.frameGravityRC(offsetY: 6, offsetRight: Res.size.x)
         }
         return wrap

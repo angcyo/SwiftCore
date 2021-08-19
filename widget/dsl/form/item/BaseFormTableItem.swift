@@ -5,10 +5,14 @@
 import Foundation
 import UIKit
 
+/// 表单item基类
 class BaseFormTableItem: DslTableItem, IFormItem {
 
     /// Label
     var itemLabel: String? = nil
+
+    /// 显示底部横线
+    var itemShowLine: Bool = true
 
     var formItemConfig: FormItemConfig = FormItemConfig()
 
@@ -57,6 +61,10 @@ class BaseFormItemCellConfig: IDslCellConfig {
             $0.setMarginHorizontal(Res.size.x)
             $0.frameGravityBottom()
         }
+
+        // 箭头控件
+        formArrow.contentMode = .scaleAspectFit
+        formArrow.wh(width: 16, height: 16)
     }
 
     /// 重写此方法, 实现布局

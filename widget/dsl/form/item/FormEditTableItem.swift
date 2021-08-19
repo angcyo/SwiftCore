@@ -11,6 +11,8 @@ class FormEditTableItem: BaseFormTableItem, IEditItem {
 
     var editItemConfig: EditItemConfig = EditItemConfig()
 
+    var itemRightTitle: String? = nil
+
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
 
@@ -20,7 +22,12 @@ class FormEditTableItem: BaseFormTableItem, IEditItem {
 
         editItemConfig.itemEditEnable = formItemConfig.formCanEdit
         initEditItem(cell.formEditCellConfig.text)
-        cell.formEditCellConfig.formLabel.text = itemLabel
+
+        cell.formEditCellConfig.formLine.visible(itemShowLine) //Line
+        cell.formEditCellConfig.formLabel.text = itemLabel //Label
+        cell.formEditCellConfig.formRequired.visible(formItemConfig.formRequired) //必填提示
+
+        cell.formEditCellConfig.rightTitle.text = itemRightTitle
     }
 }
 
@@ -50,6 +57,7 @@ class FormEditCellConfig: BaseFormItemCellConfig {
 
     let wrap = horizontal()
     let text = textFieldView(borderStyle: .none)
+    let rightTitle = subTitleView(size: Res.text.label.size) //右边提示的文本
 
     override func initCellContent() -> UIView {
         wrap.setPadding(Res.size.x)
@@ -62,6 +70,9 @@ class FormEditCellConfig: BaseFormItemCellConfig {
 
         wrap.render(text) {
             $0.mWwH(minHeight: Res.size.minHeight)
+        }
+        wrap.render(rightTitle) {
+            $0.wrap_content()
         }
 
         return wrap

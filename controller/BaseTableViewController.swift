@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import RxKeyboard
 
 class BaseTableViewController: BaseViewController {
 
@@ -14,10 +15,14 @@ class BaseTableViewController: BaseViewController {
     /// 清理选中状态
     var clearsSelectionOnViewWillAppear: Bool = false
 
+    /// 激活键盘监听
+    var enableSoftInput: Bool = true
+
     override func viewDidLoad() {
         super.viewDidLoad()
         //dslTableView = DslTableView()
         initTableView(tableView: dslTableView)
+        initKeyboard()
     }
 
     /// 创建视图
@@ -42,6 +47,17 @@ class BaseTableViewController: BaseViewController {
                 maker.leading.equalTo(view.safeAreaLayoutGuide.snp.leading)
                 maker.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing)
             }
+        }
+    }
+
+    /// 监听键盘
+    func initKeyboard() {
+        if enableSoftInput {
+            //键盘监听
+            RxKeyboard.instance.visibleHeight.drive(onNext: { height in
+                let inset = self.dslTableView.contentInset
+                self.dslTableView.contentInset = inset.resetBottom(height.toFloat())
+            }).disposed(by: disposeBag)
         }
     }
 

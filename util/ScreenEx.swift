@@ -54,6 +54,10 @@ extension CGRect {
     }
 }
 
+func point(x: Float = 0, y: Float = 0) -> CGPoint {
+    CGPoint(x: x.toCGFloat(), y: y.toCGFloat())
+}
+
 func rect(_ x: Float, _ y: Float, _ width: Float, _ height: Float) -> CGRect {
     CGRect(x: x.toCGFloat(), y: y.toCGFloat(), width: width.toCGFloat(), height: height.toCGFloat())
 }
@@ -64,4 +68,10 @@ func rect(_ width: Float, _ height: Float) -> CGRect {
 
 func insets(left: Float = 0, top: Float = 0, right: Float = 0, bottom: Float = 0) -> UIEdgeInsets {
     UIEdgeInsets(top: top.toCGFloat(), left: left.toCGFloat(), bottom: bottom.toCGFloat(), right: right.toCGFloat())
+}
+
+extension UIEdgeInsets {
+    func resetBottom(_ bottom: Float) -> UIEdgeInsets {
+        UIEdgeInsets(top: top, left: left, bottom: bottom.toCGFloat(), right: right)
+    }
 }
