@@ -11,6 +11,15 @@ extension UIButton {
         //setTitle(title: title, for: .selected)
         //setTitle(title: title, for: .highlighted)
     }
+
+    /// 加粗
+    func setBold(_ bold: Bool = true) {
+        titleLabel?.setBold(bold)
+    }
+
+    func bold(_ bold: Bool = true) {
+        titleLabel?.setBold(bold)
+    }
 }
 
 /// 按钮

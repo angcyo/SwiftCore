@@ -12,6 +12,7 @@ class DslItem: NSObject, IDslItem {
     /// cell 界面, 必须
     /// 如果是在DslTableView中, 则必须是UITableViewCell的子类
     /// 如果是在DslCollectionView中, 则必须是UICollectionViewCell的子类
+    /// 如果未配置, 会自动根据Item的类名获取对应的Cell类.
     var itemCell: AnyClass? = nil
 
     /// itemCell 可复用的标识

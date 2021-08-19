@@ -6,11 +6,11 @@ import Foundation
 import UIKit
 import TangramKit
 
-class DeviceItem: DslTableItem {
+class DeviceTableItem: DslTableItem {
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
 
-        guard let cell = cell as? DeviceCell else {
+        guard let cell = cell as? DeviceTableCell else {
             return
         }
 
@@ -38,7 +38,7 @@ class DeviceItem: DslTableItem {
     }
 }
 
-class DeviceCell: DslTableCell {
+class DeviceTableCell: DslTableCell {
 
     let root = linearLayout()
     let text = labelView()

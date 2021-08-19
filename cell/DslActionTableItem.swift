@@ -14,9 +14,9 @@ struct DslActionData {
     var detailText: String? = nil
 }
 
-class DslActionItem: DslTableItem {
+class DslActionTableItem: DslTableItem {
     override func initItem() {
-        itemCell = DslActionCell.self
+        itemCell = DslActionTableCell.self
         itemHeight = 50
         enableSelect()
     }
@@ -24,7 +24,7 @@ class DslActionItem: DslTableItem {
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
 
-        guard let cell = cell as? DslActionCell else {
+        guard let cell = cell as? DslActionTableCell else {
             return
         }
 
@@ -37,7 +37,7 @@ class DslActionItem: DslTableItem {
 }
 
 /// 系统标准样式的cell
-class DslActionCell: DslTableCell {
+class DslActionTableCell: DslTableCell {
 
     override init(style: UIKit.UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .value1, reuseIdentifier: reuseIdentifier)

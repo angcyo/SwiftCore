@@ -165,6 +165,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     /// cell 即将显示
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         debugPrint("cell即将显示:\(indexPath):\(cell):\(cell.layer.cornerRadius)")
+        //cell.layer.cornerRadius = 100 // 可以修改 insetGrouped 默认圆角
     }
 
     /// cell即将不可见

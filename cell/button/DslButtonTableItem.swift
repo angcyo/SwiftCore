@@ -5,12 +5,12 @@
 import Foundation
 import UIKit
 
-class DslButtonItem: DslTableItem {
+class DslButtonTableItem: DslTableItem {
 
     var itemButtonText: String? = "保存"
 
     override func initItem() {
-        itemCell = DslButtonCell.self
+        itemCell = DslButtonTableCell.self
         itemHeight = 45
         itemCanHighlight = false
         itemCanSelect = false
@@ -20,7 +20,7 @@ class DslButtonItem: DslTableItem {
         super.bindCell(cell, indexPath)
         (cell as? UIView)?.backgroundColor = UIColor.clear
 
-        guard let cell = cell as? DslButtonCell else {
+        guard let cell = cell as? DslButtonTableCell else {
             return
         }
         bindItemGesture(cell.button)
@@ -28,12 +28,14 @@ class DslButtonItem: DslTableItem {
     }
 }
 
-class DslButtonCell: DslTableCell {
+class DslButtonTableCell: DslTableCell {
 
-    let button = solidButton()
+    let button = solidButton(titleSize: Res.text.normal.size)
 
     override func initCell() {
         super.initCell()
+
+        button.bold()
         contentView.render(button) { view in
             view.makeFullWidth()
             view.makeFullHeight()

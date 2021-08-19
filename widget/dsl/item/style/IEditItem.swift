@@ -8,6 +8,7 @@ import UIKit
 protocol IEditItem: IDslItem, UITextFieldDelegate {
 
     /// 配置项
+    /// var editItemConfig: EditItemConfig = EditItemConfig()
     var editItemConfig: EditItemConfig { get set }
 }
 

@@ -81,7 +81,7 @@ extension UIView {
         tg_visibility = visible
     }
 
-    func gone(_ gone: Bool) {
+    func gone(_ gone: Bool = true) {
         if gone {
             setVisible(.gone)
         } else {
@@ -89,7 +89,7 @@ extension UIView {
         }
     }
 
-    func visible(_ visible: Bool) {
+    func visible(_ visible: Bool = true) {
         if visible {
             setVisible(.visible)
         } else {

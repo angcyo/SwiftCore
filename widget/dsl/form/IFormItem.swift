@@ -9,6 +9,7 @@ import SwiftyJSON
 protocol IFormItem: IDslItem {
 
     /// 表单item的配置项
+    /// var formItemConfig: FormItemConfig = FormItemConfig()
     var formItemConfig: FormItemConfig { get set }
 }
 
@@ -19,6 +20,9 @@ class FormItemConfig {
 
     /**表单是否必填. 为true, 将会在 label 前面绘制 红色`*` */
     var formRequired: Bool = false
+
+    /// 表单是否可编辑
+    var formCanEdit: Bool = true
 
     /**获取表单的值*/
     var onGetFormValue: (_ params: FormParams) -> Any? = { params in

@@ -85,6 +85,8 @@ struct Res {
 
         static var minHeight: Float = 35 //控件 最小的高度
 
+        static var itemRequiredOffsetLeft: Float = 3 // * 左边偏移量
+        static var itemRequiredOffsetTop: Float = 20 // * 头部偏移量
         static var itemMinHeight: Float = 52 //dsl item 最小的高度
         static var itemMinLabelWidth: Float = 65 //dsl item label最小的宽度
     }
