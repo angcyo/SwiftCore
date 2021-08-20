@@ -53,7 +53,7 @@ class BaseViewController: UIViewController, Navigation {
     /// 此方法会在[viewDidLoad]之后触发
     func initController() {
         //init
-        debugPrint("initController:\(self)")
+        debugPrint("initController:\(self):bounds:\(view.bounds)")
         view.backgroundColor = Res.color.controllerBackgroundColor
     }
 

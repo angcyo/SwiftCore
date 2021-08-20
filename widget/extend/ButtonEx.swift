@@ -6,10 +6,11 @@ import Foundation
 import UIKit
 
 extension UIButton {
+
     func setText(_ title: String?) {
         setTitle(title, for: .normal)
-        //setTitle(title: title, for: .selected)
-        //setTitle(title: title, for: .highlighted)
+        //setTitle(title, for: .selected)
+        //setTitle(title, for: .highlighted)
     }
 
     /// 加粗
@@ -74,5 +75,61 @@ func borderButton(_ title: String? = nil,
             titleSize: titleSize,
             insets: UIEdgeInsets(top: 8, left: 9, bottom: 8, right: 9))
     view.setRadiusBorder(radius, borderColor: borderColor ?? titleColor, borderWidth: borderWidth)
+    return view
+}
+
+/// 偏平的文本按钮
+func labelButton(_ title: String? = nil,
+                 titleColor: UIColor = Res.text.label.color,
+                 titleSize: Double = Res.text.label.size,
+                 _ onClick: @escaping (UIResponder) -> Void) -> UIButton {
+    let view = UIButton(type: .custom)
+    view.backgroundColor = UIColor.clear
+    view.tintColor = titleColor
+    view.setTitle(title, for: .normal)
+    view.setTitle(title, for: .selected)
+    view.setTitle(title, for: .highlighted)
+    view.setTitleColor(titleColor, for: .normal)
+    view.setTitleColor(titleColor, for: .selected)
+    view.setTitleColor(titleColor, for: .highlighted)
+    view.titleLabel?.setTextSize(titleSize)
+
+    view.onClick(.touchUpInside, onClick)
+    return view
+}
+
+/// 勾选框 [onCheck] 返回是否可以选中/取消选中
+func checkButton(_ title: String? = nil,
+                 titleColor: UIColor = Res.text.label.color,
+                 titleSize: Double = Res.text.label.size,
+                 _ onCheck: ((Bool) -> Bool)? = nil) -> UIButton {
+    let view = UIButton(type: .custom)
+    view.backgroundColor = UIColor.clear
+    view.tintColor = titleColor
+    view.setImage(R.image.uncheck(), for: .normal)
+    view.setImage(R.image.checked(), for: .selected)
+    view.setTitle(title, for: .normal)
+    view.setTitle(title, for: .selected)
+    view.setTitle(title, for: .highlighted)
+    view.setTitleColor(titleColor, for: .normal)
+    view.setTitleColor(titleColor, for: .selected)
+    view.setTitleColor(titleColor, for: .highlighted)
+    view.titleLabel?.setTextSize(titleSize)
+
+    // 文本和图标的左边界
+    //view.titleEdgeInsets = insets(left: 10)
+    //view.titleEdgeInsets.left = Res.size.x.toCGFloat()
+    //view.imageEdgeInsets.right = Res.size.x.toCGFloat()
+
+    view.onClick { _ in
+        let selected = !view.isSelected
+        if let onCheck = onCheck {
+            if onCheck(selected) {
+                view.isSelected = selected
+            }
+        } else {
+            view.isSelected = selected
+        }
+    }
     return view
 }

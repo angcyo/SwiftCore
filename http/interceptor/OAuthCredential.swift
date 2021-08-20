@@ -5,7 +5,7 @@
 import Foundation
 import Alamofire
 
-struct OAuthCredential: AuthenticationCredential {
+struct OAuthCredential: AuthenticationCredential, Codable {
 
     let accessToken: String
     let refreshToken: String

@@ -5,6 +5,7 @@
 import Foundation
 import UIKit
 
+/// 场景代理
 class CoreSceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     /// 弱引用保存
