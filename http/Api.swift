@@ -33,7 +33,10 @@ struct Api {
                         http.encoding = URLEncoding.default
                     }
                     config?(http)
-                }.validateAuth().validate(statusCode: 200...299)
+                }
+                //.log()
+                .validateAuth()
+                .validate(statusCode: 200...299)
                 .response { response in
                     debugPrint("[\(threadName())] 请求结束:↓")
                     debugPrint(response)
@@ -232,6 +235,7 @@ extension Api {
                         encoding: encoding,
                         headers: headers,
                         interceptor: Http.wrapInterceptor(interceptor: interceptor))
+                .log()
                 .validateAuth()
                 .validate(statusCode: 200...299)
     }
@@ -266,6 +270,7 @@ extension Api {
                     $0.rx.swiftyJSON()
                 }
                 .subscribe(onNext: { data in
+                    debugPrint(data)
                     if Http.PARSE_DATA_CODE {
                         let json = data
                         let code = json[Http.KEY_CODE].intValue
@@ -280,6 +285,7 @@ extension Api {
                         onResult(data, nil)
                     }
                 }, onError: { error in
+                    debugPrint(error)
                     onResult(nil, error)
                 })
     }
@@ -327,6 +333,7 @@ extension Api {
                     $0.rx.decodable()
                 }
                 .subscribe(onNext: { (data: T) in
+                    debugPrint(data)
                     if Http.PARSE_DATA_CODE, let bean = data as? HttpCodeProtocol {
                         let code = bean.code ?? 0
                         if code >= 200 && code <= 299 {
@@ -340,6 +347,7 @@ extension Api {
                         onResult(data, nil)
                     }
                 }, onError: { error in
+                    debugPrint(error)
                     onResult(nil, error)
                 })
     }

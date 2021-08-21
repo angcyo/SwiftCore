@@ -13,6 +13,9 @@ class FormAvatarTableItem: BaseFormTableItem {
     var itemAvatarUrl: String? = nil
     var itemUserName: String? = nil
 
+    /// 相册选择后的图片
+    var itemPickerImage: UIImage? = nil
+
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
 
@@ -21,7 +24,7 @@ class FormAvatarTableItem: BaseFormTableItem {
         }
 
         cell.formAvatarCellConfig.formLabel.text = itemLabel
-        cell.formAvatarCellConfig.avatar.setAvatarUrl(itemAvatarUrl, name: itemUserName ?? "")
+        cell.formAvatarCellConfig.avatar.setImage(itemPickerImage ?? itemAvatarUrl, name: itemUserName)
     }
 }
 

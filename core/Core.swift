@@ -23,6 +23,8 @@ class Core {
         Dialog.initDialog()
     }
 
+    static var DEF_NIL_STRING = "--"
+
 }
 
 func hold(_ obj: NSObject) {

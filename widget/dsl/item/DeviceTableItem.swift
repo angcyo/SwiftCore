@@ -20,20 +20,30 @@ class DeviceTableItem: DslTableItem {
             $0.append(Bundle.displayName())
             $0.append("/")
             $0.append(Bundle.appName())
-            $0.append("\n")
 
+            $0.append("\n")
             $0.append(Bundle.bundleId())
             $0.append("/")
             $0.append("\(Bundle.versionName())/\(Bundle.versionCode()) ")
             $0.append("w:\(UIScreen.width) h:\(UIScreen.height) s:\(UIScreen.scale_)")
-            $0.append("\n")
 
+            $0.append("\n")
             $0.append("statusBar:")
             $0.append(UIApplication.statusBarFrame)
-            $0.append("\n")
 
+            $0.append("\n")
             //$0.append("windowSafeArea:")
             $0.append(UIApplication.sceneWindow?.safeAreaInsets)
+
+            $0.append("\n")
+            let device = UIDevice.current
+            $0.append("\(device.name)/\(device.model)/\(device.localizedModel)/\(device.systemName)/\(device.systemVersion)")
+
+            $0.append("\n")
+            $0.append("\(device.batteryLevel)/\(device.batteryState.rawValue)/\(device.proximityState)/\(device.isMultitaskingSupported)/\(device.userInterfaceIdiom.rawValue)")
+
+            $0.append("\n")
+            $0.append(device.identifierForVendor ?? "--")
         }
     }
 }

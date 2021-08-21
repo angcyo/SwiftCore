@@ -24,7 +24,7 @@ extension UIImageView {
     }
 
     /// 显示头像
-    func setAvatarUrl(_ url: String?, name: String) {
+    func setAvatarUrl(_ url: String?, name: String? = nil) {
         if nilOrEmpty(url) {
             image = nil
         } else {
@@ -33,11 +33,30 @@ extension UIImageView {
                     self.setAvatarUrl(url, name: name)
                 }
             } else {
-                let nameImage = name.toImage(rect: bounds)
+                let nameImage = name?.toImage(rect: bounds) ?? image
                 af.setImage(withURL: URL(string: url!)!,
                         cacheKey: url,
                         placeholderImage: nameImage)
             }
+        }
+    }
+
+    /// image 支持[UIImage] 支持本地图片, 支持在线图片
+    func setImage(_ image: Any?, name: String? = nil) {
+        if let img = image {
+            if let imgStr = img as? String {
+                if imgStr.starts(with: "http") {
+                    setAvatarUrl(imgStr, name: name)
+                } else {
+                    self.image = UIImage(named: imgStr)
+                }
+            } else if let imgObj = img as? UIImage {
+                self.image = imgObj
+            } else {
+                debugPrint("不支持的图片类型:\(img)")
+            }
+        } else {
+            self.image = nil
         }
     }
 }
@@ -45,21 +64,7 @@ extension UIImageView {
 /// image 支持[UIImage] 支持本地图片, 支持在线图片
 func img(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
     let view = UIImageView()
-    if let img = image {
-        if img is String {
-            let imgStr = img as! String
-            if imgStr.starts(with: "http") {
-                debugPrint("加载图片:\(imgStr)")
-                view.af.setImage(withURL: URL(string: imgStr)!,
-                        cacheKey: imgStr,
-                        placeholderImage: view.image)
-            } else {
-                view.image = UIImage(named: imgStr)
-            }
-        } else if img is UIImage {
-            view.image = img as! UIImage
-        }
-    }
+    view.setImage(image)
 
     if let tintColor = tintColor {
         view.image = view.image?.withTintColor(tintColor)
