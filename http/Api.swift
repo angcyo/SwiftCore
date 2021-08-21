@@ -33,7 +33,7 @@ struct Api {
                         http.encoding = URLEncoding.default
                     }
                     config?(http)
-                }.validate(statusCode: 200...299)
+                }.validateAuth().validate(statusCode: 200...299)
                 .response { response in
                     debugPrint("[\(threadName())] 请求结束:↓")
                     debugPrint(response)
@@ -228,10 +228,12 @@ extension Api {
         let _url = Http.wrapUrlQuery(url, method: method, query: query)
         let _param = Http.wrapParam(method: method, param: param, query: query)
         return httpSession.rx.request(method, connectUrl(url: _url),
-                parameters: _param,
-                encoding: encoding,
-                headers: headers,
-                interceptor: Http.wrapInterceptor(interceptor: interceptor))
+                        parameters: _param,
+                        encoding: encoding,
+                        headers: headers,
+                        interceptor: Http.wrapInterceptor(interceptor: interceptor))
+                .validateAuth()
+                .validate(statusCode: 200...299)
     }
 
     /// 获取JSON对象

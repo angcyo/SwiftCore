@@ -3,6 +3,7 @@
 //
 
 import Foundation
+import UIKit
 import SwiftyJSON
 
 extension NSData {
@@ -53,6 +54,18 @@ extension Data {
 
     func toUIImage() -> UIImage? {
         UIImage(data: self)
+    }
+}
+
+extension UIImage {
+    func toData() -> Data? {
+        //UIImagePNGRepresentation(self)
+        pngData()
+        //jpegData(compressionQuality: <#T##CGFloat##CoreGraphics.CGFloat#>)
+    }
+
+    func toJpegData(compressionQuality: CGFloat = 0.8) -> Data? {
+        jpegData(compressionQuality: compressionQuality)
     }
 }
 

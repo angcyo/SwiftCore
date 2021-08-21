@@ -96,14 +96,15 @@ class DslItem: NSObject, IDslItem {
         onBindCell?(cell, indexPath)
         bindCellOverride(cell, indexPath)
 
-        //bindItemGesture(cell)
-
         /*guard let cell = cell as? DslCell else {
             return
         }*/
     }
 
     func bindCellOverride(_ cell: DslCell, _ indexPath: IndexPath) {
+        if let view = cell as? UIView {
+            bindItemGesture(view)
+        }
         onBindCellOverride?(cell, indexPath)
     }
 

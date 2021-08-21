@@ -4,12 +4,30 @@
 
 import Foundation
 
-class MessageError: Error {
+class MessageError: Error, LocalizedError, CustomDebugStringConvertible, CustomStringConvertible {
 
     var message: String
 
     init(message: String) {
         self.message = message
+    }
+
+    //MARK: --
+
+    var errorDescription: String? {
+        message
+    }
+
+    var failureReason: String? {
+        message
+    }
+
+    var description: String {
+        "MessageError:\(message)"
+    }
+
+    var debugDescription: String {
+        "MessageError:debug:\(message)"
     }
 }
 
