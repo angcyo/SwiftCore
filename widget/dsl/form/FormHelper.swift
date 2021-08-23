@@ -113,7 +113,7 @@ class FormHelper {
     var _animLayer: CALayer? = nil
 
     /// 数据获取
-    func checkAndObtain(tableView: DslTableView, _ params: FormParams? = nil, _ end: (FormParams, Error?) -> Void) {
+    func checkAndObtain(_ tableView: DslTableView, _ params: FormParams? = nil, _ end: (FormParams, Error?) -> Void) {
         let p = params ?? FormParams()
         tableView.checkAndObtainData(p) { path, error in
             if let error = error {
@@ -170,8 +170,14 @@ class FormHelper {
         }
 
         layer.add(animation, forKey: nil)
-        CATransaction.commit()
         tableView.layer.addSublayer(layer)
+        //tableView.layer.setNeedsDisplay()
+        //tableView.layoutIfNeeded()
+
+        CATransaction.commit()
         _animLayer = layer
     }
 }
+
+/// share
+let formHelper = FormHelper()
