@@ -39,6 +39,10 @@ func nilOrEmpty(_ value: Array<Any?>?) -> Bool {
     value == nil || value?.isEmpty == true
 }
 
+/*func nilOrEmpty(_ value: Set<Hashable?>?) -> Bool {
+    value == nil || value?.isEmpty == true
+}*/
+
 func nilOrEmpty(_ value: Dictionary<String, Any?>?) -> Bool {
     value == nil || value?.isEmpty == true
 }

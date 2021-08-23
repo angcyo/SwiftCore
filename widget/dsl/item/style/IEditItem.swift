@@ -10,6 +10,28 @@ protocol IEditItem: IDslItem, UITextFieldDelegate {
     /// 配置项
     /// var editItemConfig: EditItemConfig = EditItemConfig()
     var editItemConfig: EditItemConfig { get set }
+
+    /// 请实现以下方法
+//    /// 文本内容改变后,保存值
+//    func textFieldDidChangeSelection(_ textField: UITextField) {
+//        editItemConfig.itemEditText = textField.text
+//        formItemConfig.formValue = textField.text
+//    }
+//
+//    /// 收起键盘
+//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//        textField.resignFirstResponder()
+//        return true
+//    }
+//
+//    /// 限制最大输入字符数
+//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//        guard let text = textField.text else {
+//            return true
+//        }
+//        let textLength = text.count + string.count - range.length
+//        return textLength <= editItemConfig.itemEditMaxLength
+//    }
 }
 
 class EditItemConfig {
@@ -22,6 +44,12 @@ class EditItemConfig {
 
     ///是否可编辑
     var itemEditEnable: Bool = true
+
+    /// 键盘类型
+    var itemEditKeyboardType: UIKeyboardType = .default
+
+    /// 限制最大输入字符数
+    var itemEditMaxLength: Int = Int.max
 }
 
 extension IEditItem {
@@ -33,6 +61,7 @@ extension IEditItem {
         textField.isEnabled = editItemConfig.itemEditEnable
         //textField.setEdit = editItemConfig.itemEditEnable
         textField.placeholder = editItemConfig.itemEditPlaceholder
+        textField.keyboardType = editItemConfig.itemEditKeyboardType
     }
 
 }

@@ -29,6 +29,27 @@ class FormEditTableItem: BaseFormTableItem, IEditItem {
 
         cell.formEditCellConfig.rightTitle.text = itemRightTitle
     }
+
+    /// 文本内容改变后,保存值
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        editItemConfig.itemEditText = textField.text
+        formItemConfig.formValue = textField.text
+    }
+
+    /// 收起键盘
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+
+    /// 限制最大输入字符数
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else {
+            return true
+        }
+        let textLength = text.count + string.count - range.length
+        return textLength <= editItemConfig.itemEditMaxLength
+    }
 }
 
 class FormEditTableCell: DslTableCell, IFormEditCell {

@@ -24,9 +24,22 @@ class FormItemConfig {
     /// 表单是否可编辑
     var formCanEdit: Bool = true
 
-    /**获取表单的值*/
+    /// 是否忽略此表单
+    var formIgnore: Bool = false
+
+    /// 保存form的value 在[onGetFormValue]中使用, 优先使用此值
+    var formValue: Any? = nil
+
+    ///获取表单的值 [formCheck] [formObtain]
     var onGetFormValue: (_ params: FormParams) -> Any? = { params in
         if let item = params.formItem {
+
+            // 优先使用
+            if let value = params.formItem?.formItemConfig.formValue {
+                return value
+            }
+
+            //其次
             if let editItem = item as? IEditItem {
                 return editItem.editItemConfig.itemEditText
             }
@@ -38,38 +51,68 @@ class FormItemConfig {
 
     /// 检查item是否有错误, 通过end回调, 返回框架错误信息. 无错误回调nil
     var formCheck: (_ params: FormParams, _ end: (_ error: Error?) -> Void) -> Void = { params, end in
-        if (params.formItem?.formItemConfig.formRequired == true) {
-            let value = params.formItem?.formItemConfig.onGetFormValue(params)
-            if (value == nil) {
-                end(error("无效的值"))
-            } else if nilOrEmpty(value as? String) {
-                end(error("无效的值"))
-            } else if nilOrEmpty(value as? Array<Any>) {
-                end(error("无效的值"))
-            } else if nilOrEmpty(value as? Dictionary<String, Any>) {
-                end(error("无效的值"))
+        let formItemConfig = params.formItem?.formItemConfig
+        if formItemConfig?.formIgnore == true {
+            end(nil)
+        } else {
+            if (formItemConfig?.formRequired == true) {
+                let value = formItemConfig?.onGetFormValue(params)
+                if (value == nil) {
+                    end(error("无效的值"))
+                } else {
+                    if value is String {
+                        if nilOrEmpty(value as? String) {
+                            end(error("无效的值"))
+                        } else {
+                            end(nil)
+                        }
+                    } else if value is Array<Any?> {
+                        if nilOrEmpty(value as? Array<Any?>) {
+                            end(error("无效的值"))
+                        } else {
+                            end(nil)
+                        }
+                    } /*else if value is Set<Any> {
+                        if nilOrEmpty(value as? Set<Hashable>) {
+                            end(error("无效的值"))
+                        } else {
+                            end(nil)
+                        }
+                    } */else if value is Dictionary<String, Any?> {
+                        if nilOrEmpty(value as? Dictionary<String, Any?>) {
+                            end(error("无效的值"))
+                        } else {
+                            end(nil)
+                        }
+                    } else {
+                        end(nil)
+                    }
+                }
             } else {
                 end(nil)
             }
-        } else {
-            end(nil)
         }
     }
 
     /**获取form item对应的表单数据, 附件会自动解析
      * [end] 异步获取数据结束之后的回调*/
     var formObtain: (_ params: FormParams, _ end: (_ error: Error?) -> Void) -> Void = { params, end in
-        let key = params.formItem?.formItemConfig.formKey
-        if nilOrEmpty(key) {
+        let formItemConfig = params.formItem?.formItemConfig
+        if formItemConfig?.formIgnore == true {
             end(nil)
         } else {
-            let formValue = params.formItem?.formItemConfig.onGetFormValue(params)
-            if let formValue = formValue {
-                params.put(key!, formValue)
+            let key = formItemConfig?.formKey
+            if nilOrEmpty(key) {
                 end(nil)
             } else {
-                debugPrint("跳过空值formKey[\(key)]")
-                end(nil)
+                let formValue = formItemConfig?.onGetFormValue(params)
+                if let formValue = formValue {
+                    params.put(key!, formValue)
+                    end(nil)
+                } else {
+                    debugPrint("跳过空值formKey[\(key)]")
+                    end(nil)
+                }
             }
         }
     }
