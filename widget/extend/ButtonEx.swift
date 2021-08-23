@@ -21,6 +21,14 @@ extension UIButton {
     func bold(_ bold: Bool = true) {
         titleLabel?.setBold(bold)
     }
+
+    func setPadding(padding: Float = 0) {
+        setPadding(left: padding, top: padding, right: padding, bottom: padding)
+    }
+
+    func setPadding(left: Float = 0, top: Float = 0, right: Float = 0, bottom: Float = 0) {
+        contentEdgeInsets = insets(left: left, top: top, right: right, bottom: bottom)
+    }
 }
 
 /// 按钮
@@ -82,19 +90,23 @@ func borderButton(_ title: String? = nil,
 func labelButton(_ title: String? = nil,
                  titleColor: UIColor = Res.text.label.color,
                  titleSize: Double = Res.text.label.size,
-                 _ onClick: @escaping (UIResponder) -> Void) -> UIButton {
+                 _ onClick: ((UIResponder) -> Void)? = nil) -> UIButton {
     let view = UIButton(type: .custom)
     view.backgroundColor = UIColor.clear
     view.tintColor = titleColor
     view.setTitle(title, for: .normal)
     view.setTitle(title, for: .selected)
     view.setTitle(title, for: .highlighted)
+    view.setTitle(title, for: .disabled)
     view.setTitleColor(titleColor, for: .normal)
     view.setTitleColor(titleColor, for: .selected)
     view.setTitleColor(titleColor, for: .highlighted)
+    view.setTitleColor(titleColor, for: .disabled)
     view.titleLabel?.setTextSize(titleSize)
 
-    view.onClick(.touchUpInside, onClick)
+    if let click = onClick {
+        view.onClick(.touchUpInside, click)
+    }
     return view
 }
 

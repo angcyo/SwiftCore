@@ -67,6 +67,14 @@ extension UIApplication {
     static var statusBarFrame: CGRect? {
         statusBarManager()?.statusBarFrame
     }
+
+    static var bottomSafeInsets: CGFloat {
+        UIApplication.mainWindow?.safeAreaInsets.bottom ?? 0
+    }
+
+    static var topSafeInsets: CGFloat {
+        UIApplication.mainWindow?.safeAreaInsets.top ?? 0
+    }
 }
 
 /// 创建一个新的UIWindow, 返回对象需要hold,否则会被arc回收

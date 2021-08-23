@@ -22,7 +22,7 @@ func _pickerConfiguration() -> YPImagePickerConfiguration {
     var config = YPImagePickerConfiguration()
     config.colors.tintColor = Res.color.colorAccent
     config.albumName = Bundle.displayName()
-    
+
     config.screens = [.library, .photo, .video]
     config.library.mediaType = .photoAndVideo
     config.library.defaultMultipleSelection = false //多选

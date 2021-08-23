@@ -28,6 +28,11 @@ func message(_ body: String, title: String = "", iconImage: UIImage? = nil,
     SwiftMessages.show(view: view)
 }
 
+func messageInfo(_ body: String, title: String = "", iconImage: UIImage? = nil,
+                 layout: MessageView.Layout = .cardView, theme: Theme = .info) {
+    message(body, title: title, iconImage: iconImage, layout: layout, theme: theme)
+}
+
 func messageSuccess(_ body: String, title: String = "", iconImage: UIImage? = nil,
                     layout: MessageView.Layout = .cardView, theme: Theme = .success) {
     message(body, title: title, iconImage: iconImage, layout: layout, theme: theme)

@@ -13,8 +13,25 @@ extension Array where Element: Equatable {
     }
 
     func indexOf(_ object: Element) -> Int {
+        return firstIndexOf(object)
+    }
+
+    func firstIndexOf(_ object: Element) -> Int {
         let index = firstIndex(of: object)
         return index ?? -1
+    }
+
+    func lastIndexOf(_ object: Element) -> Int {
+        let index = lastIndex(of: object)
+        return index ?? -1
+    }
+}
+
+extension Array {
+    func forEachIndex(_ action: (Element, Int) -> Void) {
+        for i in self.indices {
+            action(self[i], i)
+        }
     }
 }
 
