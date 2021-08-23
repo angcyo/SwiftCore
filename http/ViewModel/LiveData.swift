@@ -11,37 +11,60 @@ protocol NilObject {
     var isNil: Bool { get }
 }
 
-extension BehaviorSubject {
+/// 数据包裹
+class LiveData: NilObject {
+    var isNil: Bool {
+        data == nil
+    }
+    var data: Any? = nil
+
+    init(_ data: Any?) {
+        self.data = data
+    }
+}
+
+extension String: NilObject {
+    var isNil: Bool {
+        isEmpty
+    }
+}
+
+extension BehaviorSubject where Element: LiveData {
 
     /// 获取可能为nil的值
-    func valueOrNil() -> Element? {
+    func valueOrNil() -> Any? {
         do {
             let value = try value()
-            if let nilObj = value as? NilObject {
-                if nilObj.isNil {
+            if let liveData = value as? LiveData {
+                if liveData.isNil {
                     return nil
                 }
+                return liveData.data
             }
-            return value
+            return nil
         } catch {
             debugPrint("error->\(error)")
             return nil
         }
     }
 
+    func beanOrNil<Bean>() -> Bean? {
+        valueOrNil() as? Bean
+    }
+
     /// 设置值
-    func setValue(_ value: Element) {
-        onNext(value)
+    func setValue(_ value: Any?) {
+        onNext(LiveData(value) as! BehaviorSubject<Element>.Element)
     }
 
     /// 观察value or nil
-    func observe(_ on: @escaping (Element?) -> Void) -> Disposable {
+    func observe(_ on: @escaping (Any?) -> Void) -> Disposable {
         subscribe(onNext: { value in
-            if let nilObj = value as? NilObject {
-                if nilObj.isNil {
+            if let liveData = value as? LiveData {
+                if liveData.isNil {
                     on(nil)
                 } else {
-                    on(value)
+                    on(liveData.data)
                 }
             } else {
                 on(nil)
@@ -65,7 +88,12 @@ extension JSON: NilObject {
     }
 }
 
+func liveData(_ type: Any /*类型提示*/) -> BehaviorSubject<LiveData> {
+    liveData(value: nil)
+}
+
 /// 可以观察的数据对象
-func liveData<Bean: NilObject>(_ value: Bean) -> BehaviorSubject<Bean> {
-    BehaviorSubject<Bean>(value: value)
+func liveData(value: Any? = nil) -> BehaviorSubject<LiveData> {
+    let data = LiveData(value)
+    return BehaviorSubject(value: data)
 }

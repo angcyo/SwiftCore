@@ -57,7 +57,7 @@ class DslItem: NSObject, IDslItem {
     var _itemSection: DslSection? = nil
 
     /// index
-    var itemIndexOfSection: IndexPath? {
+    var itemIndex: IndexPath? {
         if let section = _itemSection, let tableView = _dslRecyclerView {
             //在第几个section中, 从0开始
             let s = tableView.sectionHelper.sectionList.indexOf(section)
@@ -118,9 +118,15 @@ class DslItem: NSObject, IDslItem {
         DisposeBag()
     }()
 
+    /// 手势订阅
+    lazy var gestureDisposeBag: DisposeBag = {
+        DisposeBag()
+    }()
+
     /// 取消所有订阅
     func reset() {
         disposeBag = DisposeBag()
+        gestureDisposeBag = DisposeBag()
     }
 
     //MARK: 事件回调, 无法自动触发. 需要手动触发调用
@@ -147,24 +153,21 @@ extension DslItem {
 extension DslItem {
 
     /// 绑定点击, 长按事件回调
-    func bindItemGesture(_ view: UIView) {
+    @objc func bindItemGesture(_ view: UIView) {
+        gestureDisposeBag = DisposeBag() //重置手势监听
         bindItemClick(view)
         bindItemLongClick(view)
     }
 
     func bindItemClick(_ view: UIView) {
-        if let click = onItemClick {
-            view.onClick(bag: disposeBag) { _ in
-                click()
-            }
+        view.onClick(bag: gestureDisposeBag) { _ in
+            self.onItemClick?()
         }
     }
 
     func bindItemLongClick(_ view: UIView) {
-        if let longClick = onItemLongClick {
-            view.onLongClick(bag: disposeBag) { _ in
-                longClick()
-            }
+        view.onLongClick(bag: gestureDisposeBag) { _ in
+            self.onItemLongClick?()
         }
     }
 }

@@ -16,7 +16,7 @@ struct DslActionData {
 
 class DslActionTableItem: DslTableItem {
     override func initItem() {
-        itemCell = DslActionTableCell.self
+        super.initItem()
         itemHeight = 50
         enableSelect()
     }
@@ -33,6 +33,10 @@ class DslActionTableItem: DslTableItem {
             cell.textLabel?.text = data.text
             cell.detailTextLabel?.text = data.detailText
         }
+    }
+
+    override func bindItemGesture(_ view: UIView) {
+        //
     }
 }
 

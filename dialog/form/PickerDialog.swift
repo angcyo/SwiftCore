@@ -12,9 +12,9 @@ class PickerDialog: BaseFormDialog, UIPickerViewDelegate, UIPickerViewDataSource
     let pickerView = UIPickerView()
 
     /// 选项
-    var pickerItems: [String] = [] {
+    var pickerItems: [String?]? = [] {
         didSet {
-            empty.isHidden = !pickerItems.isEmpty
+            empty.show(nilOrEmpty(pickerItems))
         }
     }
 
@@ -66,14 +66,16 @@ class PickerDialog: BaseFormDialog, UIPickerViewDelegate, UIPickerViewDataSource
 
     /// 默认选中
     func pickerDefaultItem() {
-        if !pickerItems.isEmpty {
-            if let item = pickerItem {
-                let index = pickerItems.firstIndexOf(item)
-                pickerView.selectRow(index, inComponent: 0, animated: false)
-            } else {
-                let index = 0
-                pickerView.selectRow(index, inComponent: 0, animated: false)
-                pickerView(pickerView, didSelectRow: index, inComponent: 0) //手动触发回调
+        if let pickerItems = pickerItems {
+            if !pickerItems.isEmpty {
+                if let item = pickerItem {
+                    let index = pickerItems.firstIndexOf(item)
+                    pickerView.selectRow(index, inComponent: 0, animated: false)
+                } else {
+                    let index = 0
+                    pickerView.selectRow(index, inComponent: 0, animated: false)
+                    pickerView(pickerView, didSelectRow: index, inComponent: 0) //手动触发回调
+                }
             }
         }
     }
@@ -81,12 +83,12 @@ class PickerDialog: BaseFormDialog, UIPickerViewDelegate, UIPickerViewDataSource
     //MARK: UIPickerViewDelegate
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        pickerItems[row]
+        pickerItems?[row]
     }
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         debugPrint("didSelectRow:\(row)")
-        confirm.isEnabled = pickerItem != pickerItems[row]
+        confirm.isEnabled = pickerItem != pickerItems?[row]
     }
 
     //MARK: UIPickerViewDataSource
@@ -98,7 +100,7 @@ class PickerDialog: BaseFormDialog, UIPickerViewDelegate, UIPickerViewDataSource
 
     /// 每个滚轮有多少个item
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        pickerItems.count
+        pickerItems?.count ?? 0
     }
 }
 

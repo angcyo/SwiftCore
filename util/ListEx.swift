@@ -35,10 +35,10 @@ extension Array {
     }
 }
 
-func nilOrEmpty(_ value: Array<Any>?) -> Bool {
+func nilOrEmpty(_ value: Array<Any?>?) -> Bool {
     value == nil || value?.isEmpty == true
 }
 
-func nilOrEmpty(_ value: Dictionary<String, Any>?) -> Bool {
+func nilOrEmpty(_ value: Dictionary<String, Any?>?) -> Bool {
     value == nil || value?.isEmpty == true
 }

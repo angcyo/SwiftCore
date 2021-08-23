@@ -65,6 +65,14 @@ extension UIView {
         }
     }
 
+    func hide(_ bool: Bool = true) {
+        isHidden = bool
+    }
+
+    func show(_ bool: Bool = true) {
+        hide(!bool)
+    }
+
     /// 将UIVIew转换成UIImage UIView截图
     func toImage() -> UIImage? {
         let size = bounds.size

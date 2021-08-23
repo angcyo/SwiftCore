@@ -51,6 +51,10 @@ class DslTableItem: DslItem {
     var onHighlighted: ((_ highlighted: Bool, _ animated: Bool) -> Void)? = nil
     var onSelected: ((_ selected: Bool, _ animated: Bool) -> Void)? = nil
 
+    override func initItem() {
+        super.initItem()
+    }
+
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
         _bindTableCell(cell, indexPath)

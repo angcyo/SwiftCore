@@ -8,6 +8,8 @@ import RxSwift
 /// vm
 class ViewModel: NSObject {
 
+    //let liveData = liveData("")
+
     required override init() {
         super.init()
         debugPrint("创建:\(self)")

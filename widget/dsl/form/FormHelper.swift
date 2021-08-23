@@ -26,7 +26,7 @@ extension DslRecycleView {
                 formItem.formItemConfig.formCheck(params) { error in
                     params.formItem = nil
                     if let error = error {
-                        end(item?.itemIndexOfSection, error)
+                        end(item?.itemIndex, error)
                     } else {
                         _checkData(params, itemList: itemList, index: index + 1, end: end)
                     }
@@ -86,14 +86,14 @@ extension DslRecycleView {
                 formItem.formItemConfig.formCheck(params) { error in
                     params.formItem = nil
                     if let error = error {
-                        end(item?.itemIndexOfSection, error)
+                        end(item?.itemIndex, error)
                     } else {
                         //检查无错误, 则获取数据
                         params.formItem = formItem
                         formItem.formItemConfig.formObtain(params) { error in
                             params.formItem = nil
                             if let error = error {
-                                end(item?.itemIndexOfSection, error)
+                                end(item?.itemIndex, error)
                             } else {
                                 // 获取数据之后
                                 _checkAndObtainData(params, itemList: itemList, index: index + 1, end: end)
