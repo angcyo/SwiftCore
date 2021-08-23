@@ -124,7 +124,7 @@ class BaseFormDialog: UIView {
 
     /// 配置消息¬
     func configMessage(swiftMessage: SwiftMessages) {
-        swiftMessage.defaultConfig.dimMode = .blur(style: .dark, alpha: 0.3, interactive: true)
+        swiftMessage.defaultConfig.dimMode = .blur(style: .dark, alpha: 0.5, interactive: true)
         //.gray(interactive: true)
         swiftMessage.defaultConfig.duration = .forever
         swiftMessage.defaultConfig.interactiveHide = true
