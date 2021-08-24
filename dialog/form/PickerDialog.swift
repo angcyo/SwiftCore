@@ -54,7 +54,7 @@ class PickerDialog: BaseFormDialog, UIPickerViewDelegate, UIPickerViewDataSource
                 hide()
             }
         } else {
-            debugPrint("选中:\(selected)")
+            print("选中:\(selected)")
             hide()
         }
     }
@@ -87,7 +87,7 @@ class PickerDialog: BaseFormDialog, UIPickerViewDelegate, UIPickerViewDataSource
     }
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        debugPrint("didSelectRow:\(row)")
+        print("didSelectRow:\(row)")
         confirm.isEnabled = pickerItem != pickerItems?[row]
     }
 

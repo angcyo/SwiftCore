@@ -20,7 +20,7 @@ class BaseViewController: UIViewController, Navigation {
     init() {
         super.init(nibName: nil, bundle: nil)
         //bounds:(0.0, 0.0, 375.0, 812.0)
-        debugPrint("\(threadName())->创建:\(self):\(modalPresentationStyle.rawValue)") //pageSheet
+        print("\(threadName())->创建:\(self):\(modalPresentationStyle.rawValue)") //pageSheet
         initController()
     }
 
@@ -53,7 +53,7 @@ class BaseViewController: UIViewController, Navigation {
     /// 此方法会在[viewDidLoad]之后触发
     func initController() {
         //init
-        debugPrint("initController:\(self):bounds:\(view.bounds)")
+        print("initController:\(self):bounds:\(view.bounds)")
         view.backgroundColor = Res.color.controllerBackgroundColor
     }
 
@@ -80,13 +80,13 @@ class BaseViewController: UIViewController, Navigation {
 
     override func loadView() {
         super.loadView()
-        debugPrint("\(threadName())->加载试图:\(self)")
+        print("\(threadName())->加载试图:\(self)")
     }
 
     /// 加载试图
     override func viewDidLoad() {
         super.viewDidLoad()
-        debugPrint("viewDidLoad:\(self):\(view.bounds):\(view.safeAreaLayoutGuide)")
+        print("viewDidLoad:\(self):\(view.bounds):\(view.safeAreaLayoutGuide)")
     }
 
     /// 试图将要显示
@@ -140,6 +140,6 @@ class BaseViewController: UIViewController, Navigation {
     /// Swift 的ARC, 在创建对象之后, 没有被引用会立马被回收.
     /// https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html
     deinit {
-        debugPrint("\(threadName())->销毁:\(self)")
+        print("\(threadName())->销毁:\(self)")
     }
 }

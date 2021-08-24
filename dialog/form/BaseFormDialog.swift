@@ -86,7 +86,7 @@ class BaseFormDialog: UIView {
 
         //frame = rect(0, 0, 100, 100)
 
-        //debugPrint("test:::\(safeAreaInsets) \(UIApplication.mainWindow?.safeAreaInsets)")
+        //print("test:::\(safeAreaInsets) \(UIApplication.mainWindow?.safeAreaInsets)")
         //layoutMargins = insets(bottom: 100)
     }
 

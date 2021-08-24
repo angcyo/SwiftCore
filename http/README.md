@@ -24,6 +24,10 @@ pod 'RxSwiftExt' #, '6.0.1'
 # 网络图片
 # https://github.com/Alamofire/AlamofireImage
 pod 'AlamofireImage', '~> 4.2.0'
+
+# 网络请求日志
+# https://github.com/jankaltoun/AlamofireEasyLogger
+pod 'AlamofireEasyLogger' # '~> 1.6.0'
 ```
 
 ## RxSwift 中文文档 · RxSwift 中文文档

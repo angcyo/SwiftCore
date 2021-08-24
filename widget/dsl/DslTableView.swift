@@ -150,7 +150,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
 
     /// 赋值和初始化
     func createTableViewCell(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, item: DslItem) -> UITableViewCell {
-        debugPrint("获取Cell:\(indexPath)")
+        print("获取Cell:\(indexPath)")
         //赋值
         item._dslRecyclerView = self
 
@@ -164,31 +164,31 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
 
     /// cell 即将显示
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        debugPrint("cell即将显示:\(indexPath):\(cell):\(cell.layer.cornerRadius)")
+        print("cell即将显示:\(indexPath):\(cell):\(cell.layer.cornerRadius)")
         //cell.layer.cornerRadius = 100 // 可以修改 insetGrouped 默认圆角
     }
 
     /// cell即将不可见
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        debugPrint("cell即将不可见:\(indexPath):\(cell)")
+        print("cell即将不可见:\(indexPath):\(cell)")
     }
 
     /// 头部试图即将显示
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        debugPrint("头部试图即将显示:\(section):\(view)")
+        print("头部试图即将显示:\(section):\(view)")
     }
 
     func tableView(_ tableView: UITableView, didEndDisplayingHeaderView view: UIView, forSection section: Int) {
-        debugPrint("头部试图即将不可见:\(section):\(view)")
+        print("头部试图即将不可见:\(section):\(view)")
     }
 
     /// 尾部试图即将显示
     func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
-        debugPrint("尾部试图即将显示:\(section):\(view)")
+        print("尾部试图即将显示:\(section):\(view)")
     }
 
     func tableView(_ tableView: UITableView, didEndDisplayingFooterView view: UIView, forSection section: Int) {
-        debugPrint("尾部试图即将不可见:\(section):\(view)")
+        print("尾部试图即将不可见:\(section):\(view)")
     }
 
     // MARK: 高度计算
@@ -196,40 +196,40 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     /// 指定行高
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         //return UITableView.automaticDimension
-        debugPrint("heightForRowAt:\(indexPath)")
+        print("heightForRowAt:\(indexPath)")
         return getTableItem(indexPath)?.itemHeight ?? UITableView.automaticDimension
     }
 
     /// 预估的行高
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         //return 50
-        debugPrint("estimatedHeightForRowAt:\(indexPath)")
+        print("estimatedHeightForRowAt:\(indexPath)")
         return getTableItem(indexPath)?.itemEstimatedHeight ?? 50
     }
 
     /// 头部的高度
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         //return UITableView.automaticDimension
-        debugPrint("heightForHeaderInSection:\(section)")
+        print("heightForHeaderInSection:\(section)")
         return getSectionFirstItem(section)?.itemHeaderHeight ?? UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         //return UITableView.automaticDimension
-        debugPrint("estimatedHeightForHeaderInSection:\(section)")
+        print("estimatedHeightForHeaderInSection:\(section)")
         return getSectionFirstItem(section)?.itemHeaderEstimatedHeight ?? UITableView.automaticDimension
     }
 
     /// 尾部的高度
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         //return UITableView.automaticDimension
-        debugPrint("heightForFooterInSection:\(section)")
+        print("heightForFooterInSection:\(section)")
         return getSectionFirstItem(section)?.itemFooterHeight ?? UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
         //return UITableView.automaticDimension
-        debugPrint("estimatedHeightForFooterInSection:\(section)")
+        print("estimatedHeightForFooterInSection:\(section)")
         return getSectionFirstItem(section)?.itemFooterEstimatedHeight ?? UITableView.automaticDimension
     }
 
@@ -237,7 +237,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
 
     /// 返回头部试图
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        debugPrint("viewForHeaderInSection:\(section)")
+        print("viewForHeaderInSection:\(section)")
         //return getSectionFirstItem(section)?.itemHeaderView
         let view = UIView()
         view.frame = CGRect(x: 0, y: 0, width: 1, height: 1)
@@ -246,7 +246,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
 
     /// 返回尾部试图
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        debugPrint("viewForFooterInSection:\(section)")
+        print("viewForFooterInSection:\(section)")
         //return getSectionFirstItem(section)?.itemFooterView
         let view = UIView()
         view.frame = CGRect(x: 0, y: 0, width: 1, height: 1)
@@ -256,7 +256,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     /// 需要cell的样式为:accessoryType = .detailButton 或 .detailDisclosureButton
     /// 点击排序按钮的时候, 也会触发
     func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
-        debugPrint("点击详情按钮:\(indexPath)")
+        print("点击详情按钮:\(indexPath)")
     }
 
     // MARK: 突出和选中
@@ -267,16 +267,16 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     }
 
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
-        debugPrint("突出显示:\(indexPath)")
+        print("突出显示:\(indexPath)")
     }
 
     func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
-        debugPrint("取消突出:\(indexPath)")
+        print("取消突出:\(indexPath)")
     }
 
     /// 将要选中行
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        debugPrint("即将选中:\(indexPath)")
+        print("即将选中:\(indexPath)")
         if getTableItem(indexPath)?.itemCanSelect ?? false {
             return indexPath
         }
@@ -284,7 +284,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     }
 
     func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
-        debugPrint("即将取消选中:\(indexPath)")
+        print("即将取消选中:\(indexPath)")
         if getTableItem(indexPath)?.itemCanDeselect ?? false {
             return indexPath
         }
@@ -298,7 +298,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     var autoCancelSelect = true
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        debugPrint("选中:\(indexPath)")
+        print("选中:\(indexPath)")
         selectList.append(indexPath)
 
         if autoCancelSelect {
@@ -307,7 +307,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     }
 
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        debugPrint("取消选中:\(indexPath)")
+        print("取消选中:\(indexPath)")
         selectList.remove(indexPath)
     }
 
@@ -327,7 +327,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
 
     /// 编辑模式下得编辑样式
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        debugPrint("editingStyleForRowAt:\(indexPath)")
+        print("editingStyleForRowAt:\(indexPath)")
         return .delete
     }
 
@@ -338,51 +338,51 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
 
     /// 侧滑菜单
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        debugPrint("editActionsForRowAt:\(indexPath)")
+        print("editActionsForRowAt:\(indexPath)")
         return nil
     }
 
     /// 左边侧滑配置
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        debugPrint("leadingSwipeActionsConfigurationForRowAt:\(indexPath)")
+        print("leadingSwipeActionsConfigurationForRowAt:\(indexPath)")
         return nil
     }
 
     /// 右边侧滑配置
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        debugPrint("trailingSwipeActionsConfigurationForRowAt:\(indexPath)")
+        print("trailingSwipeActionsConfigurationForRowAt:\(indexPath)")
         return nil
     }
 
     /// 编辑模式时, 是否缩进行
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
-        debugPrint("shouldIndentWhileEditingRowAt:\(indexPath)")
+        print("shouldIndentWhileEditingRowAt:\(indexPath)")
         return true
     }
 
     /// 缩进级别量
     func tableView(_ tableView: UITableView, indentationLevelForRowAt indexPath: IndexPath) -> Int {
-        debugPrint("缩进:indentationLevelForRowAt:\(indexPath)")
+        print("缩进:indentationLevelForRowAt:\(indexPath)")
         return getTableItem(indexPath)?.itemIndentationLevel ?? 0
     }
 
     /// 即将进入编辑模式
     func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
-        debugPrint("即将进入编辑模式:\(indexPath)")
+        print("即将进入编辑模式:\(indexPath)")
     }
 
     func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
-        debugPrint("已退出编辑模式:\(indexPath)")
+        print("已退出编辑模式:\(indexPath)")
     }
 
     func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
-        debugPrint("移动从:\(sourceIndexPath) 到:\(proposedDestinationIndexPath)")
+        print("移动从:\(sourceIndexPath) 到:\(proposedDestinationIndexPath)")
         return proposedDestinationIndexPath
     }
 
     /// 是否显示菜单
     func tableView(_ tableView: UITableView, shouldShowMenuForRowAt indexPath: IndexPath) -> Bool {
-        debugPrint("是否显示菜单:\(indexPath)")
+        print("是否显示菜单:\(indexPath)")
         return false
     }
 
@@ -393,7 +393,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
 
     /// 距离的菜单操作
     func tableView(_ tableView: UITableView, performAction action: Selector, forRowAt indexPath: IndexPath, withSender sender: Any?) {
-        debugPrint("菜单操作:\(indexPath) :\(action)")
+        print("菜单操作:\(indexPath) :\(action)")
     }
 
     /// 是否有焦点

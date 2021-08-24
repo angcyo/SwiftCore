@@ -16,7 +16,7 @@ extension UIImageView {
         if nilOrEmpty(url) {
             image = nil
         } else {
-            debugPrint("加载图片:\(url)")
+            print("加载图片:\(url)")
             af.setImage(withURL: URL(string: url!)!,
                     cacheKey: url,
                     placeholderImage: image)
@@ -53,7 +53,7 @@ extension UIImageView {
             } else if let imgObj = img as? UIImage {
                 self.image = imgObj
             } else {
-                debugPrint("不支持的图片类型:\(img)")
+                print("不支持的图片类型:\(img)")
             }
         } else {
             self.image = nil

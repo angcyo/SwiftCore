@@ -11,12 +11,12 @@ class TargetObserver {
 
     /// 回调
     @objc func onActionInner(sender: UIResponder) {
-        debugPrint("onActionInner:\(sender)")
+        print("onActionInner:\(sender)")
         onAction?(sender)
     }
 
     deinit {
-        debugPrint("\(threadName())->销毁:\(self)")
+        print("\(threadName())->销毁:\(self)")
     }
 }
 

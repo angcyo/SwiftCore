@@ -74,7 +74,7 @@ class DslTableCell: UITableViewCell {
     override init(style: CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         //cellIdentifier = reuseIdentifier ?? NSStringFromClass(Self.self)
-        debugPrint("创建cell:\(self):\(style.rawValue):\(reuseIdentifier)")
+        print("创建cell:\(self):\(style.rawValue):\(reuseIdentifier)")
 
         initCell()
     }
@@ -84,7 +84,7 @@ class DslTableCell: UITableViewCell {
     }
 
     deinit {
-        debugPrint("\(threadName())->销毁:\(self)")
+        print("\(threadName())->销毁:\(self)")
     }
 
     ///  自定义的cell需要放在这里
@@ -113,11 +113,11 @@ class DslTableCell: UITableViewCell {
     // 重写此方法, 在复用之前准备cell
     override func prepareForReuse() {
         super.prepareForReuse()
-        debugPrint("prepareForReuse")
+        print("prepareForReuse")
     }
 
     /*override var contentView: UIView {
-        //debugPrint("contentView:\(self)")
+        //print("contentView:\(self)")
         let view = UIView()
         view.backgroundColor = UIColor.black
         return view
@@ -125,7 +125,7 @@ class DslTableCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        debugPrint("awakeFromNib")
+        print("awakeFromNib")
     }
 
     /// [自动赋值]
@@ -133,7 +133,7 @@ class DslTableCell: UITableViewCell {
 
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
-        //debugPrint("setEditing:\(editing):\(animated)")
+        //print("setEditing:\(editing):\(animated)")
 
         if let item = _item as? DslTableItem {
             item._itemEditing = editing
@@ -143,7 +143,7 @@ class DslTableCell: UITableViewCell {
 
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
-        debugPrint("setHighlighted:\(highlighted):\(animated)")
+        print("setHighlighted:\(highlighted):\(animated)")
 
         if let item = _item as? DslTableItem {
             item._itemHighlighted = highlighted
@@ -153,7 +153,7 @@ class DslTableCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        debugPrint("setSelected:\(selected):\(animated)")
+        print("setSelected:\(selected):\(animated)")
 
         if let item = _item as? DslTableItem {
             item._itemSelected = selected

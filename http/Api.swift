@@ -26,8 +26,7 @@ struct Api {
         return Http.request(_url, _param, method: method) { http in
                     if method == .post || method == .put {
                         http.encoding = JSONEncoding.default
-
-                        http.headers.append(HTTPHeader(name: "Accept", value: "application/json; charset=utf-8"))
+                        //http.headers.append(HTTPHeader(name: "Accept", value: "application/json; charset=utf-8"))
                         //http.headers.append(HTTPHeader(name: "Content-Type", value: "application/json; charset=utf-8"))
                     } else {
                         http.encoding = URLEncoding.default
@@ -37,10 +36,10 @@ struct Api {
                 //.log()
                 .validateAuth()
                 .validate(statusCode: 200...299)
-                .response { response in
-                    debugPrint("[\(threadName())] 请求结束:↓")
-                    debugPrint(response)
-                }
+        /*.response { response in
+            print("[\(threadName())] 请求结束:↓")
+            print(response)
+        }*/
     }
 }
 
@@ -107,6 +106,22 @@ extension DataRequest {
     func requestImage(_ onResult: @escaping (Image?, Error?) -> Void) -> DataRequest {
         let request: DataRequest = self
         responseImage { response in
+            Api.requestHold.remove(request)
+            switch response.result {
+            case .success(let value):
+                onResult(value, nil)
+            case .failure(let error):
+                onResult(nil, error)
+            }
+        }
+        Api.requestHold.append(request)
+        return request
+    }
+
+    @discardableResult
+    func requestString(_ onResult: @escaping (String?, Error?) -> Void) -> DataRequest {
+        let request: DataRequest = self
+        responseString { response in
             Api.requestHold.remove(request)
             switch response.result {
             case .success(let value):
@@ -225,17 +240,17 @@ extension Api {
                         _ param: Parameters? = nil, //请求参数, 可以是body, form等
                         query: Parameters? = nil,
                         method: HTTPMethod = .get,
-                        encoding: ParameterEncoding = URLEncoding.default,
+                        encoding: ParameterEncoding? = nil /*URLEncoding.default*/,
                         headers: HTTPHeaders? = nil,
                         interceptor: RequestInterceptor? = nil) -> Observable<DataRequest> {
         let _url = Http.wrapUrlQuery(url, method: method, query: query)
         let _param = Http.wrapParam(method: method, param: param, query: query)
         return httpSession.rx.request(method, connectUrl(url: _url),
                         parameters: _param,
-                        encoding: encoding,
-                        headers: headers,
+                        encoding: Http.wrapEncoding(method: method, encoding: encoding),
+                        headers: Http.wrapHttpHeader(method: method, headers: headers),
                         interceptor: Http.wrapInterceptor(interceptor: interceptor))
-                .log()
+                //.log()
                 .validateAuth()
                 .validate(statusCode: 200...299)
     }
@@ -245,11 +260,10 @@ extension Api {
                             _ param: Parameters? = nil, //请求参数, 可以是body, form等
                             query: Parameters? = nil,
                             method: HTTPMethod = .post,
-                            encoding: ParameterEncoding = URLEncoding.default,
+                            encoding: ParameterEncoding? = nil,
                             headers: HTTPHeaders? = nil,
                             interceptor: RequestInterceptor? = nil) -> Observable<JSON> {
-        request(url, param, query: query, method: method,
-                encoding: encoding, headers: headers, interceptor: interceptor)
+        request(url, param, query: query, method: method, encoding: encoding, headers: headers, interceptor: interceptor)
                 .flatMap {
                     $0.rx.swiftyJSON()
                 }
@@ -260,17 +274,16 @@ extension Api {
                      _ param: Parameters? = nil, //请求参数, 可以是body, form等
                      query: Parameters? = nil,
                      method: HTTPMethod = .post,
-                     encoding: ParameterEncoding = URLEncoding.default,
+                     encoding: ParameterEncoding? = nil,
                      headers: HTTPHeaders? = nil,
                      interceptor: RequestInterceptor? = nil,
                      _ onResult: @escaping (JSON?, Error?) -> Void) -> Disposable {
-        request(url, param, query: query, method: method,
-                encoding: encoding, headers: headers, interceptor: interceptor)
+        request(url, param, query: query, method: method, encoding: encoding, headers: headers, interceptor: interceptor)
                 .flatMap {
                     $0.rx.swiftyJSON()
                 }
                 .subscribe(onNext: { data in
-                    debugPrint(data)
+                    //debugPrint(data)
                     if Http.PARSE_DATA_CODE {
                         let json = data
                         let code = json[Http.KEY_CODE].intValue
@@ -285,7 +298,7 @@ extension Api {
                         onResult(data, nil)
                     }
                 }, onError: { error in
-                    debugPrint(error)
+                    //debugPrint(error)
                     onResult(nil, error)
                 })
     }
@@ -294,11 +307,10 @@ extension Api {
                                     _ param: Parameters? = nil, //请求参数, 可以是body, form等
                                     query: Parameters? = nil,
                                     method: HTTPMethod = .post,
-                                    encoding: ParameterEncoding = URLEncoding.default,
+                                    encoding: ParameterEncoding? = nil,
                                     headers: HTTPHeaders? = nil,
                                     interceptor: RequestInterceptor? = nil) -> Observable<(HTTPURLResponse, JSON)> {
-        request(url, param, query: query, method: method,
-                encoding: encoding, headers: headers, interceptor: interceptor)
+        request(url, param, query: query, method: method, encoding: encoding, headers: headers, interceptor: interceptor)
                 .flatMap {
                     $0.rx.responseSwiftyJSON()
                 }
@@ -309,11 +321,10 @@ extension Api {
                                           _ param: Parameters? = nil, //请求参数, 可以是body, form等
                                           query: Parameters? = nil,
                                           method: HTTPMethod = .post,
-                                          encoding: ParameterEncoding = URLEncoding.default,
+                                          encoding: ParameterEncoding? = nil,
                                           headers: HTTPHeaders? = nil,
                                           interceptor: RequestInterceptor? = nil) -> Observable<T> {
-        request(url, param, query: query, method: method,
-                encoding: encoding, headers: headers, interceptor: interceptor)
+        request(url, param, query: query, method: method, encoding: encoding, headers: headers, interceptor: interceptor)
                 .flatMap {
                     $0.rx.decodable()
                 }
@@ -323,17 +334,16 @@ extension Api {
                                    _ param: Parameters? = nil, //请求参数, 可以是body, form等
                                    query: Parameters? = nil,
                                    method: HTTPMethod = .post,
-                                   encoding: ParameterEncoding = URLEncoding.default,
+                                   encoding: ParameterEncoding? = nil,
                                    headers: HTTPHeaders? = nil,
                                    interceptor: RequestInterceptor? = nil,
                                    _ onResult: @escaping (T?, Error?) -> Void) -> Disposable {
-        request(url, param, query: query, method: method,
-                encoding: encoding, headers: headers, interceptor: interceptor)
+        request(url, param, query: query, method: method, encoding: encoding, headers: headers, interceptor: interceptor)
                 .flatMap {
                     $0.rx.decodable()
                 }
                 .subscribe(onNext: { (data: T) in
-                    debugPrint(data)
+                    //debugPrint(data)
                     if Http.PARSE_DATA_CODE, let bean = data as? HttpCodeProtocol {
                         let code = bean.code ?? 0
                         if code >= 200 && code <= 299 {
@@ -347,7 +357,7 @@ extension Api {
                         onResult(data, nil)
                     }
                 }, onError: { error in
-                    debugPrint(error)
+                    //debugPrint(error)
                     onResult(nil, error)
                 })
     }
@@ -356,11 +366,10 @@ extension Api {
                                                   _ param: Parameters? = nil, //请求参数, 可以是body, form等
                                                   query: Parameters? = nil,
                                                   method: HTTPMethod = .post,
-                                                  encoding: ParameterEncoding = URLEncoding.default,
+                                                  encoding: ParameterEncoding? = nil,
                                                   headers: HTTPHeaders? = nil,
                                                   interceptor: RequestInterceptor? = nil) -> Observable<(HTTPURLResponse, T)> {
-        request(url, param, query: query, method: method,
-                encoding: encoding, headers: headers, interceptor: interceptor)
+        request(url, param, query: query, method: method, encoding: encoding, headers: headers, interceptor: interceptor)
                 .flatMap {
                     $0.rx.responseDecodable()
                 }

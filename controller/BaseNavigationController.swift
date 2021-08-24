@@ -96,13 +96,13 @@ class BaseNavigationController: UINavigationController,
     /// Swift 的ARC, 在创建对象之后, 没有被引用会立马被回收.
     /// https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html
     deinit {
-        debugPrint("\(threadName())->销毁:\(self)")
+        print("\(threadName())->销毁:\(self)")
     }
 
     //MARK: 导航代理
 
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        debugPrint("即将显示VC:\(viewController):\(animated)")
+        print("即将显示VC:\(viewController):\(animated)")
         if let navigation = viewController as? Navigation {
             //navigationController.navigationBar.isHidden = !navigation.showNavigationBar
             //navigationController.isNavigationBarHidden = !navigation.showNavigationBar
@@ -122,54 +122,54 @@ class BaseNavigationController: UINavigationController,
 
     func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
         //"已经显示VC:<Wayto_GBSecurity_iOS.HomeController: 0x117d08390>:true:(0.0, 44.0, 375.0, 44.0)"
-        debugPrint("已经显示VC:\(viewController):\(animated):\(navigationController.navigationBar.frame)")
+        print("已经显示VC:\(viewController):\(animated):\(navigationController.navigationBar.frame)")
     }
 
     /// 支持的屏幕方向
     func navigationControllerSupportedInterfaceOrientations(_ navigationController: UINavigationController) -> UIInterfaceOrientationMask {
-        debugPrint("navigationControllerSupportedInterfaceOrientations")
+        print("navigationControllerSupportedInterfaceOrientations")
         return .portrait
     }
 
     /// 预选方向
     func navigationControllerPreferredInterfaceOrientationForPresentation(_ navigationController: UINavigationController) -> UIInterfaceOrientation {
-        debugPrint("navigationControllerPreferredInterfaceOrientationForPresentation")
+        print("navigationControllerPreferredInterfaceOrientationForPresentation")
         return .portrait
     }
 
     /// 过渡东安湖
     func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        debugPrint("interactionControllerFor:\(animationController)")
+        print("interactionControllerFor:\(animationController)")
         return nil
     }
 
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        debugPrint("animationControllerFor:\(operation):fromVC:\(fromVC) :toVC:\(toVC)")
+        print("animationControllerFor:\(operation):fromVC:\(fromVC) :toVC:\(toVC)")
         return nil
     }
 
     //MARK: 导航栏代理
 
     func navigationBar(_ navigationBar: UINavigationBar, shouldPush item: UINavigationItem) -> Bool {
-        debugPrint("shouldPush:\(item)")
+        print("shouldPush:\(item)")
         return true
     }
 
     func navigationBar(_ navigationBar: UINavigationBar, didPush item: UINavigationItem) {
-        debugPrint("didPush:\(item)")
+        print("didPush:\(item)")
     }
 
     func navigationBar(_ navigationBar: UINavigationBar, shouldPop item: UINavigationItem) -> Bool {
-        debugPrint("shouldPop:\(item)")
+        print("shouldPop:\(item)")
         return true
     }
 
     func navigationBar(_ navigationBar: UINavigationBar, didPop item: UINavigationItem) {
-        debugPrint("didPop:\(item)")
+        print("didPop:\(item)")
     }
 
     func position(for bar: UIBarPositioning) -> UIBarPosition {
-        debugPrint("position:\(bar)")
+        print("position:\(bar)")
         return bar.barPosition
     }
 

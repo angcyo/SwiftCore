@@ -69,6 +69,17 @@ class DslItem: NSObject, IDslItem {
         }
     }
 
+    //MARK: change
+
+    //// item内容是否发生改变
+    var itemChange: Bool = false {
+        didSet {
+            if itemChange {
+                itemChangeAction()
+            }
+        }
+    }
+
     override init() {
         super.init()
         initItem()
@@ -136,6 +147,37 @@ class DslItem: NSObject, IDslItem {
 
     /// 长按事件的回调
     var onItemLongClick: (() -> Void)? = nil
+
+    /// MARK: change
+
+    /// item 内容改变后
+    var onItemChange: ((DslItem) -> Void)? = nil
+
+    func itemChangeAction() {
+        onItemChange?(self)
+
+        // trigger
+        itemChangeUpdateOther()
+    }
+
+    /// 定向更新
+    func itemChangeUpdateOther() {
+        if let updateList = isItemInUpdateList, let recyclerView = _dslRecyclerView {
+            recyclerView._itemList.forEach {
+                if updateList($0) {
+                    // 需要更新
+                    $0.onItemUpdateFrom?(self)
+                    $0.itemUpdate = true
+                }
+            }
+        }
+    }
+
+    //// 当当前item内容改变后, 需要更新的其他item
+    var isItemInUpdateList: ((DslItem) -> Bool)? = nil
+
+    /// 来自其他内容改变的item, 触发的更新自己
+    var onItemUpdateFrom: ((DslItem) -> Void)? = nil
 }
 
 extension DslItem {

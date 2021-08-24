@@ -30,7 +30,7 @@ class BaseTableViewController: BaseViewController {
         DslTableView(frame: .zero, style: .plain)
         //.apply {
         //let insets = view.safeAreaInsets
-        //debugPrint($0)
+        //print($0)
         //$0.safeAreaLayoutGuide.topAnchor.constraint(equalTo: navController.navigationBar.bottomAnchor)
         //$0.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: bottomLayoutGuide.bottomAnchor)
         //}

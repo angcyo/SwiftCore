@@ -43,7 +43,7 @@ extension BehaviorSubject where Element: LiveData {
             }
             return nil
         } catch {
-            debugPrint("error->\(error)")
+            print("error->\(error)")
             return nil
         }
     }

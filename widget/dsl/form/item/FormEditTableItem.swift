@@ -34,6 +34,7 @@ class FormEditTableItem: BaseFormTableItem, IEditItem {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         editItemConfig.itemEditText = textField.text
         formItemConfig.formValue = textField.text
+        itemChange = true
     }
 
     /// 收起键盘

@@ -17,7 +17,7 @@ class DslCollectionCell: UICollectionViewCell {
     }
 
     deinit {
-        debugPrint("\(threadName())->销毁:\(self)")
+        print("\(threadName())->销毁:\(self)")
     }
 
     override var contentView: UIView {
@@ -31,6 +31,6 @@ class DslCollectionCell: UICollectionViewCell {
     // 重写此方法, 在复用之前准备cell
     override func prepareForReuse() {
         super.prepareForReuse()
-        debugPrint("prepareForReuse")
+        print("prepareForReuse")
     }
 }

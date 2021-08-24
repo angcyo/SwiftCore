@@ -5,19 +5,26 @@
 import Foundation
 import UIKit
 import Alamofire
+import AlamofireEasyLogger
 
 /// 核心代理
 class CoreAppDelegate: UIResponder, UIApplicationDelegate {
 
+    //网络日志
+    let alamofireLogger = FancyAppAlamofireLogger(prettyPrint: true) {
+        print()
+        print($0)
+    }
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        debugPrint("启动程序↓\(launchOptions)")
+        print("启动程序↓\(launchOptions)")
 
         Core.initCore()
         Http.HOST = (Bundle.getPlist("ApiHost") as? String) ?? Http.HOST
         Http.headers.append(HTTPHeader(name: "source-of-request", value: "app"))
 
-        debugPrint(Http.HOST)
+        print(Http.HOST)
 
         logObj(Bundle.main.infoDictionary)
 

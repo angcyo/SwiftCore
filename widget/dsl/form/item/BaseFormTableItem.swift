@@ -8,11 +8,23 @@ import UIKit
 /// 表单item基类
 class BaseFormTableItem: DslTableItem, IFormItem {
 
-    /// Label
+    /// Label, 需要手动使用
     var itemLabel: String? = nil
 
-    /// 显示底部横线
+    /// 显示底部横线, 需要手动使用
     var itemShowLine: Bool = true
+
+    override var itemChange: Bool {
+        get {
+            super.itemChange
+        }
+        set {
+            super.itemChange = newValue
+            if newValue {
+                formItemConfig.formIgnore = false
+            }
+        }
+    }
 
     var formItemConfig: FormItemConfig = FormItemConfig()
 

@@ -24,9 +24,14 @@ extension FormParams {
     ///   - key: 支持.号分割的路径
     ///   - value:
     ///   - putToArray: 是否将[value]追加到key对应的数组中
-    func put(_ key: String, _ value: Any, putToArray: Bool = false) {
+    func put(_ key: String, _ value: Any?, putToArray: Bool = false) {
         let keyList = key.splitString(separator: ".")
         jsonData.ensurePath(keyList)
+
+        //空值不处理
+        guard let value = value else {
+            return
+        }
 
         //value
         let _value: JSON
@@ -42,5 +47,10 @@ extension FormParams {
         } else {
             jsonData[keyList] = _value
         }
+    }
+
+    /// 返回表单请求需要的参数
+    func params() -> [String: Any]? {
+        jsonData.dictionaryObject
     }
 }

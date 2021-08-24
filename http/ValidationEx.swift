@@ -16,8 +16,8 @@ fileprivate func _validateAuth(request: URLRequest?, response: HTTPURLResponse, 
 }
 
 fileprivate func _log(request: URLRequest?, response: HTTPURLResponse, data: Data?) -> Request.ValidationResult {
-    debugPrint("[\(threadName())] 请求返回↓ \(request?.method)")
-    debugPrint(request, response, data)
+    print("[\(threadName())] 请求返回↓ \(request?.method)")
+    print(request, response, data)
     return .success(())
 }
 

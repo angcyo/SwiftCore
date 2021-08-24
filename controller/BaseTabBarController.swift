@@ -9,7 +9,7 @@ class BaseTabBarController: UITabBarController, Navigation {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        debugPrint("\(threadName())->创建:\(self)")
+        print("\(threadName())->创建:\(self)")
         initController()
     }
 
@@ -49,7 +49,7 @@ class BaseTabBarController: UITabBarController, Navigation {
     /// Swift 的ARC, 在创建对象之后, 没有被引用会立马被回收.
     /// https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html
     deinit {
-        debugPrint("\(threadName())->销毁:\(self)")
+        print("\(threadName())->销毁:\(self)")
     }
 
 }

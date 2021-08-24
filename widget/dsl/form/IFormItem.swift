@@ -19,13 +19,19 @@ class FormItemConfig {
     var formKey: String? = nil
 
     /**表单是否必填. 为true, 将会在 label 前面绘制 红色`*` */
-    var formRequired: Bool = false
+    var formRequired: Bool = false {
+        didSet {
+            if formRequired {
+                formIgnore = false
+            }
+        }
+    }
 
     /// 表单是否可编辑
     var formCanEdit: Bool = true
 
-    /// 是否忽略此表单
-    var formIgnore: Bool = false
+    /// 是否忽略此表单, 默认忽略表单. 在表单必填时打开, 或者表单内容改变后打开
+    var formIgnore: Bool = true
 
     /// 保存form的value 在[onGetFormValue]中使用, 优先使用此值
     var formValue: Any? = nil
@@ -110,7 +116,7 @@ class FormItemConfig {
                     params.put(key!, formValue)
                     end(nil)
                 } else {
-                    debugPrint("跳过空值formKey[\(key)]")
+                    print("跳过空值formKey[\(key)]")
                     end(nil)
                 }
             }

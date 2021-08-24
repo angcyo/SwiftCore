@@ -23,7 +23,7 @@ class CoreSceneDelegate: UIResponder, UIWindowSceneDelegate {
         CoreSceneDelegate.connectScene = scene
 
         logObjNewLine("场景连接:\(scene)")
-        debugPrint("安全区域window:\(window?.safeAreaInsets):\(window?.layoutMargins)")
+        print("安全区域window:\(window?.safeAreaInsets):\(window?.layoutMargins)")
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

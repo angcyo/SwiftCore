@@ -72,7 +72,7 @@ func logIvarList(_ cls: AnyClass?) {
     if let ivars = class_copyIvarList(cls, &count) {
         for i in 0..<count {
             let ivar = ivars[Int(i)];
-            debugPrint("name:\(ivar_getName(ivar)) type:\(ivar_getTypeEncoding(ivar))")
+            print("name:\(ivar_getName(ivar)) type:\(ivar_getTypeEncoding(ivar))")
         }
     }
 }

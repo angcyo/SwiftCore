@@ -6,6 +6,7 @@ import Foundation
 import Alamofire
 import RxAlamofire
 
+/// https://github.com/Alamofire/Alamofire
 /// https://gitee.com/mirrors/alamofire/blob/master/Documentation/Usage.md
 class Http {
 
@@ -37,21 +38,22 @@ class Http {
     }
 
     func doIt() -> DataRequest {
-        var _url = connectUrl(base, url: url)
+        let _url = connectUrl(base, url: url)
 
         //-----------------------请求头---------------------------
 
-        let h: HTTPHeaders = HTTPHeaders(Http.headers + headers)
+        let h: HTTPHeaders = HTTPHeaders(headers)
 
         return httpSession.request(_url, method: method, parameters: param,
-                encoding: encoding, headers: h,
+                encoding: encoding,
+                headers: Http.wrapHttpHeader(method: method, headers: h),
                 interceptor: Http.wrapInterceptor(interceptors: interceptor))
     }
 
     /// Swift 的ARC, 在创建对象之后, 没有被引用会立马被回收.
     /// https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html
     deinit {
-        debugPrint("销毁:\(self)")
+        print("销毁:\(self)")
     }
 
     /// 发送一个请求
@@ -69,6 +71,44 @@ class Http {
 }
 
 extension Http {
+
+    /// 请求头包裹
+    static func wrapHttpHeader(method: HTTPMethod, headers: HTTPHeaders? = nil) -> HTTPHeaders {
+        var result = headers ?? HTTPHeaders()
+
+        if method == .post || method == .put {
+            let accept = "Accept"
+            if result.value(for: accept) == nil {
+                result.update(name: accept, value: "application/json; charset=utf-8")
+            }
+
+            let contentType = "Content-Type"
+            if result.value(for: contentType) == nil {
+                result.update(name: contentType, value: "application/json; charset=utf-8")
+            }
+        }
+
+        //公共头
+        Http.headers.forEach {
+            result.update($0)
+        }
+
+        return result
+    }
+
+    /// 请求编码器
+    static func wrapEncoding(method: HTTPMethod, encoding: ParameterEncoding? = nil) -> ParameterEncoding {
+        if let encoding = encoding {
+            return encoding
+        }
+
+        if method == .post || method == .put {
+            return JSONEncoding.default
+        }
+
+        return URLEncoding.default
+    }
+
 
     /// 将查询参数, 手动拼接到url中
     static func wrapUrlQuery(_ url: String,
@@ -113,9 +153,9 @@ extension Http {
         //拦截器
         var _interceptors: [RequestInterceptor] = []
 
-        if D.isDebug {
+        /*if D.isDebug {
             _interceptors.append(LogInterceptor())
-        }
+        }*/
 
         //auth
         if let credential = Http.credential {

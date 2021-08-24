@@ -47,7 +47,7 @@ func picker() {
             print(video.thumbnail)
             print(video.url)
         }
-        debugPrint(items)
+        print(items)
         picker.dismiss(animated: true, completion: nil)
     }
     show(picker, animated: true, completion: nil)
