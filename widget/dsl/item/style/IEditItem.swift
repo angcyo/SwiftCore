@@ -15,8 +15,7 @@ protocol IEditItem: IDslItem, UITextFieldDelegate {
 //    /// 文本内容改变后,保存值
 //    func textFieldDidChangeSelection(_ textField: UITextField) {
 //        editItemConfig.itemEditText = textField.text
-//        formItemConfig.formValue = textField.text
-//        itemChange = true
+//        updateFormItemValue(textField.text)
 //    }
 //
 //    /// 收起键盘

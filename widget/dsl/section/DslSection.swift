@@ -19,3 +19,33 @@ class DslSection: NSObject {
         items.last
     }
 }
+
+extension DslItem {
+
+    /// section中只有一个item
+    func isSectionOnlyOne() -> Bool {
+        if let section = _itemSection {
+            return section.items.count == 1
+        } else {
+            return false
+        }
+    }
+
+    /// 是否是section中的第一个
+    func isSectionFirst() -> Bool {
+        if let section = _itemSection {
+            return section.firstItem == self
+        } else {
+            return false
+        }
+    }
+
+    /// 是否是section中的最后一个
+    func isSectionLast() -> Bool {
+        if let section = _itemSection {
+            return section.lastItem == self
+        } else {
+            return false
+        }
+    }
+}

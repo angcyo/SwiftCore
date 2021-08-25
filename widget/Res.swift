@@ -55,6 +55,7 @@ struct Res {
     // MARK: - 尺寸资源
 
     struct size {
+        static var estimatedHeight: CGFloat = 0.0000001
         static var line: Float = 1
 
         static var roundLittle: Float = 2

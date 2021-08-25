@@ -23,7 +23,7 @@ class FormEditTableItem: BaseFormTableItem, IEditItem {
         editItemConfig.itemEditEnable = formItemConfig.formCanEdit
         initEditItem(cell.formEditCellConfig.text)
 
-        cell.formEditCellConfig.formLine.visible(itemShowLine) //Line
+        cell.formEditCellConfig.formLine.visible(_itemShowLine) //Line
         cell.formEditCellConfig.formLabel.text = itemLabel //Label
         cell.formEditCellConfig.formRequired.visible(formItemConfig.formRequired) //必填提示
 
@@ -33,8 +33,7 @@ class FormEditTableItem: BaseFormTableItem, IEditItem {
     /// 文本内容改变后,保存值
     func textFieldDidChangeSelection(_ textField: UITextField) {
         editItemConfig.itemEditText = textField.text
-        formItemConfig.formValue = textField.text
-        itemChange = true
+        updateFormItemValue(textField.text)
     }
 
     /// 收起键盘

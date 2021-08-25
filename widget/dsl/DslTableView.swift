@@ -38,7 +38,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
         estimatedRowHeight = UITableView.automaticDimension
         rowHeight = UITableView.automaticDimension
 
-        if style == .grouped || style == .insetGrouped {
+        /*if style == .grouped || style == .insetGrouped {
             if tableHeaderView == nil {
                 tableHeaderView = emptyView(height: Res.size.leftMargin)
             }
@@ -50,7 +50,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
             tableHeaderView = nil
             // 表尾
             tableFooterView = nil
-        }
+        }*/
 
         bounces = true //边界回弹
         minimumZoomScale = 1
@@ -217,7 +217,15 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         //return UITableView.automaticDimension
         print("estimatedHeightForHeaderInSection:\(section)")
-        return getSectionFirstItem(section)?.itemHeaderEstimatedHeight ?? UITableView.automaticDimension
+        let estimatedHeight: CGFloat
+        if style == .plain {
+            //这里要用auto, 用0.001还是有高度.
+            estimatedHeight = UITableView.automaticDimension //Res.size.estimatedHeight
+        } else {
+            //这里可以用0.001
+            estimatedHeight = Res.size.leftMargin.toCGFloat()
+        }
+        return getSectionFirstItem(section)?.itemHeaderEstimatedHeight ?? estimatedHeight //UITableView.automaticDimension
     }
 
     /// 尾部的高度
@@ -230,7 +238,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
         //return UITableView.automaticDimension
         print("estimatedHeightForFooterInSection:\(section)")
-        return getSectionFirstItem(section)?.itemFooterEstimatedHeight ?? UITableView.automaticDimension
+        return getSectionFirstItem(section)?.itemFooterEstimatedHeight ?? Res.size.estimatedHeight //UITableView.automaticDimension
     }
 
     // MARK: 首尾试图获取

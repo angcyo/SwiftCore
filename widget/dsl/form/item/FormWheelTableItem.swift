@@ -18,7 +18,7 @@ class FormWheelTableItem: BaseFormTableItem {
             return
         }
 
-        cell.formWheelCellConfig.formLine.visible(itemShowLine) //Line
+        cell.formWheelCellConfig.formLine.visible(_itemShowLine) //Line
         cell.formWheelCellConfig.formLabel.text = itemLabel //Label
         cell.formWheelCellConfig.formRequired.visible(formItemConfig.formRequired) //必填提示
 

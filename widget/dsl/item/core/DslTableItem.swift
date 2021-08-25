@@ -23,20 +23,22 @@ class DslTableItem: DslItem {
         itemCanDeselect = enable
     }
 
+    //MARK: [DslTableView] 代理配置-Item
+
     var itemHeight: CGFloat = UITableView.automaticDimension
     var itemEstimatedHeight: CGFloat = 50
 
     //MARK: [DslTableView] 代理配置-Header
     var itemHeaderView: UIView? = nil
     var itemHeaderTitle: String? = nil
-    var itemHeaderHeight: CGFloat = UITableView.automaticDimension
-    var itemHeaderEstimatedHeight: CGFloat = UITableView.automaticDimension
+    var itemHeaderHeight: CGFloat? = nil //UITableView.automaticDimension
+    var itemHeaderEstimatedHeight: CGFloat? = nil // = Res.size.leftMargin.toCGFloat() //UITableView.automaticDimension
 
     //MARK: [DslTableView] 代理配置-Footer
     var itemFooterView: UIView? = nil
     var itemFooterTitle: String? = nil
-    var itemFooterHeight: CGFloat = UITableView.automaticDimension
-    var itemFooterEstimatedHeight: CGFloat = UITableView.automaticDimension
+    var itemFooterHeight: CGFloat? = nil //UITableView.automaticDimension
+    var itemFooterEstimatedHeight: CGFloat? = nil //0.0000001 //UITableView.automaticDimension
 
     //MARK: 界面回调 [DslTableCell]
 
