@@ -29,8 +29,15 @@ class BaseFormTableItem: DslTableItem, IFormItem {
 
     var formItemConfig: FormItemConfig = FormItemConfig()
 
+    /// bind cell
     override func bindCellOverride(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCellOverride(cell, indexPath)
+    }
+
+    /// 更新表单的值
+    func updateFormItemValue(_ value: Any?) {
+        formItemConfig.formValue = value
+        itemChange = true
     }
 }
 

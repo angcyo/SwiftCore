@@ -39,6 +39,10 @@ extension Array {
             append($0)
         }
     }
+
+    mutating func add(_ newElement: Element) {
+        append(newElement)
+    }
 }
 
 func nilOrEmpty(_ value: Array<Any?>?) -> Bool {

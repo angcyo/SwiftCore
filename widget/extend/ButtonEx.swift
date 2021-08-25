@@ -7,10 +7,12 @@ import UIKit
 
 extension UIButton {
 
-    func setText(_ title: String?) {
+    func setText(_ title: String?, all: Bool = true) {
         setTitle(title, for: .normal)
-        //setTitle(title, for: .selected)
-        //setTitle(title, for: .highlighted)
+        if all {
+            setTitle(title, for: .selected)
+            setTitle(title, for: .highlighted)
+        }
     }
 
     /// 加粗

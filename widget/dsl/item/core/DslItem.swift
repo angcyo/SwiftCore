@@ -80,7 +80,7 @@ class DslItem: NSObject, IDslItem {
         }
     }
 
-    override init() {
+    required override init() {
         super.init()
         initItem()
     }

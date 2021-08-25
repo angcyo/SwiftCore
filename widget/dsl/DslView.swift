@@ -44,7 +44,7 @@ extension UIView {
     }
 
     @discardableResult
-    func renderAndMake(_ view: UIView, _ action: (ConstraintMaker) -> Void) -> UIView {
+    func renderAndMake<T: UIView>(_ view: T, _ action: (ConstraintMaker) -> Void) -> T {
         render(view)
         view.make(action)
         return view

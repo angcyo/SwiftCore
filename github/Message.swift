@@ -25,6 +25,7 @@ func message(_ body: String, title: String = "", iconImage: UIImage? = nil,
     view.button?.isHidden = true
 
     //SwiftMessages.defaultConfig.presentationStyle = .bottom
+    SwiftMessages.defaultConfig.duration = .seconds(seconds: 0.6) //0.6秒后消失
     SwiftMessages.show(view: view)
 }
 
