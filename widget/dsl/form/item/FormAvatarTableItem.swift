@@ -16,6 +16,20 @@ class FormAvatarTableItem: BaseFormTableItem {
     /// 相册选择后的图片
     var itemPickerImage: UIImage? = nil
 
+    override func initItem() {
+        super.initItem()
+
+        /// 点击选择图片
+        onItemClick = {
+            pickerPhoto {
+                self.itemPickerImage = $0.image
+                self.formItemConfig.formValue = $0.image.toData()?.toFormFile()
+                self.itemChange = true
+                self.itemUpdate = true
+            }
+        }
+    }
+
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
 

@@ -30,7 +30,7 @@ class Http {
     /// 请求拦截器
     var interceptor: [RequestInterceptor] = []
 
-    var encoding: ParameterEncoding = URLEncoding.default
+    var encoding: ParameterEncoding? = nil
 
     /// 添加请求头
     func addHeader(_ name: String, _ value: Any) {
@@ -39,14 +39,46 @@ class Http {
 
     func doIt() -> DataRequest {
         let _url = connectUrl(base, url: url)
-
-        //-----------------------请求头---------------------------
-
-        let h: HTTPHeaders = HTTPHeaders(headers)
-
         return httpSession.request(_url, method: method, parameters: param,
-                encoding: encoding,
-                headers: Http.wrapHttpHeader(method: method, headers: h),
+                encoding: Http.wrapEncoding(method: method, encoding: encoding),
+                headers: Http.wrapHttpHeader(method: method, headers: HTTPHeaders(headers)),
+                interceptor: Http.wrapInterceptor(interceptors: interceptor))
+    }
+
+    /// 上传数据
+    func upload(_ data: Data) -> UploadRequest {
+        let _url = connectUrl(base, url: url)
+        return httpSession.upload(data,
+                to: connectParam(_url, param),
+                method: method,
+                headers: Http.wrapHttpHeader(method: method, headers: HTTPHeaders(headers)),
+                interceptor: Http.wrapInterceptor(interceptors: interceptor))
+    }
+
+    func upload(_ fileURL: URL) -> UploadRequest {
+        let _url = connectUrl(base, url: url)
+        return httpSession.upload(fileURL,
+                to: connectParam(_url, param),
+                method: method,
+                headers: Http.wrapHttpHeader(method: method, headers: HTTPHeaders(headers)),
+                interceptor: Http.wrapInterceptor(interceptors: interceptor))
+    }
+
+    func upload(_ stream: InputStream) -> UploadRequest {
+        let _url = connectUrl(base, url: url)
+        return httpSession.upload(stream,
+                to: connectParam(_url, param),
+                method: method,
+                headers: Http.wrapHttpHeader(method: method, headers: HTTPHeaders(headers)),
+                interceptor: Http.wrapInterceptor(interceptors: interceptor))
+    }
+
+    func upload(multipartFormData: MultipartFormData) -> UploadRequest {
+        let _url = connectUrl(base, url: url)
+        return httpSession.upload(multipartFormData: multipartFormData,
+                to: connectParam(_url, param),
+                method: method,
+                headers: Http.wrapHttpHeader(method: method, headers: HTTPHeaders(headers)),
                 interceptor: Http.wrapInterceptor(interceptors: interceptor))
     }
 
@@ -67,6 +99,20 @@ class Http {
         http.param = parameters
         dsl?(http)
         return http.doIt()
+    }
+
+    /// 上传数据
+    static func upload(_ url: String,
+                       multipartFormData: MultipartFormData,
+                       _ query: Parameters? = nil /*拼接在url后面的数据*/,
+                       method: HTTPMethod = .post,
+                       _ dsl: ((Http) -> Void)? = nil) -> UploadRequest {
+        let http = Http()
+        http.url = url
+        http.method = method
+        http.param = query
+        dsl?(http)
+        return http.upload(multipartFormData: multipartFormData)
     }
 }
 

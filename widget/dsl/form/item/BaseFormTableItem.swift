@@ -21,6 +21,7 @@ class BaseFormTableItem: DslTableItem, IFormItem {
         set {
             super.itemChange = newValue
             if newValue {
+                //表单的值改变之后, 关闭忽略
                 formItemConfig.formIgnore = false
             }
         }

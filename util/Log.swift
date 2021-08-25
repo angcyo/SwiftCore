@@ -55,9 +55,16 @@ extension Int {
 
 /// 线程名
 func threadName() -> String {
-    let name = Thread.current.name
+    var name = Thread.current.name
+    let main = Thread.current.isMainThread
+
     if nilOrEmpty(name) {
-        return Thread.current.description
+        name = Thread.current.description
     }
+
+    if main {
+        return "[main]\(name!)"
+    }
+
     return name!
 }

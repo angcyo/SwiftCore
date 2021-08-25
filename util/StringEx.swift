@@ -4,6 +4,9 @@
 
 import Foundation
 import UIKit
+import MobileCoreServices
+
+/// 字符串扩展 https://github.com/amayne/SwiftString
 
 extension NSString {
     func toString() -> String {
@@ -12,6 +15,14 @@ extension NSString {
 }
 
 extension String {
+
+    func toInt() -> Int {
+        Int(self)!
+    }
+
+    func toFloat() -> Float {
+        Float(self)!
+    }
 
     func toNSString() -> NSString {
         NSString(string: self)
@@ -74,6 +85,52 @@ extension String {
             UIGraphicsEndImageContext()
         }
         return image
+    }
+
+    func startWith(_ prefix: String) -> Bool {
+        hasPrefix(prefix)
+    }
+
+    func endWith(_ suffix: String) -> Bool {
+        hasSuffix(suffix)
+    }
+
+    func mimeType() -> String {
+        let url = NSURL(fileURLWithPath: self)
+        let pathExtension = url.pathExtension
+
+        if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, pathExtension! as NSString, nil)?.takeRetainedValue() {
+            if let mimetype = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassMIMEType)?.takeRetainedValue() {
+                return mimetype as String
+            }
+        }
+        return "application/octet-stream"
+    }
+}
+
+extension Data {
+    func mimeType() -> String {
+        var b: UInt8 = 0
+        copyBytes(to: &b, count: 1)
+
+        switch b {
+        case 0xFF:
+            return "image/jpeg"
+        case 0x89:
+            return "image/png"
+        case 0x47:
+            return "image/gif"
+        case 0x4D, 0x49:
+            return "image/tiff"
+        case 0x25:
+            return "application/pdf"
+        case 0xD0:
+            return "application/vnd"
+        case 0x46:
+            return "text/plain"
+        default:
+            return "application/octet-stream"
+        }
     }
 }
 

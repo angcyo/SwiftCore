@@ -7,6 +7,12 @@ import SwiftyJSON
 
 class FormParams {
 
+    /// 从字符串中分割多个值
+    static let SPILT: Character = "|"
+
+    /// 多参数拼接分隔符
+    static let MULTI_SPILT: Character = ";"
+
     /// 使用可见的item, 进行数据操作. hidden的不处理
     /// [UITableView.visibleCells]
     var userVisibleItem: Bool = true
@@ -21,36 +27,35 @@ class FormParams {
 extension FormParams {
 
     /// - Parameters:
-    ///   - key: 支持.号分割的路径
-    ///   - value:
+    ///   - key: 支持.号分割的路径, 如果key是]结尾, 则默认追加到数组中
+    ///   - value: 支持JSON类型的数据
     ///   - putToArray: 是否将[value]追加到key对应的数组中
     func put(_ key: String, _ value: Any?, putToArray: Bool = false) {
-        let keyList = key.splitString(separator: ".")
-        jsonData.ensurePath(keyList)
-
-        //空值不处理
-        guard let value = value else {
-            return
-        }
-
-        //value
-        let _value: JSON
-        if let value = value as? JSON {
-            _value = value
-        } else {
-            _value = JSON(value)
-        }
-
-        //put
-        if putToArray {
-            jsonData.add(keyList, value: _value)
-        } else {
-            jsonData[keyList] = _value
-        }
+        jsonData.put(key, value, putToArray: putToArray)
     }
 
     /// 返回表单请求需要的参数
     func params() -> [String: Any]? {
         jsonData.dictionaryObject
+    }
+}
+
+extension FormParams {
+
+    /// 上传表单文件
+    @discardableResult
+    func uploadFile(onEnd: @escaping (Error?) -> Void) -> FormFileHelper {
+        let helper = FormFileHelper()
+        helper.onUploadEnd = { json, error in
+            if let json = json, error == nil {
+                //成功
+                self.jsonData = json
+                onEnd(nil)
+            } else {
+                onEnd(error)
+            }
+        }
+        helper.startUpload(json: jsonData)
+        return helper
     }
 }

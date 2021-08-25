@@ -33,6 +33,12 @@ extension Array {
             action(self[i], i)
         }
     }
+
+    mutating func addAll(_ array: [Element]) {
+        array.forEach {
+            append($0)
+        }
+    }
 }
 
 func nilOrEmpty(_ value: Array<Any?>?) -> Bool {

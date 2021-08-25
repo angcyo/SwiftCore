@@ -32,6 +32,10 @@ extension DataRequest {
         }
     }
 
+    func validateCode(statusCode acceptableStatusCodes: ClosedRange<Int> = 200...299) -> DataRequest {
+        validate(statusCode: acceptableStatusCodes)
+    }
+
     /// 日志输出
     func log() -> DataRequest {
         validate { request, response, data in
@@ -48,6 +52,10 @@ extension ObservableType where Element == DataRequest {
         validate { request, response, data in
             _validateAuth(request: request, response: response, data: data)
         }
+    }
+
+    func validateCode(statusCode acceptableStatusCodes: ClosedRange<Int> = 200...299) -> Observable<Element> {
+        validate(statusCode: acceptableStatusCodes)
     }
 
     func log() -> Observable<Element> {

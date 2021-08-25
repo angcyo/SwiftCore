@@ -18,28 +18,32 @@ struct Api {
     @discardableResult
     static func create(_ url: String,
                        _ param: Parameters? = nil, //请求参数, 可以是body, form等
+                       query: Parameters? = nil, //拼接在url后面的参数
+                       method: HTTPMethod = .get,
+                       config: ((Http) -> Void)? = nil) -> DataRequest {
+        let _url = Http.wrapUrlQuery(url, method: method, query: query)
+        let _param = Http.wrapParam(method: method, param: param, query: query)
+        return Http.request(_url, _param, method: method, config)
+                //.log()
+                .validateAuth()
+                .validateCode()
+        /*.response { response in
+            print("[\(threadName())] 请求结束:↓")
+            print(response)
+        }*/
+    }
+
+    @discardableResult
+    static func upload(_ url: String,
+                       _ param: Parameters? = nil, //请求参数, 可以是body, form等
                        query: Parameters? = nil,
                        method: HTTPMethod = .get,
                        config: ((Http) -> Void)? = nil) -> DataRequest {
         let _url = Http.wrapUrlQuery(url, method: method, query: query)
         let _param = Http.wrapParam(method: method, param: param, query: query)
-        return Http.request(_url, _param, method: method) { http in
-                    if method == .post || method == .put {
-                        http.encoding = JSONEncoding.default
-                        //http.headers.append(HTTPHeader(name: "Accept", value: "application/json; charset=utf-8"))
-                        //http.headers.append(HTTPHeader(name: "Content-Type", value: "application/json; charset=utf-8"))
-                    } else {
-                        http.encoding = URLEncoding.default
-                    }
-                    config?(http)
-                }
-                //.log()
+        return Http.request(_url, _param, method: method, config)
                 .validateAuth()
-                .validate(statusCode: 200...299)
-        /*.response { response in
-            print("[\(threadName())] 请求结束:↓")
-            print(response)
-        }*/
+                .validateCode()
     }
 }
 
@@ -147,7 +151,30 @@ extension DataRequest {
             Api.requestHold.remove(request)
             switch response.result {
             case .success(let value):
-                onResult(value, nil)
+
+                // 默认处理
+                var defHandle = true
+
+                if Http.PARSE_DATA_CODE, let data = value as? HttpCodeProtocol {
+                    let code = data.code ?? 0
+                    if code >= 200 && code <= 299 {
+                        //成功
+                    } else {
+                        let msg = data.msg ?? "接口异常"
+                        onResult(nil, messageError(msg))
+                        defHandle = false
+                    }
+                }
+
+                if (defHandle) {
+                    switch response.result {
+                    case .success(let value):
+                        onResult(value, nil)
+                    case .failure(let error):
+                        onResult(nil, error)
+                    }
+                }
+
             case .failure(let error):
                 onResult(nil, error)
             }
@@ -252,7 +279,7 @@ extension Api {
                         interceptor: Http.wrapInterceptor(interceptor: interceptor))
                 //.log()
                 .validateAuth()
-                .validate(statusCode: 200...299)
+                .validateCode()
     }
 
     /// 获取JSON对象

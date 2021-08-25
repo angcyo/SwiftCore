@@ -31,6 +31,8 @@ func _pickerConfiguration() -> YPImagePickerConfiguration {
     config.library.preselectedItems = nil //预选中
     config.startOnScreen = .library //默认显示界面 图库
 
+    config.shouldSaveNewPicturesToAlbum = false //不保存新照片,防止污染相册
+
     config.showsPhotoFilters = false //开启图片滤镜
     config.showsVideoTrimmer = false //开启视频剪辑
     config.showsCrop = .none//.rectangle(ratio: 1.0)
@@ -39,7 +41,7 @@ func _pickerConfiguration() -> YPImagePickerConfiguration {
 
 /// 选择图片和视频
 func picker() {
-    var config = _pickerConfiguration()
+    let config = _pickerConfiguration()
     let picker = YPImagePicker(configuration: config)
     picker.didFinishPicking { [unowned picker] items, cancelled in
         if let video = items.singleVideo {
