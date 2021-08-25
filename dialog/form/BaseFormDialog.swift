@@ -124,10 +124,10 @@ class BaseFormDialog: UIView {
 
     /// 配置消息¬
     func configMessage(swiftMessage: SwiftMessages) {
-        swiftMessage.defaultConfig.dimMode = .blur(style: .dark, alpha: 0.5, interactive: true)
+        swiftMessage.defaultConfig.dimMode = .blur(style: .dark, alpha: 0.5, interactive: true) //interactive 控制是否点击内容外隐藏对话库
         //.gray(interactive: true)
         swiftMessage.defaultConfig.duration = .forever
-        swiftMessage.defaultConfig.interactiveHide = true
+        swiftMessage.defaultConfig.interactiveHide = true // 交互隐藏, 下拉隐藏
         swiftMessage.defaultConfig.presentationStyle = .bottom
         swiftMessage.defaultConfig.presentationContext = .automatic
         //.window(windowLevel: .statusBar)
@@ -139,20 +139,28 @@ class BaseFormDialog: UIView {
 
     override func willMove(toSuperview newSuperview: UIView?) {
         super.willMove(toSuperview: newSuperview)
+        print("willMove toSuperview:\(self):\(newSuperview)")
     }
 
     override func willMove(toWindow newWindow: UIWindow?) {
         super.willMove(toWindow: newWindow)
+        print("willMove toWindow:\(self):\(newWindow)")
+
+        if newWindow == nil {
+            onDialogHide()
+        } else {
+            onDialogShow()
+        }
     }
 
     /// show
     func onDialogShow() {
-
+        print("onDialogShow:\(bounds):\(safeAreaInsets):\(safeAreaLayoutGuide)")
     }
 
     /// hide
     func onDialogHide() {
-
+        print("onDialogHide:\(bounds):\(safeAreaInsets):\(safeAreaLayoutGuide)")
     }
 
     func onCancelClick() {
@@ -175,12 +183,12 @@ extension BaseFormDialog {
     func show() {
         let messageView = createMessageView()
         configMessage(swiftMessage: formDialog)
-        onDialogShow()
+        //onDialogShow()
         formDialog.show(view: messageView)
     }
 
     func hide() {
-        onDialogHide()
+        //onDialogHide()
         formDialog.hide(animated: true)
     }
 }

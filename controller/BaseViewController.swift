@@ -86,27 +86,31 @@ class BaseViewController: UIViewController, Navigation {
     /// 加载试图
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("viewDidLoad:\(self):\(view.bounds):\(view.safeAreaLayoutGuide)")
+        print("viewDidLoad:\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")
     }
 
     /// 试图将要显示
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        print("viewWillAppear:\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")
     }
 
     /// 试图已显示
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        print("viewDidAppear:\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")
     }
 
     /// 试图将要消失
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        print("viewWillDisappear:\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")
     }
 
     /// 试图已消失
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        print("viewDidDisappear:\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")
     }
 
     override func viewWillLayoutSubviews() {
