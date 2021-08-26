@@ -21,13 +21,13 @@ class FormEditTableItem: BaseFormTableItem, IEditItem {
         }
 
         editItemConfig.itemEditEnable = formItemConfig.formCanEdit
-        initEditItem(cell.formEditCellConfig.text)
+        initEditItem(cell.cellConfig.text)
 
-        cell.formEditCellConfig.formLine.visible(_itemShowLine) //Line
-        cell.formEditCellConfig.formLabel.text = itemLabel //Label
-        cell.formEditCellConfig.formRequired.visible(formItemConfig.formRequired) //必填提示
+        cell.cellConfig.formLine.visible(_itemShowLine) //Line
+        cell.cellConfig.formLabel.text = itemLabel //Label
+        cell.cellConfig.formRequired.visible(formItemConfig.formRequired) //必填提示
 
-        cell.formEditCellConfig.rightTitle.text = itemRightTitle
+        cell.cellConfig.rightTitle.text = itemRightTitle
     }
 
     /// 文本内容改变后,保存值
@@ -52,27 +52,16 @@ class FormEditTableItem: BaseFormTableItem, IEditItem {
     }
 }
 
-class FormEditTableCell: DslTableCell, IFormEditCell {
+class FormEditTableCell: DslTableCell {
 
-    var formEditCellConfig = FormEditCellConfig()
+    let cellConfig: FormEditCellConfig = FormEditCellConfig()
 
-    override func initCell() {
-        super.initCell()
-
-        formEditCellConfig.initCellConfig(self)
-        renderToCell(self, formEditCellConfig.formRoot)
-    }
-
-    override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
-        formEditCellConfig.formRoot.sizeThatFits(CGSize(width: targetSize.width - safeAreaInsets.left - safeAreaInsets.right, height: targetSize.height))
+    override func getCellConfig() -> IDslCellConfig? {
+        cellConfig
     }
 }
 
-protocol IFormEditCell: IDslCell {
-
-    /// var formEditCellConfig = FormEditCellConfig()
-    var formEditCellConfig: FormEditCellConfig { get set }
-}
+//MARK: cell 界面声明, 用于兼容UITableView和UICollectionView
 
 class FormEditCellConfig: BaseFormItemCellConfig {
 

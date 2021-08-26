@@ -78,7 +78,7 @@ func img(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
     //当使用scaleAspectFill, 而不使用clipsToBounds时, 图片会超出控件frame显示
     view.clipsToBounds = true
 
-    // 内容模式
+    // 内容模式 https://www.jianshu.com/p/e1f8e4664faf
     view.contentMode = .scaleAspectFill
 
     return view
@@ -97,6 +97,13 @@ func icon(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
 
 func iconView(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
     icon(image, tintColor: tintColor)
+}
+
+func imageView(size: Float, radius: Float = Res.size.roundLittle) -> UIImageView {
+    let view = image()
+    view.frame = rect(size, size)
+    view.setRadius(radius)
+    return view
 }
 
 /// 创建一个圆形头像

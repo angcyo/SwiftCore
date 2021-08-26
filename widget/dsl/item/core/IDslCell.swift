@@ -8,8 +8,27 @@ import UIKit
 /// 扩展cell时的基协议, 方便继承查找
 protocol IDslCell {
 
+/*    /// 协议中需要访问的泛型, 需要在此声明. 用了泛型, 协议就没办法强转类型了.
+    associatedtype CellConfig: IDslCellConfig
+
+    /// 实现类
+    var cellConfig: CellConfig { get set }*/
+
+    ///改用方法的形式声明
+    func getCellConfig() -> IDslCellConfig?
 }
 
+/// cell中界面的配置
+protocol IDslCellConfig {
+
+    /// 初始化 [UITableCell]或者[UICollectionCell]
+    func initCellConfig(_ cell: UIView)
+
+    /// 获取跟视图
+    func getRootView() -> UIView
+}
+
+/// 扩展
 extension IDslCell {
 
     /// 将[IDslCell]渲染到[UITableCell]或者[UICollectionCell]中

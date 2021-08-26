@@ -71,7 +71,7 @@ class DslTableItem: DslItem {
     }
 }
 
-class DslTableCell: UITableViewCell {
+class DslTableCell: UITableViewCell, IDslCell {
 
     override init(style: CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -104,6 +104,17 @@ class DslTableCell: UITableViewCell {
 
         // 选中样式
         selectionStyle = .default
+
+        //IDslCell
+        if let cellConfig = getCellConfig() {
+            cellConfig.initCellConfig(self)
+            renderToCell(self, cellConfig.getRootView())
+        }
+    }
+
+    /// 请重写此方法
+    func getCellConfig() -> IDslCellConfig? {
+        nil
     }
 
     /// 添加控件到内容视图中
@@ -168,7 +179,12 @@ class DslTableCell: UITableViewCell {
     }
 
     override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
-        super.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
+        //IDslCell
+        if let cellConfig = getCellConfig() {
+            return cellConfig.getRootView().systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
+        } else {
+            return super.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
+        }
         //root.sizeThatFits(CGSize(width: targetSize.width - safeAreaInsets.left - safeAreaInsets.right, height: targetSize.height))
     }
 }

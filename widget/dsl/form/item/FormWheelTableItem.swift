@@ -18,33 +18,24 @@ class FormWheelTableItem: BaseFormTableItem {
             return
         }
 
-        cell.formWheelCellConfig.formLine.visible(_itemShowLine) //Line
-        cell.formWheelCellConfig.formLabel.text = itemLabel //Label
-        cell.formWheelCellConfig.formRequired.visible(formItemConfig.formRequired) //必填提示
+        cell.cellConfig.formLine.visible(_itemShowLine) //Line
+        cell.cellConfig.formLabel.text = itemLabel //Label
+        cell.cellConfig.formRequired.visible(formItemConfig.formRequired) //必填提示
 
-        cell.formWheelCellConfig.text.text = itemWheelValue
+        cell.cellConfig.text.text = itemWheelValue
     }
 }
 
-class FormWheelTableCell: DslTableCell, IFormWheelCell {
+class FormWheelTableCell: DslTableCell {
 
-    var formWheelCellConfig = FormWheelCellConfig()
+    let cellConfig = FormWheelCellConfig()
 
-    override func initCell() {
-        super.initCell()
-
-        formWheelCellConfig.initCellConfig(self)
-        renderToCell(self, formWheelCellConfig.formRoot)
-    }
-
-    override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
-        formWheelCellConfig.formRoot.sizeThatFits(CGSize(width: targetSize.width - safeAreaInsets.left - safeAreaInsets.right, height: targetSize.height))
+    override func getCellConfig() -> IDslCellConfig? {
+        cellConfig
     }
 }
 
-protocol IFormWheelCell: IDslCell {
-    var formWheelCellConfig: FormWheelCellConfig { get set }
-}
+//MARK: cell 界面声明, 用于兼容UITableView和UICollectionView
 
 class FormWheelCellConfig: BaseFormItemCellConfig {
 

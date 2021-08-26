@@ -75,6 +75,10 @@ class BaseFormItemCellConfig: IDslCellConfig {
     var requiredOffsetLeft = Res.size.itemRequiredOffsetLeft
     var requiredOffsetTop = Res.size.itemRequiredOffsetTop
 
+    func getRootView() -> UIView {
+        formRoot
+    }
+
     /// 初始化
     func initCellConfig(_ cell: UIView) {
         formRoot.cacheRect()
