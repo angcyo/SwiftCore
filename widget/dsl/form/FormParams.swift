@@ -38,6 +38,11 @@ extension FormParams {
     func params() -> [String: Any]? {
         jsonData.dictionaryObject
     }
+
+    /// 表单数据温控
+    func isEmpty() -> Bool {
+        jsonData.isJsonEmpty()
+    }
 }
 
 extension FormParams {

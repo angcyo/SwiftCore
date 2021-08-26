@@ -48,6 +48,14 @@ extension BehaviorSubject where Element: LiveData {
         }
     }
 
+    func bean<Bean>() -> Bean? {
+        valueOrNil() as? Bean
+    }
+
+    func data<Bean>() -> Bean? {
+        valueOrNil() as? Bean
+    }
+
     func beanOrNil<Bean>() -> Bean? {
         valueOrNil() as? Bean
     }

@@ -10,10 +10,13 @@ class DslButtonTableItem: DslTableItem {
     var itemButtonText: String? = "保存"
 
     override func initItem() {
-        itemCell = DslButtonTableCell.self
+        super.initItem()
         itemHeight = 45
         itemCanHighlight = false
         itemCanSelect = false
+
+        itemHeaderEstimatedHeight = 50
+        itemFooterEstimatedHeight = 50
     }
 
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {

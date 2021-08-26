@@ -64,7 +64,9 @@ func labelView(_ text: String? = nil,
     view.textColor = color
     view.numberOfLines = 0 //任意行
     view.lineBreakMode = .byWordWrapping
-    view.sizeToFit()
+    if !nilOrEmpty(text) {
+        view.sizeToFit()
+    }
     return view
 }
 
@@ -113,7 +115,9 @@ func fillTipLabel(_ text: String? = nil, textColor: UIColor = Res.color.info, fi
     view.setBackground(backColor)
     view.textColor = color
 
-    view.sizeToFit()
+    if !nilOrEmpty(text) {
+        view.sizeToFit()
+    }
 
     /*let button = UIButton()
     button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
@@ -141,6 +145,8 @@ func borderTipLabel(_ text: String? = nil, textColor: UIColor = Res.color.info, 
     view.setRadiusBorder(Res.size.roundLittle, borderColor: borderColor)
     view.textColor = color
 
-    view.sizeToFit()
+    if !nilOrEmpty(text) {
+        view.sizeToFit()
+    }
     return view
 }

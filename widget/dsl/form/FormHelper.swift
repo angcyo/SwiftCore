@@ -23,6 +23,7 @@ extension DslRecycleView {
             let item = itemList.get(index)
             if let formItem = item as? IFormItem {
                 params.formItem = formItem
+                print(threadName(), "->开始检查表单数据:", formItem)
                 formItem.formItemConfig.formCheck(params) { error in
                     params.formItem = nil
                     if let error = error {
@@ -54,6 +55,7 @@ extension DslRecycleView {
             let item = itemList.get(index)
             if let formItem = item as? IFormItem {
                 params.formItem = formItem
+                print(threadName(), "->开始获取表单数据:", formItem)
                 formItem.formItemConfig.formObtain(params) { error in
                     params.formItem = nil
                     if let error = error {
@@ -83,6 +85,7 @@ extension DslRecycleView {
             let item = itemList.get(index)
             if let formItem = item as? IFormItem {
                 params.formItem = formItem
+                print(threadName(), "->开始检查表单数据:", formItem)
                 formItem.formItemConfig.formCheck(params) { error in
                     params.formItem = nil
                     if let error = error {
@@ -90,6 +93,7 @@ extension DslRecycleView {
                     } else {
                         //检查无错误, 则获取数据
                         params.formItem = formItem
+                        print(threadName(), "->开始获取表单数据:", formItem)
                         formItem.formItemConfig.formObtain(params) { error in
                             params.formItem = nil
                             if let error = error {

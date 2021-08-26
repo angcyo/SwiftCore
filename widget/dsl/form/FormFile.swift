@@ -3,11 +3,18 @@
 //
 
 import Foundation
+import UIKit
 
 //MARK: FormFile
 
 protocol FormFile {
 
+}
+
+extension UIImage: FormFile {
+    func toFormFile() -> String {
+        toData()?.toFormFile() ?? ""
+    }
 }
 
 extension Data: FormFile {
@@ -27,7 +34,7 @@ extension URL: FormFile {
 }
 
 func addFormFile(key: String, value: FormFile) {
-    FormFileHelper.formFile.removeValue(forKey: key)
+    removeFormFile(key: key)
     FormFileHelper.formFile.add([key: value])
 }
 

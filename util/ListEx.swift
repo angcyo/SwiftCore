@@ -28,6 +28,19 @@ extension Array where Element: Equatable {
 }
 
 extension Array {
+
+    func find(_ action: (Element) -> Bool) -> Element? {
+        var result: Element? = nil
+        for i in self.indices {
+            let item = self[i]
+            if action(item) {
+                result = item
+                break
+            }
+        }
+        return result
+    }
+
     func forEachIndex(_ action: (Element, Int) -> Void) {
         for i in self.indices {
             action(self[i], i)

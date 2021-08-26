@@ -204,6 +204,31 @@ extension JSON {
             }
         }
     }
+
+    /// json为空
+    func isJsonEmpty() -> Bool {
+        var empty = null != nil
+
+        if !empty {
+            if let dictionary = dictionary {
+                empty = dictionary.isEmpty
+            }
+        }
+
+        if !empty {
+            if let array = array {
+                empty = array.isEmpty
+            }
+        }
+
+        if !empty {
+            if let string = string {
+                empty = nilOrEmpty(string)
+            }
+        }
+
+        return empty
+    }
 }
 
 /// 快速创建JSON对象

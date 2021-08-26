@@ -9,13 +9,13 @@ extension UIView {
 
     func wrap_content(minWidth: Float? = nil, minHeight: Float? = nil) {
         if let min = minWidth {
-            tg_width.min(min.toCGFloat())
+            tg_width.equal(.wrap).min(min.toCGFloat())
         } else {
             tg_width.equal(.wrap)
         }
 
         if let min = minHeight {
-            tg_height.min(min.toCGFloat())
+            tg_height.equal(.wrap).min(min.toCGFloat())
         } else {
             tg_height.equal(.wrap)
         }
@@ -23,13 +23,13 @@ extension UIView {
 
     func match_parent(maxWidth: Float? = nil, maxHeight: Float? = nil) {
         if let max = maxWidth {
-            tg_width.max(max.toCGFloat())
+            tg_width.equal(.wrap).max(max.toCGFloat())
         } else {
             tg_width.equal(.fill)
         }
 
         if let max = maxHeight {
-            tg_height.max(max.toCGFloat())
+            tg_height.equal(.wrap).max(max.toCGFloat())
         } else {
             tg_height.equal(.fill)
         }
@@ -58,7 +58,7 @@ extension UIView {
         }
 
         if let min = minHeight {
-            tg_height.min(min.toCGFloat())
+            tg_height.equal(.wrap).min(min.toCGFloat())
         }
     }
 
@@ -72,7 +72,7 @@ extension UIView {
         }
 
         if let min = minWidth {
-            tg_width.min(min.toCGFloat())
+            tg_width.equal(.wrap).min(min.toCGFloat())
         }
     }
 
