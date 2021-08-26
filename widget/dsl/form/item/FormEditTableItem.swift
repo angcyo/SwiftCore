@@ -23,10 +23,6 @@ class FormEditTableItem: BaseFormTableItem, IEditItem {
         editItemConfig.itemEditEnable = formItemConfig.formCanEdit
         initEditItem(cell.cellConfig.text)
 
-        cell.cellConfig.formLine.visible(_itemShowLine) //Line
-        cell.cellConfig.formLabel.text = itemLabel //Label
-        cell.cellConfig.formRequired.visible(formItemConfig.formRequired) //必填提示
-
         cell.cellConfig.rightTitle.text = itemRightTitle
     }
 

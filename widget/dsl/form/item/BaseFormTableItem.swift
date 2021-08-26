@@ -37,11 +37,21 @@ class BaseFormTableItem: DslTableItem, IFormItem {
         }
     }
 
+    /// 表单item的配置项
     var formItemConfig: FormItemConfig = FormItemConfig()
 
     /// bind cell
     override func bindCellOverride(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCellOverride(cell, indexPath)
+
+        if let cell = cell as? DslTableCell {
+            if let cellConfig = cell.getCellConfig() as? BaseFormItemCellConfig {
+
+                cellConfig.formLine.visible(_itemShowLine) //Line
+                cellConfig.formLabel.text = itemLabel //Label
+                cellConfig.formRequired.visible(formItemConfig.formRequired) //必填提示
+            }
+        }
     }
 
     /// 更新表单的值

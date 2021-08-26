@@ -36,7 +36,6 @@ class FormAvatarTableItem: BaseFormTableItem {
             return
         }
 
-        cell.cellConfig.formLabel.text = itemLabel
         cell.cellConfig.avatar.setImage(itemPickerImage ?? itemAvatarUrl, name: itemUserName)
     }
 }

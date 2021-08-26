@@ -34,7 +34,6 @@ class FormPickerTableItem: BaseFormTableItem, IPickerItem {
             return
         }
 
-        cell.cellConfig.formLabel.text = itemLabel
         let image = pickerItemConfig.itemPickerImage ?? itemImage ?? R.image.img_add()
         cell.cellConfig.image.setImage(image)
     }
