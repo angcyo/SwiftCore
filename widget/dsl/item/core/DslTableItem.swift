@@ -77,12 +77,13 @@ class DslTableCell: UITableViewCell, IDslCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         //cellIdentifier = reuseIdentifier ?? NSStringFromClass(Self.self)
         print("创建cell:\(self):\(style.rawValue):\(reuseIdentifier)")
-
         initCell()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        print("创建cell:\(self):\(coder)")
+        initCell()
     }
 
     deinit {

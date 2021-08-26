@@ -82,9 +82,9 @@ extension DslRecycleView {
 
     // MARK: 辅助操作
 
-    func getItem(_ indexPath: IndexPath) -> DslItem {
-        let section = sectionHelper.sectionList[indexPath.section]
-        let item = section.items[indexPath.row]
+    func getItem(_ indexPath: IndexPath) -> DslItem? {
+        let section = sectionHelper.sectionList.get(indexPath.section)
+        let item = section?.items.get(indexPath.row)
         return item
     }
 

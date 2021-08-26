@@ -10,6 +10,7 @@ class BaseFormTableItem: DslTableItem, IFormItem {
 
     /// Label, 需要手动使用
     var itemLabel: String? = nil
+    var itemLabelMinWidth: Float? = nil
 
     /// 显示底部横线, 需要手动使用, nil 智能设置
     var itemShowLine: Bool? = nil
@@ -50,6 +51,12 @@ class BaseFormTableItem: DslTableItem, IFormItem {
                 cellConfig.formLine.visible(_itemShowLine) //Line
                 cellConfig.formLabel.text = itemLabel //Label
                 cellConfig.formRequired.visible(formItemConfig.formRequired) //必填提示
+
+                if let itemLabelMinWidth = itemLabelMinWidth {
+                    //label最小宽度
+                    cellConfig.labelMinWidth = itemLabelMinWidth
+                    cellConfig.formLabel.wrap_content(minWidth: itemLabelMinWidth)
+                }
             }
         }
     }

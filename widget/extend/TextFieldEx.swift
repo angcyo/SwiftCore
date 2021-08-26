@@ -78,6 +78,11 @@ extension UITextField {
         delegate = result
         return result
     }
+
+    ///占位文本的颜色
+    func setPlaceholderColor(_ placeholder: String, color: UIColor) {
+        attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [.foregroundColor: color])
+    }
 }
 
 func textFieldView(_ placeholder: String? = "请输入...",

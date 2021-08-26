@@ -47,8 +47,8 @@ class FormWheelCellConfig: BaseFormItemCellConfig {
             $0.wrap_content(minWidth: self.labelMinWidth)
         }
 
-        text.placeholder = "请选择"
-        text.textColor = Res.text.label.color
+        text.placeholder = "请选择..."
+        //text.textColor = Res.text.label.color
         text.isUserInteractionEnabled = false
         text.isEnabled = false
         wrap.render(text) {

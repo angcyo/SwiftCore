@@ -168,6 +168,11 @@ extension JSON {
     ///   - value: 支持JSON类型的数据
     ///   - putToArray: 是否将[value]追加到key对应的数组中
     mutating func put(_ key: String, _ value: Any?, putToArray: Bool = false) {
+        //空值不处理
+        guard let value = value else {
+            return
+        }
+
         var toArray = putToArray
 
         //数组判断
@@ -180,15 +185,10 @@ extension JSON {
         let keyList = key.splitString(separator: ".")
         let path = self.ensurePath(keyList)
 
-        //空值不处理
-        guard let value = value else {
-            return
-        }
-
         //value
         let _value: JSON
-        if let value = value as? JSON {
-            _value = value
+        if value is JSON {
+            _value = value as! JSON
         } else {
             _value = JSON(value)
         }

@@ -89,7 +89,7 @@ class BaseViewController: UIViewController, Navigation {
         print("viewDidLoad:\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")
     }
 
-    /// 试图将要显示
+    /// 试图将要显示, 从后台切回来时, 不会触发. 只会触发Scene相关的生命周期
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print("viewWillAppear:\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")

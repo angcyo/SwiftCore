@@ -5,6 +5,7 @@
 import Foundation
 import UIKit
 
+/// 单独一个按钮的item
 class DslButtonTableItem: DslTableItem {
 
     var itemButtonText: String? = "保存"
@@ -39,9 +40,9 @@ class DslButtonTableCell: DslTableCell {
         super.initCell()
 
         button.bold()
-        contentView.render(button) { view in
-            view.makeFullWidth()
-            view.makeFullHeight()
+        contentView.render(button) {
+            $0.makeFullWidth()
+            $0.makeFullHeight()
         }
     }
 }
