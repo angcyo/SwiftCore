@@ -153,17 +153,13 @@ extension UIView {
     ///   - height:
     ///   - widthAmount: 目标宽度乘以的倍数
     ///   - heightAmount: 目标高度乘以的倍数
-    func makeWidthHeight(_ width: ConstraintRelatableTarget? = nil,
-                         _ height: ConstraintRelatableTarget? = nil,
+    func makeWidthHeight(_ width: ConstraintRelatableTarget,
+                         _ height: ConstraintRelatableTarget,
                          widthAmount: ConstraintMultiplierTarget = 1,
                          heightAmount: ConstraintMultiplierTarget = 1) {
         make { maker in
-            if let width = width {
-                maker.width.equalTo(width).multipliedBy(widthAmount)
-            }
-            if let height = height {
-                maker.height.equalTo(height).multipliedBy(heightAmount)
-            }
+            maker.width.equalTo(width).multipliedBy(widthAmount)
+            maker.height.equalTo(height).multipliedBy(heightAmount)
         }
     }
 

@@ -56,4 +56,7 @@ pod 'UIGradient' #1.3.2
 
 # 日志输出 https://github.com/SwiftyBeaver/SwiftyBeaver
 pod 'SwiftyBeaver' #1.9.5
+
+# 图标库 https://github.com/piknotech/SFSafeSymbols
+pod 'SFSafeSymbols', '~> 2.1.3'
 ```
