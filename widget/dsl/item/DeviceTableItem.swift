@@ -7,6 +7,15 @@ import UIKit
 import TangramKit
 
 class DeviceTableItem: DslTableItem {
+
+    override func initItem() {
+        super.initItem()
+        onItemClick = {
+            //showFileBrowser()
+            //showFileExplorer()
+        }
+    }
+
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
 

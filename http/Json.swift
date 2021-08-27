@@ -232,12 +232,14 @@ extension JSON {
 }
 
 /// 快速创建JSON对象
-func json() -> JSON {
-    let json = JSON()
+func json(_ dsl: ((inout JSON) -> Void)? = nil) -> JSON {
+    var json = JSON()
+    dsl?(&json)
     return json
 }
 
-func jsonArray() -> JSON {
-    let json = JSON([])
+func jsonArray(_ dsl: ((inout JSON) -> Void)? = nil) -> JSON {
+    var json = JSON([])
+    dsl?(&json)
     return json
 }

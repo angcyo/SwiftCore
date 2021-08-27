@@ -9,6 +9,9 @@ import Foundation
 import UIKit
 import AlamofireImage
 
+
+///https://github.com/Alamofire/AlamofireImage
+
 extension UIImageView {
 
     /// 显示网络图片

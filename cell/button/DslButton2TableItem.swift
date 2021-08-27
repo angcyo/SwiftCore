@@ -55,6 +55,7 @@ class DslButton2TableCell: DslTableCell {
         super.initCell()
 
         rightButton.bold()
+        rightButton.addGradient()
 
         wrap.render(leftButton) {
             $0.makeFullHeight()

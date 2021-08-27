@@ -40,6 +40,8 @@ class DslButtonTableCell: DslTableCell {
         super.initCell()
 
         button.bold()
+        button.addGradient()
+
         contentView.render(button) {
             $0.makeFullWidth()
             $0.makeFullHeight()

@@ -50,7 +50,7 @@ extension UILabel {
     }
 
     /// 设置文本颜色, 支持UIColor 支持hex颜色
-    func setTextColor(_ color: Any) {
+    func setTextColor(_ color: Any?) {
         textColor = toColor(color)
     }
 }

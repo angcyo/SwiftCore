@@ -25,13 +25,16 @@ struct Res {
     // MARK: - 颜色资源
 
     struct color {
+        //static var _test = "#2D52F2"
+
         static var colorPrimary = UIColor.parse("#2D52F2")
-        static var colorPrimaryDark = UIColor.parse("#162bf2ff")
+        static var colorPrimaryDark = UIColor.parse("#223EB7")
         static var colorAccent = UIColor.parse("#2D52F2")
         /// 控制器的默认背景颜色
         static var controllerBackgroundColor = UIColor.white
 
         static var white = UIColor.white
+        static var black = UIColor.black
         static var line = UIColor.parse("#ECECEC")
         static var bg = UIColor.parse("#F3F5F9")
         static var desBg = UIColor.parse("#F3F5F9")

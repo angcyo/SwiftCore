@@ -39,3 +39,18 @@ pod "SwiftString" //0.5
 # https://github.com/malcommac/SwiftRichString
 pod 'SwiftRichString' //3.7.2
 ```
+
+# 2021-08-26
+
+```
+# 文件浏览器 https://github.com/marmelroy/FileBrowser
+pod 'FileBrowser', '~> 1.0'
+
+# https://github.com/Augustyniak/FileExplorer
+pod "FileExplorer", "~> 1.0.4" # 高版本swift 5不兼容
+```
+
+```
+# https://github.com/dqhieu/UIGradient
+pod 'UIGradient' #1.3.2
+```

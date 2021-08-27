@@ -98,7 +98,7 @@ extension String {
 }
 
 /// 颜色转换
-func toColor(_ color: Any) -> UIColor? {
+func toColor(_ color: Any?) -> UIColor? {
     // op
     if color is UIColor {
         return color as! UIColor

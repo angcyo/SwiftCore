@@ -6,9 +6,22 @@ import Foundation
 
 extension Array where Element: Equatable {
 
-    mutating func remove(_ object: Element) {
+    /*mutating func remove(_ object: Element) {
         if let index = firstIndex(of: object) {
             remove(at: index)
+        }
+    }*/
+
+    @discardableResult
+    mutating func remove(_ item: Element) -> Bool {
+        let index = self.index() {
+            $0 == item
+        }
+        if let index = index {
+            remove(at: index)
+            return true
+        } else {
+            return false
         }
     }
 

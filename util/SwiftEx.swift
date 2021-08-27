@@ -13,6 +13,13 @@ extension String {
     }
 }
 
+@discardableResult
+public func with<T>(_ value: T, _ modifier: (inout T) -> Void) -> T {
+    var value = value
+    modifier(&value)
+    return value
+}
+
 extension NSObject {
 
     /// 模拟kotlin的apply
@@ -76,5 +83,7 @@ func logIvarList(_ cls: AnyClass?) {
         }
     }
 }
+
+
 
 

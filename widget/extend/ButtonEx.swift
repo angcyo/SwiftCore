@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import UIGradient
 
 extension UIButton {
 
@@ -56,6 +57,12 @@ func button(_ title: String? = nil,
 
     //view.layer.contents = UIImage().cgImage
 
+    return view
+}
+
+func gradientButton(_ title: String? = nil, colors: [UIColor] = [Res.color.colorPrimary, Res.color.colorPrimaryDark]) -> UIButton {
+    let view = button(title)
+    view.addGradient(colors: colors)
     return view
 }
 
