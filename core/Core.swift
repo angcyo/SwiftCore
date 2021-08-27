@@ -3,6 +3,7 @@
 //
 
 import Foundation
+import AlamofireEasyLogger
 
 class Core {
 
@@ -18,9 +19,16 @@ class Core {
     ///
     var uuid: String = Util.uuid()
 
+    //网络日志
+    let alamofireLogger = FancyAppAlamofireLogger(prettyPrint: true) {
+        print()
+        L.i($0, #file, #function, #line)
+    }
+
     /// 初始化入口
-    class func initCore() {
+    func initCore() {
         Dialog.initDialog()
+        SwiftyBeaverEx.initSwiftyBeaver()
     }
 
     static var DEF_NIL_STRING = "--"

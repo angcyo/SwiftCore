@@ -53,4 +53,7 @@ pod "FileExplorer", "~> 1.0.4" # 高版本swift 5不兼容
 ```
 # https://github.com/dqhieu/UIGradient
 pod 'UIGradient' #1.3.2
+
+# 日志输出 https://github.com/SwiftyBeaver/SwiftyBeaver
+pod 'SwiftyBeaver' #1.9.5
 ```
