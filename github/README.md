@@ -59,4 +59,7 @@ pod 'SwiftyBeaver' #1.9.5
 
 # 图标库 https://github.com/piknotech/SFSafeSymbols
 pod 'SFSafeSymbols', '~> 2.1.3'
+
+# 图片/视频浏览 https://github.com/3lvis/Viewer
+pod 'Viewer' #4.3.0
 ```
