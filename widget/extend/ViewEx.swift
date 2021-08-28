@@ -5,18 +5,51 @@
 import Foundation
 import UIKit
 
-class TargetObserver {
+class TargetObserver: NSObject, UIGestureRecognizerDelegate {
+
+    /// 是否要忽略当前的UIGestureRecognizer
+    static func ignoreTouch(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        //手势附加的view
+        let gestureView = gestureRecognizer.view
+
+        //正在touch的view
+        let touchView = touch.view
+
+        if touch.tapCount == 1 && gestureView != touchView {
+            if let touchView = touchView {
+                if touchView is UIControl && touchView.isUserInteractionEnabled {
+                    //UIControl
+                    return false
+                }
+                if let gestureRecognizers = touchView.gestureRecognizers {
+                    let find = gestureRecognizers.find {
+                        $0 is UITapGestureRecognizer
+                    }
+                    if find != nil {
+                        //具有点击手势
+                        return false
+                    }
+                }
+            }
+        }
+        return true
+    }
+
     /// dsl
     var onAction: ((UIResponder) -> Void)? = nil
 
     /// 回调
     @objc func onActionInner(sender: UIResponder) {
-        print("onActionInner:\(sender)")
+        L.d("onActionInner:\(sender)")
         onAction?(sender)
     }
 
     deinit {
-        print("\(threadName())->销毁:\(self)")
+        L.w("\(threadName())->销毁:\(self)")
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        TargetObserver.ignoreTouch(gestureRecognizer, shouldReceive: touch)
     }
 }
 
@@ -271,12 +304,13 @@ extension UIView {
         let old = getObject(&UIView.KEY_ON_CLICK)
 
         if self is UIControl {
+            let control = (self as! UIControl)
             if let old = old as? TargetObserver {
-                (self as! UIControl).removeTarget(old,
+                control.removeTarget(old,
                         action: #selector(TargetObserver.onActionInner(sender:)),
                         for: controlEvents)
             }
-            (self as! UIControl).addTarget(observer,
+            control.addTarget(observer,
                     action: #selector(TargetObserver.onActionInner(sender:)),
                     for: controlEvents)
             setObject(&UIView.KEY_ON_CLICK, observer)
@@ -289,6 +323,9 @@ extension UIView {
             let gesture = UITapGestureRecognizer(target: observer,
                     action: #selector(TargetObserver.onActionInner(sender:)))
 
+            gesture.setObject(&UIView.KEY_ON_CLICK, observer)
+
+            gesture.delegate = observer
             // 点击一次
             gesture.numberOfTapsRequired = 1
             // 一个手指

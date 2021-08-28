@@ -56,7 +56,11 @@ extension UIView {
 
     /// 点击事件
     func onClick(bag: DisposeBag, _ action: @escaping (UITapGestureRecognizer) -> Void) {
-        rx.tapGesture()
+        rx.tapGesture { (gesture: UITapGestureRecognizer, delegate: GenericRxGestureRecognizerDelegate<UITapGestureRecognizer>) in
+                    delegate.touchReceptionPolicy = .custom { (gesture: UITapGestureRecognizer, touch: RxGestureTouch) in
+                        TargetObserver.ignoreTouch(gesture, shouldReceive: touch)
+                    }
+                }
                 .when(.recognized) //UIGestureRecognizer.State
                 .subscribe(onNext: { event in
                     action(event)

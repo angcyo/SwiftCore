@@ -41,3 +41,10 @@ func lantern(_ images: [Any], index: Int = 0) {
     lantern.pageIndex = index
     lantern.show()
 }
+
+func lantern(_ image: Any?) {
+    guard let img = image else {
+        return
+    }
+    lantern([img], index: 0)
+}
