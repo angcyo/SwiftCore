@@ -62,4 +62,10 @@ pod 'SFSafeSymbols', '~> 2.1.3'
 
 # 图片/视频浏览 https://github.com/3lvis/Viewer
 pod 'Viewer' #4.3.0
+
+# 图片/视频浏览 https://github.com/fcbox/Lantern
+pod 'Lantern', '1.1.2'
+
+# 颜色 https://github.com/zenangst/Hue
+pod 'Hue' #5.0.0
 ```

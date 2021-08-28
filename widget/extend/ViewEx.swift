@@ -52,8 +52,11 @@ func roundPath(bounds: CGRect,
 
 extension UIView {
 
-    ///key
+    ///key hold ViewName
     static var KEY_VIEW_NAME = "s_key_view_name"
+
+    ///hold 点击事件
+    static var KEY_ON_CLICK = "s_key_on_click"
 
     ///控件的名字, 可以用来查找控件
     var viewName: String? {
@@ -263,16 +266,26 @@ extension UIView {
         let observer = TargetObserver()
         observer.onAction = action
 
-        var keyOnClick = "key_on_click"
         //self.isUserInteractionEnabled = true
 
+        let old = getObject(&UIView.KEY_ON_CLICK)
+
         if self is UIControl {
+            if let old = old as? TargetObserver {
+                (self as! UIControl).removeTarget(old,
+                        action: #selector(TargetObserver.onActionInner(sender:)),
+                        for: controlEvents)
+            }
             (self as! UIControl).addTarget(observer,
                     action: #selector(TargetObserver.onActionInner(sender:)),
                     for: controlEvents)
-            setObject(&keyOnClick, observer)
+            setObject(&UIView.KEY_ON_CLICK, observer)
             return observer
         } else {
+            if let old = old as? UITapGestureRecognizer {
+                removeGestureRecognizer(old)
+            }
+
             let gesture = UITapGestureRecognizer(target: observer,
                     action: #selector(TargetObserver.onActionInner(sender:)))
 
@@ -286,7 +299,7 @@ extension UIView {
             //添加手势
             addGestureRecognizer(gesture)
 
-            setObject(&keyOnClick, gesture)
+            setObject(&UIView.KEY_ON_CLICK, gesture)
             return gesture
         }
     }
@@ -340,6 +353,18 @@ extension UIView {
         //layer.shadowRadius = 6.0
         //layer.shadowOpacity = 0.4
         //layer.masksToBounds = false
+    }
+
+    /// 查找VC
+    func findParentViewController() -> UIViewController? {
+        var parentResponder: UIResponder? = self
+        while parentResponder != nil {
+            parentResponder = parentResponder!.next
+            if let viewController = parentResponder as? UIViewController {
+                return viewController
+            }
+        }
+        return nil
     }
 }
 

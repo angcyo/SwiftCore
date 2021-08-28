@@ -299,7 +299,7 @@ extension URL {
     }
 }
 
-/// 在url上拼接参数
+/// 在url上拼接参数 https://github.com/imgix/imgix-swift
 func connectParam(_ url: String, _ parameters: [String: Any]?) -> String {
 
     guard let parameters = parameters else {

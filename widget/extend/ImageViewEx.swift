@@ -19,7 +19,7 @@ extension UIImageView {
         if nilOrEmpty(url) {
             image = nil
         } else {
-            print("加载图片:\(url)")
+            L.d("加载图片:\(url)")
             af.setImage(withURL: URL(string: url!)!,
                     cacheKey: url,
                     placeholderImage: image)
@@ -36,10 +36,18 @@ extension UIImageView {
                     self.setAvatarUrl(url, name: name)
                 }
             } else {
+                L.d("加载图片:\(url)")
                 let nameImage = name?.toImage(rect: bounds) ?? image
                 af.setImage(withURL: URL(string: url!)!,
                         cacheKey: url,
-                        placeholderImage: nameImage)
+                        placeholderImage: nameImage,
+                        progress: { (progress: Progress) in
+                            L.d("加载进度:\(progress):\(url)")
+                        },
+                        completion: { (data: AFIDataResponse<UIImage>) in
+                            L.d("加载进度完成:\(url)")
+                            self.setNeedsLayout()
+                        })
             }
         }
     }
@@ -56,7 +64,7 @@ extension UIImageView {
             } else if let imgObj = img as? UIImage {
                 self.image = imgObj
             } else {
-                print("不支持的图片类型:\(img)")
+                L.w("不支持的图片类型:\(type(of: img))")
             }
         } else {
             self.image = nil
