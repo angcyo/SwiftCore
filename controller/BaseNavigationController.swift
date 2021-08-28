@@ -103,7 +103,7 @@ class BaseNavigationController: UINavigationController,
 
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         print("即将显示VC:\(viewController):\(animated)")
-        if let navigation = viewController as? Navigation {
+        if let navigation = viewController as? INavigation {
             //navigationController.navigationBar.isHidden = !navigation.showNavigationBar
             //navigationController.isNavigationBarHidden = !navigation.showNavigationBar
             navigationController.setNavigationBarHidden(!navigation.showNavigationBar, animated: animated)

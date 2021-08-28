@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 
 /// 导航
-protocol Navigation {
+protocol INavigation {
 
     /// 当前界面, 是否需要显示导航栏
     var showNavigationBar: Bool { get set }

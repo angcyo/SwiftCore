@@ -111,7 +111,21 @@ func showRootViewController(_ rootViewController: UIViewController) {
     UIApplication.sceneWindow?.rootViewController = rootViewController
 }
 
-/// 优先push, 否则show
+/// 使用导航控制器包裹vc
+func navWrap(_ viewController: UIViewController) {
+    guard let window = UIApplication.mainWindow else {
+        L.w("无窗口")
+        return
+    }
+    if let mainNav = LoginController.mainNavigationController() {
+        mainNav.setViewControllers([viewController], animated: false)
+        window.rootViewController = mainNav
+    } else {
+        L.w("请先配置:MAIN_NAVIGATION_CONTROLLER")
+    }
+}
+
+/// 使用导航控制器包裹, 优先push, 否则show
 func push(_ viewControllerToPresent: UIViewController,
           animated flag: Bool = true) {
     guard let window = UIApplication.mainWindow else {
@@ -122,6 +136,9 @@ func push(_ viewControllerToPresent: UIViewController,
     }
     if let nav = root as? UINavigationController {
         nav.pushViewController(viewControllerToPresent, animated: flag)
+    } else if let mainNav = LoginController.mainNavigationController() {
+        mainNav.setViewControllers([viewControllerToPresent], animated: false)
+        window.rootViewController = mainNav
     } else {
         show(viewControllerToPresent, animated: flag)
     }

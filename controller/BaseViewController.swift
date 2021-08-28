@@ -7,7 +7,7 @@ import UIKit
 import RxSwift
 
 /// base by Rx
-class BaseViewController: UIViewController, Navigation {
+class BaseViewController: UIViewController, INavigation {
 
     //Rx 自动取消订阅,
     lazy var disposeBag: DisposeBag = {

@@ -5,7 +5,7 @@
 import Foundation
 import UIKit
 
-class BaseTabBarController: UITabBarController, Navigation {
+class BaseTabBarController: UITabBarController, INavigation {
 
     init() {
         super.init(nibName: nil, bundle: nil)
