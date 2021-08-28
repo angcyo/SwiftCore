@@ -55,10 +55,11 @@ struct SwiftyBeaverEx {
         L.addDestination(console)
         L.addDestination(file)
 
-        if D.isDebug {
+        //连不上服务器 https://api.swiftybeaver.com/api/entries
+        /*if D.isDebug {
             let cloud = SBPlatformDestination(appID: "PVnk9Z", appSecret: "3lslwkeektzknqmzoiCslhlmirpidzMh", encryptionKey: "QUA4tHfvlQtjx4hi2pwjtkmdnc0Sdnrf") // to cloud
             cloud.format = format
             L.addDestination(cloud)
-        }
+        }*/
     }
 }
