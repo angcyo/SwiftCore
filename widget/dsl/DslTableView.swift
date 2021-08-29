@@ -223,7 +223,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
             estimatedHeight = UITableView.automaticDimension //Res.size.estimatedHeight
         } else {
             //这里可以用0.001
-            estimatedHeight = Res.size.leftMargin.toCGFloat()
+            estimatedHeight = Res.size.leftMargin
         }
         return getSectionFirstItem(section)?.itemHeaderEstimatedHeight ?? estimatedHeight //UITableView.automaticDimension
     }

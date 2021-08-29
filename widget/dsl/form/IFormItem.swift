@@ -15,13 +15,22 @@ protocol IFormItem: IDslItem {
 
 class FormItemConfig {
 
-    /**数据key*/
+    /// 表单数据key
     var formKey: String? = nil
 
-    /**表单是否必填. 为true, 将会在 label 前面绘制 红色`*` */
+    /// 表单是否必填. 为true, 将会在 label 前面绘制 红色`*`
     var formRequired: Bool = false {
         didSet {
             if formRequired {
+                formVerify = true
+            }
+        }
+    }
+
+    /// 是否要验证表单的值
+    var formVerify: Bool = false {
+        didSet {
+            if formVerify {
                 formIgnore = false
             }
         }
@@ -55,48 +64,54 @@ class FormItemConfig {
         }
     }
 
+    /// 表单验证不通过时, 返回的错误提示
+    var formVerifyErrorTip: String = "无效的值"
+
     /// 检查item是否有错误, 通过end回调, 返回框架错误信息. 无错误回调nil
     var formCheck: (_ params: FormParams, _ end: (_ error: Error?) -> Void) -> Void = { params, end in
-        let formItemConfig = params.formItem?.formItemConfig
-        if formItemConfig?.formIgnore == true {
-            end(nil)
-        } else {
-            if (formItemConfig?.formRequired == true) {
-                let value = formItemConfig?.onGetFormValue(params)
-                if (value == nil) {
-                    end(error("无效的值"))
-                } else {
-                    if value is String {
-                        if nilOrEmpty(value as? String) {
-                            end(error("无效的值"))
-                        } else {
-                            end(nil)
-                        }
-                    } else if value is Array<Any?> {
-                        if nilOrEmpty(value as? Array<Any?>) {
-                            end(error("无效的值"))
-                        } else {
-                            end(nil)
-                        }
-                    } /*else if value is Set<Any> {
+        if let formItemConfig = params.formItem?.formItemConfig {
+            if formItemConfig.formIgnore == true {
+                end(nil)
+            } else {
+                if (formItemConfig.formVerify == true) {
+                    let value = formItemConfig.onGetFormValue(params)
+                    if (value == nil) {
+                        end(error(formItemConfig.formVerifyErrorTip))
+                    } else {
+                        if value is String {
+                            if nilOrEmpty(value as? String) {
+                                end(error(formItemConfig.formVerifyErrorTip))
+                            } else {
+                                end(nil)
+                            }
+                        } else if value is Array<Any?> {
+                            if nilOrEmpty(value as? Array<Any?>) {
+                                end(error(formItemConfig.formVerifyErrorTip))
+                            } else {
+                                end(nil)
+                            }
+                        } /*else if value is Set<Any> {
                         if nilOrEmpty(value as? Set<Hashable>) {
                             end(error("无效的值"))
                         } else {
                             end(nil)
                         }
                     } */else if value is Dictionary<String, Any?> {
-                        if nilOrEmpty(value as? Dictionary<String, Any?>) {
-                            end(error("无效的值"))
+                            if nilOrEmpty(value as? Dictionary<String, Any?>) {
+                                end(error(formItemConfig.formVerifyErrorTip))
+                            } else {
+                                end(nil)
+                            }
                         } else {
                             end(nil)
                         }
-                    } else {
-                        end(nil)
                     }
+                } else {
+                    end(nil)
                 }
-            } else {
-                end(nil)
             }
+        } else {
+            end(nil)
         }
     }
 

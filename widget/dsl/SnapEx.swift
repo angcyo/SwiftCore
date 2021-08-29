@@ -12,6 +12,27 @@ enum ConstraintTarget: ConstraintRelatableTarget {
     case LAST
 }
 
+extension ConstraintOffsetTarget {
+    /// 取负值
+    func reverse() -> CGFloat {
+        let offset: CGFloat
+        if let amount = self as? Float {
+            offset = -CGFloat(amount)
+        } else if let amount = self as? Double {
+            offset = -CGFloat(amount)
+        } else if let amount = self as? CGFloat {
+            offset = -CGFloat(amount)
+        } else if let amount = self as? Int {
+            offset = -CGFloat(amount)
+        } else if let amount = self as? UInt {
+            offset = -CGFloat(amount)
+        } else {
+            offset = 0.0
+        }
+        return offset
+    }
+}
+
 // MARK: - 布局扩展, 需要库SnapKit支持 http://snapkit.io/docs/
 
 extension UIView {
@@ -229,19 +250,19 @@ extension UIView {
         }
     }
 
-    func makeGravityHorizontal(_ parent: ConstraintRelatableTarget? = nil, offset: Float = 0) {
+    func makeGravityHorizontal(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
         make { maker in
             let parent = toConstraintTarget(parent)
             maker.left.equalTo(parent).offset(offset)
-            maker.right.equalTo(parent).offset(-offset)
+            maker.right.equalTo(parent).offset(offset.reverse())
         }
     }
 
-    func makeGravityVertical(_ parent: ConstraintRelatableTarget? = nil, offset: Float = 0) {
+    func makeGravityVertical(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
         make { maker in
             let parent = toConstraintTarget(parent)
             maker.top.equalTo(parent).offset(offset)
-            maker.bottom.equalTo(parent).offset(-offset)
+            maker.bottom.equalTo(parent).offset(offset.reverse())
         }
     }
 

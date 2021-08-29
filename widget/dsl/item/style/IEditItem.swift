@@ -50,6 +50,9 @@ class EditItemConfig {
 
     /// 限制最大输入字符数
     var itemEditMaxLength: Int = Int.max
+
+    /// 是否是密码输入框
+    var itemSecureTextEntry = false
 }
 
 extension IEditItem {
@@ -62,6 +65,7 @@ extension IEditItem {
         //textField.setEdit = editItemConfig.itemEditEnable
         textField.placeholder = editItemConfig.itemEditPlaceholder
         textField.keyboardType = editItemConfig.itemEditKeyboardType
+        textField.isSecureTextEntry = editItemConfig.itemSecureTextEntry
     }
 
 }

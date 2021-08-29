@@ -11,7 +11,7 @@ import TangramKit
 class BaseFormDialog: UIView {
 
     /// 标题的高度
-    var titleLayoutHeight: Float = 45
+    var titleLayoutHeight: CGFloat = 45
 
     let titleLayout = horizontal()
     let cancel = labelButton("取消")
@@ -104,7 +104,7 @@ class BaseFormDialog: UIView {
         messageView.respectSafeArea = false //是否考虑安全区域
 
         let backgroundView = CornerRoundingView()
-        backgroundView.cornerRadius = Res.size.roundCommon.toCGFloat()
+        backgroundView.cornerRadius = Res.size.roundCommon
         backgroundView.roundedCorners = [.topLeft, .topRight]
         backgroundView.layer.masksToBounds = true
         backgroundView.backgroundColor = UIColor.white

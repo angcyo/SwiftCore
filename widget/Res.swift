@@ -59,51 +59,52 @@ struct Res {
 
     struct size {
         static var estimatedHeight: CGFloat = 0.0000001
-        static var line: Float = 1
+        static var line: CGFloat = 1
 
-        static var roundLittle: Float = 2
-        static var roundMin: Float = 5
-        static var roundNormal: Float = 10
-        static var roundCommon: Float = 15
-        static var roundMax: Float = 45
+        static var roundLittle: CGFloat = 2
+        static var roundMin: CGFloat = 5
+        static var roundNormal: CGFloat = 10
+        static var roundCommon: CGFloat = 15
+        static var roundMax: CGFloat = 45
 
-        static var x: Float = 10
-        static var xx: Float = 20
-        static var xxx: Float = 30
+        static var x: CGFloat = 10
+        static var xx: CGFloat = 20
+        static var xxx: CGFloat = 30
 
         // 行间距
-        static var lineSpacing: Float = 6
+        static var lineSpacing: CGFloat = 6
         // Flow间隙
-        static var space: Float = 8
+        static var space: CGFloat = 8
 
         // 表单左边距
-        static var leftMargin: Float = 16
-        static var leadingMargin: Float = 16 //头
-        static var trailingMargin: Float = 16 //尾
+        static var leftMargin: CGFloat = 16
+        static var leadingMargin: CGFloat = 16 //头
+        static var trailingMargin: CGFloat = 16 //尾
 
         // 头像的默认大小
-        static var avatar: Float = 68
+        static var avatar: CGFloat = 68
         // 图标的大小
-        static var icon: Float = 18
-        static var iconMin: Float = 15 //小图标
+        static var icon: CGFloat = 18
+        static var iconMin: CGFloat = 15 //小图标
 
-        static var minHeight: Float = 35 //控件 最小的高度
+        static var minHeight: CGFloat = 35 //控件 最小的高度
 
-        static var itemRequiredOffsetLeft: Float = 3 // * 左边偏移量
-        static var itemRequiredOffsetTop: Float = 20 // * 头部偏移量
-        static var itemMinHeight: Float = 52 //dsl item 最小的高度
-        static var itemMinLabelWidth: Float = 65 //dsl item label最小的宽度
+        static var itemRequiredOffsetLeft: CGFloat = 3 // * 左边偏移量
+        static var itemRequiredOffsetTop: CGFloat = 20 // * 头部偏移量
+        static var itemMinHeight: CGFloat = 52 //dsl item 最小的高度
+        static var itemMinLabelWidth: CGFloat = 65 //dsl item label最小的宽度
+
+        static var passwordMaxLength: Int = 20 //密码最大的长度
     }
 
     // MARK: - 字体资源
 
     struct font {
 
-        static func get(_ size: Float = Float(text.normal.size), _ weight: Float = Float(UIFont.Weight.regular.rawValue)) -> UIFont {
-            UIFont.systemFont(ofSize: CGFloat(size), weight: UIFont.Weight(CGFloat(weight)))
+        static func get(_ size: CGFloat = text.normal.size.toCGFloat(), _ weight: CGFloat = UIFont.Weight.regular.rawValue) -> UIFont {
+            UIFont.systemFont(ofSize: size, weight: UIFont.Weight(weight))
         }
 
         static var normal = UIFont.systemFont(ofSize: CGFloat(text.normal.size), weight: .regular)
-
     }
 }

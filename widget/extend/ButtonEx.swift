@@ -16,6 +16,14 @@ extension UIButton {
         }
     }
 
+    func setTextColor(_ color: UIColor?, all: Bool = true) {
+        setTitleColor(color, for: .normal)
+        if all {
+            setTitleColor(color, for: .selected)
+            setTitleColor(color, for: .highlighted)
+        }
+    }
+
     /// 加粗
     func setBold(_ bold: Bool = true) {
         titleLabel?.setBold(bold)
@@ -25,11 +33,11 @@ extension UIButton {
         titleLabel?.setBold(bold)
     }
 
-    func setPadding(padding: Float = 0) {
+    func setPadding(padding: CGFloat = 0) {
         setPadding(left: padding, top: padding, right: padding, bottom: padding)
     }
 
-    func setPadding(left: Float = 0, top: Float = 0, right: Float = 0, bottom: Float = 0) {
+    func setPadding(left: CGFloat = 0, top: CGFloat = 0, right: CGFloat = 0, bottom: CGFloat = 0) {
         contentEdgeInsets = insets(left: left, top: top, right: right, bottom: bottom)
     }
 }
@@ -38,7 +46,7 @@ extension UIButton {
 func button(_ title: String? = nil,
             titleColor: UIColor = Res.color.white,
             bgColor: UIColor = Res.color.colorAccent,
-            radius: Float = Res.size.roundNormal,
+            radius: CGFloat = Res.size.roundNormal,
             titleSize: Double = Res.text.normal.size,
             insets: UIEdgeInsets? = nil) -> UIButton {
     let view = UIButton()
@@ -69,7 +77,7 @@ func gradientButton(_ title: String? = nil, colors: [UIColor] = [Res.color.color
 /// 背景填充, 文本白色按钮
 func solidButton(_ title: String? = nil,
                  fillColor: UIColor = Res.color.colorAccent,
-                 radius: Float = Res.size.roundNormal,
+                 radius: CGFloat = Res.size.roundNormal,
                  titleColor: UIColor = Res.color.white,
                  titleSize: Double = Res.text.des.size,
                  insets: UIEdgeInsets? = nil) -> UIButton {
@@ -80,11 +88,11 @@ func solidButton(_ title: String? = nil,
 
 /// 边框按钮
 func borderButton(_ title: String? = nil,
-                  radius: Float = Res.size.roundNormal,
+                  radius: CGFloat = Res.size.roundNormal,
                   titleColor: UIColor = Res.color.colorAccent,
                   bgColor: UIColor = Res.color.white,
                   borderColor: UIColor? = nil,
-                  borderWidth: Float = Res.size.line,
+                  borderWidth: CGFloat = Res.size.line,
                   titleSize: Double = Res.text.des.size,
                   insets: UIEdgeInsets? = nil) -> UIButton {
     let view = button(title, titleColor: titleColor,

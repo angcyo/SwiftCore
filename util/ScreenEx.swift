@@ -54,20 +54,20 @@ extension CGRect {
     }
 }
 
-func point(x: Float = 0, y: Float = 0) -> CGPoint {
-    CGPoint(x: x.toCGFloat(), y: y.toCGFloat())
+func point(x: CGFloat = 0, y: CGFloat = 0) -> CGPoint {
+    CGPoint(x: x, y: y)
 }
 
-func rect(_ x: Float, _ y: Float, _ width: Float, _ height: Float) -> CGRect {
-    CGRect(x: x.toCGFloat(), y: y.toCGFloat(), width: width.toCGFloat(), height: height.toCGFloat())
+func rect(_ x: CGFloat, _ y: CGFloat, _ width: CGFloat, _ height: CGFloat) -> CGRect {
+    CGRect(x: x, y: y, width: width, height: height)
 }
 
-func rect(_ width: Float, _ height: Float) -> CGRect {
+func rect(_ width: CGFloat, _ height: CGFloat) -> CGRect {
     rect(0, 0, width, height)
 }
 
-func insets(left: Float = 0, top: Float = 0, right: Float = 0, bottom: Float = 0) -> UIEdgeInsets {
-    UIEdgeInsets(top: top.toCGFloat(), left: left.toCGFloat(), bottom: bottom.toCGFloat(), right: right.toCGFloat())
+func insets(left: CGFloat = 0, top: CGFloat = 0, right: CGFloat = 0, bottom: CGFloat = 0) -> UIEdgeInsets {
+    UIEdgeInsets(top: top, left: left, bottom: bottom, right: right)
 }
 
 extension UIEdgeInsets {

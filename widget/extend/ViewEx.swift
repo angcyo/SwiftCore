@@ -59,8 +59,8 @@ func roundPath(bounds: CGRect,
                topRight: Bool = true,
                bottomLeft: Bool = true,
                bottomRight: Bool = true,
-               widthRadii: Float = Res.size.roundNormal,
-               heightRadii: Float = Res.size.roundNormal) -> UIBezierPath {
+               widthRadii: CGFloat = Res.size.roundNormal,
+               heightRadii: CGFloat = Res.size.roundNormal) -> UIBezierPath {
     var corners: UIRectCorner = []
     if topLeft {
         corners.insert(UIRectCorner.topLeft)
@@ -77,7 +77,7 @@ func roundPath(bounds: CGRect,
 
     let maskPath = UIBezierPath(roundedRect: bounds,
             byRoundingCorners: corners,
-            cornerRadii: CGSize(width: CGFloat(widthRadii), height: CGFloat(heightRadii)))
+            cornerRadii: CGSize(width: widthRadii, height: heightRadii))
     return maskPath
 }
 
@@ -225,14 +225,14 @@ extension UIView {
     }
 
     /// 同时设置4个角的圆角
-    func setRadius(_ radius: Float = Res.size.roundNormal) {
-        layer.cornerRadius = CGFloat(radius)
+    func setRadius(_ radius: CGFloat = Res.size.roundNormal) {
+        layer.cornerRadius = radius
         clipsToBounds = true
     }
 
-    func setRadiusBorder(_ radius: Float = Res.size.roundNormal,
+    func setRadiusBorder(_ radius: CGFloat = Res.size.roundNormal,
                          borderColor: UIColor? = Res.color.colorAccent,
-                         borderWidth: Float = Res.size.line) {
+                         borderWidth: CGFloat = Res.size.line) {
         layer.cornerRadius = CGFloat(radius)
         layer.masksToBounds = true
         layer.borderColor = borderColor?.cgColor
@@ -240,7 +240,7 @@ extension UIView {
     }
 
     /// 单独设置4个角的圆角
-    func setRound(_ radii: Float = Res.size.roundNormal,
+    func setRound(_ radii: CGFloat = Res.size.roundNormal,
                   topLeft: Bool = true, topRight: Bool = true,
                   bottomLeft: Bool = true, bottomRight: Bool = true) {
         if bounds.isEmpty {
@@ -262,7 +262,7 @@ extension UIView {
                 corners.insert(UIRectCorner.bottomRight)
             }
 
-            let r = CGFloat(radii)
+            let r = radii
             let maskPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: r, height: r))
             let maskLayer = CAShapeLayer()
             maskLayer.frame = bounds
@@ -271,19 +271,19 @@ extension UIView {
         }
     }
 
-    func setRoundTop(_ radii: Float = Res.size.roundNormal) {
+    func setRoundTop(_ radii: CGFloat = Res.size.roundNormal) {
         setRound(radii, topLeft: true, topRight: true, bottomLeft: false, bottomRight: false)
     }
 
-    func setRoundBottom(_ radii: Float = Res.size.roundNormal) {
+    func setRoundBottom(_ radii: CGFloat = Res.size.roundNormal) {
         setRound(radii, topLeft: false, topRight: false, bottomLeft: true, bottomRight: true)
     }
 
-    func setRoundLeft(_ radii: Float = Res.size.roundNormal) {
+    func setRoundLeft(_ radii: CGFloat = Res.size.roundNormal) {
         setRound(radii, topLeft: true, topRight: false, bottomLeft: true, bottomRight: false)
     }
 
-    func setRoundRight(_ radii: Float = Res.size.roundNormal) {
+    func setRoundRight(_ radii: CGFloat = Res.size.roundNormal) {
         setRound(radii, topLeft: false, topRight: true, bottomLeft: false, bottomRight: true)
     }
 
@@ -343,8 +343,8 @@ extension UIView {
 
     /// 设置边框
     func setBorder(_ strokeColor: UIColor = Res.color.colorAccent,
-                   radii: Float = Res.size.roundNormal,
-                   lineWidth: Float = Res.size.line,
+                   radii: CGFloat = Res.size.roundNormal,
+                   lineWidth: CGFloat = Res.size.line,
                    fillColor: UIColor = UIColor.clear) {
         if bounds.isEmpty {
             doMain { [self] in
@@ -352,24 +352,23 @@ extension UIView {
             }
         } else {
             let roundPath = roundPath(bounds: bounds, widthRadii: radii, heightRadii: radii)
-            setBorder(strokeColor, radii: radii, lineWidth: lineWidth, fillColor: fillColor, path: roundPath.cgPath)
+            setBorder(strokeColor, lineWidth: lineWidth, fillColor: fillColor, path: roundPath.cgPath)
         }
     }
 
     func setBorder(_ strokeColor: UIColor = Res.color.colorAccent,
-                   radii: Float = Res.size.roundNormal,
-                   lineWidth: Float = Res.size.line,
+                   lineWidth: CGFloat = Res.size.line,
                    fillColor: UIColor = UIColor.clear,
                    path: CGPath) {
         if bounds.isEmpty {
             doMain { [self] in
-                setBorder(strokeColor, radii: radii, lineWidth: lineWidth, fillColor: fillColor, path: path)
+                setBorder(strokeColor, lineWidth: lineWidth, fillColor: fillColor, path: path)
             }
         } else {
             let borderLayer = CAShapeLayer()
             borderLayer.frame = bounds;
             borderLayer.path = path;
-            borderLayer.lineWidth = CGFloat(lineWidth);
+            borderLayer.lineWidth = lineWidth;
             borderLayer.fillColor = fillColor.cgColor;
             borderLayer.strokeColor = strokeColor.cgColor;
             //layer.mask = borderLayer
@@ -468,7 +467,7 @@ func lineView(_ color: UIColor = Res.color.line) -> UIView {
 }
 
 /// 横线, 宽度需要手动约束
-func hLine(height: Float = Res.size.line, color: UIColor = Res.color.line) -> UIView {
+func hLine(height: CGFloat = Res.size.line, color: UIColor = Res.color.line) -> UIView {
     let view = v()
     view.makeHeight(height)
     view.setBackground(color)
@@ -476,7 +475,7 @@ func hLine(height: Float = Res.size.line, color: UIColor = Res.color.line) -> UI
 }
 
 /// 竖线, 高度需要手动约束
-func vLine(width: Float = Res.size.line, color: UIColor = Res.color.line) -> UIView {
+func vLine(width: CGFloat = Res.size.line, color: UIColor = Res.color.line) -> UIView {
     let view = v()
     view.makeWidth()
     view.setBackground(color)

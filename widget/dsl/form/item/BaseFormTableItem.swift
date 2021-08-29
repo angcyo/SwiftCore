@@ -10,7 +10,7 @@ class BaseFormTableItem: DslTableItem, IFormItem {
 
     /// Label, 需要手动使用
     var itemLabel: String? = nil
-    var itemLabelMinWidth: Float? = nil
+    var itemLabelMinWidth: CGFloat? = nil
 
     /// 显示底部横线, 需要手动使用, nil 智能设置
     var itemShowLine: Bool? = nil

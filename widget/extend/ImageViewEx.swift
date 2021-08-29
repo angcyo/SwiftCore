@@ -110,7 +110,7 @@ func iconView(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
     icon(image, tintColor: tintColor)
 }
 
-func imageView(size: Float, radius: Float = Res.size.roundLittle) -> UIImageView {
+func imageView(size: CGFloat, radius: CGFloat = Res.size.roundLittle) -> UIImageView {
     let view = image()
     view.frame = rect(size, size)
     view.setRadius(radius)
@@ -122,7 +122,7 @@ func imageView(size: Float, radius: Float = Res.size.roundLittle) -> UIImageView
 ///   - size:  头像大小
 ///   - borderColor: 边框颜色
 /// - Returns:
-func avatarView(size: Float = Res.size.avatar,
+func avatarView(size: CGFloat = Res.size.avatar,
                 borderColor: UIColor = UIColor.white) -> UIImageView {
     let view = image()
     view.frame = rect(size, size)

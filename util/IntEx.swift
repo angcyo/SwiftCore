@@ -12,6 +12,21 @@ extension Number {
     func toString() -> String {
         "\(self)"
     }
+
+    /// 取负值
+    func reverse() -> Number {
+        if let amount = self as? Float {
+            return -(amount as! Float)
+        } else if let amount = self as? Double {
+            return -(amount as! Double)
+        } else if let amount = self as? CGFloat {
+            return -(amount as! CGFloat)
+        } else if let amount = self as? Int {
+            return -(amount as! Int)
+        } else {
+            return self
+        }
+    }
 }
 
 extension Int: Number {
