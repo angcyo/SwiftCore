@@ -16,13 +16,13 @@ class VerifyButton: UIButton {
 
     override init(frame: CGRect = .zero) {
         super.init(frame: frame)
-        L.i("init:frame:\(frame)")
+        //L.i("init:frame:\(frame)")
         initButton()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        L.i("init:coder:\(coder)")
+        //L.i("init:coder:\(coder)")
         initButton()
     }
 
@@ -50,12 +50,12 @@ class VerifyButton: UIButton {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        L.i("layoutSubviews:\(frame)")
+        //L.i("layoutSubviews:\(frame)")
     }
 
     override func layoutSublayers(of layer: CALayer) {
         super.layoutSublayers(of: layer)
-        L.i("layoutSublayers:\(frame)")
+        //L.i("layoutSublayers:\(frame)")
     }
 
     var _isStart = false
