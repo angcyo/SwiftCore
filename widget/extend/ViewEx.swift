@@ -426,6 +426,16 @@ extension UIView {
             }
         }
     }
+
+    func removeAllLayer() {
+        while !nilOrEmpty(layer.sublayers) {
+            if let sublayers = layer.sublayers {
+                if let layer = sublayers.get(0) {
+                    layer.removeFromSuperlayer()
+                }
+            }
+        }
+    }
 }
 
 /// 获取一个渐变 图层

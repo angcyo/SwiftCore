@@ -100,32 +100,58 @@ open class ProgressWebViewController: UIViewController {
     fileprivate var isReloadWhenAppear = false
     fileprivate var estimatedProgress = 0.0 {
         didSet {
+
             if currentNavigationController?.isNavigationBarHidden ?? true, activityIndicatorView.isDescendant(of: view) {
                 if estimatedProgress >= 1.0 {
-                    activityIndicatorView.stopAnimating()
+                    //activityIndicatorView.stopAnimating()//no
                 } else {
                     activityIndicatorView.startAnimating()
                 }
-            } else if let navigationItem = currentNavigationController?.navigationBar, progressView.isDescendant(of: navigationItem) {
+            }
+
+            if let navigationItem = currentNavigationController?.navigationBar, progressView.isDescendant(of: navigationItem) {
                 progressView.alpha = 1
                 progressView.setProgress(Float(estimatedProgress), animated: true)
 
                 if estimatedProgress >= 1.0 {
-                    UIView.animate(withDuration: 0.3, delay: 0.3, options: .curveEaseOut, animations: {
-                        self.progressView.alpha = 0
-                    }, completion: {
-                        finished in
-                        self.progressView.setProgress(0, animated: false)
-                    })
+                    //no
                 }
             }
+
+            //progressView.scale(y: 0.3)
+
+            //统一处理
+            if estimatedProgress >= 1.0 {
+                activityIndicatorView.stopAnimating()
+
+                UIView.animate(withDuration: 0.3, delay: 0.3, options: .curveEaseOut, animations: {
+                    self.progressView.alpha = 0
+                }, completion: {
+                    finished in
+                    self.progressView.setProgress(0, animated: false)
+                })
+            }
+
         }
     }
 
-    lazy fileprivate var progressView: UIProgressView = {
-        let progressView = UIProgressView(progressViewStyle: .default)
+    /* lazy fileprivate var progressView: UIProgressView = {
+         let progressView = UIProgressView(progressViewStyle: .default)
+         progressView.alpha = 1
+         progressView.trackTintColor = UIColor.clear //UIColor(white: 1, alpha: 0)
+         //progressView.addGradient()
+         return progressView
+     }()*/
+
+    lazy fileprivate var progressView: GradientProgressBar = {
+        //let progressView = UIProgressView(progressViewStyle: .default)
+        let progressView = GradientProgressBar()
         progressView.alpha = 1
-        progressView.trackTintColor = UIColor(white: 1, alpha: 0)
+        //progressView.trackTintColor = UIColor.clear //UIColor(white: 1, alpha: 0)
+        //progressView.addGradient()
+        progressView.gradientColors = [Res.color.colorPrimary, Res.color.colorPrimaryDark]
+        progressView.gradientLayer.cornerRadius = Res.size.roundLittle
+        progressView.backgroundColor = UIColor.clear
         return progressView
     }()
 
@@ -462,7 +488,13 @@ extension ProgressWebViewController {
         guard let navigationBar = currentNavigationController?.navigationBar, progressView.isDescendant(of: navigationBar) else {
             return
         }
-        progressView.frame = CGRect(x: 0, y: navigationBar.frame.size.height - progressView.frame.size.height, width: navigationBar.frame.size.width, height: progressView.frame.size.height)
+
+        let height: CGFloat = 2 //progressView.frame.height
+        progressView.frame = CGRect(x: 0, y: navigationBar.frame.size.height - height,
+                width: navigationBar.frame.size.width, height: height)
+        //progressView.removeAllLayer()
+        //progressView.addGradient()
+        //progressView.scale(y: 0.3)
     }
 
     func addBarButtonItems() {
@@ -569,17 +601,23 @@ extension ProgressWebViewController {
         }
 
         if let tintColor = tintColor {
-            progressView.progressTintColor = tintColor
+            //progressView.progressTintColor = tintColor
             currentNavigationController?.navigationBar.tintColor = tintColor
             currentNavigationController?.toolbar.tintColor = tintColor
         }
 
+        //菊花提示
         if currentNavigationController?.isNavigationBarHidden ?? true, !activityIndicatorView.isDescendant(of: view) {
             activityIndicatorView.center = view.center
-            view.addSubview(activityIndicatorView)
+            view.render(activityIndicatorView)
             activityIndicatorView.startAnimating()
-        } else if let navigationBar = currentNavigationController?.navigationBar, !progressView.isDescendant(of: navigationBar) {
-            navigationBar.addSubview(progressView)
+        }
+
+        //进度提示,都要
+        if let navigationBar = currentNavigationController?.navigationBar, !progressView.isDescendant(of: navigationBar) {
+            navigationBar.render(progressView)
+        } else {
+            view.render(progressView)
         }
     }
 

@@ -25,6 +25,11 @@ extension UIView {
     /// 添加一个view, 并且返回. 请先确保 view 的 frame有效.
     @discardableResult
     func render<T: UIView>(_ view: T, _ action: ((T) -> Void)? = nil) -> T {
+        if self == view {
+            action?(view)
+            return view
+        }
+
         if let superview = view.superview {
             if superview != self {
                 //parent改变了, 先从其他地方移除
