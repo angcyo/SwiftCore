@@ -96,17 +96,19 @@ class BaseNavigationController: UINavigationController,
     /// Swift 的ARC, 在创建对象之后, 没有被引用会立马被回收.
     /// https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html
     deinit {
-        print("\(threadName())->销毁:\(self)")
+        L.w("\(threadName())->销毁:\(self)")
     }
 
     //MARK: 导航代理
 
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        print("即将显示VC:\(viewController):\(animated)")
+        L.i("即将显示VC:\(viewController):\(animated)")
         if let navigation = viewController as? INavigation {
             //navigationController.navigationBar.isHidden = !navigation.showNavigationBar
             //navigationController.isNavigationBarHidden = !navigation.showNavigationBar
             navigationController.setNavigationBarHidden(!navigation.showNavigationBar, animated: animated)
+        } else {
+            navigationController.setNavigationBarHidden(false, animated: animated)
         }
 
         //viewController.navigationItem.standardAppearance?.shadowColor = UIColor.clear

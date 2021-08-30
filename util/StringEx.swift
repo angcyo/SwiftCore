@@ -32,6 +32,10 @@ extension String {
         NSAttributedString(string: self)
     }
 
+    func toURL() -> URL? {
+        URL(string: self)
+    }
+
     /// 如果为空时则返回[empty]
     func ifEmpty(_ empty: String) -> String {
         if self.isEmpty || self.lowercased() == "null" {
