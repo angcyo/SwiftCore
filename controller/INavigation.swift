@@ -10,6 +10,9 @@ protocol INavigation {
 
     /// 当前界面, 是否需要显示导航栏
     var showNavigationBar: Bool { get set }
+
+    /// 是否显示底部工具栏
+    var showToolbar: Bool { get set }
 }
 
 /// 快速创建导航item

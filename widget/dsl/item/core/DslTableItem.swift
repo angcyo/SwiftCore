@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 
 ///
-class DslTableItem: DslItem {
+open class DslTableItem: DslItem {
 
     //MARK: [DslTableView] 代理配置
     var itemIndentationLevel: Int = 0
@@ -52,6 +52,10 @@ class DslTableItem: DslItem {
     var onEditing: ((_ editing: Bool, _ animated: Bool) -> Void)? = nil
     var onHighlighted: ((_ highlighted: Bool, _ animated: Bool) -> Void)? = nil
     var onSelected: ((_ selected: Bool, _ animated: Bool) -> Void)? = nil
+
+    public required init() {
+        super.init()
+    }
 
     override func initItem() {
         super.initItem()

@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 
 /// 表单item基类
-class BaseFormTableItem: DslTableItem, IFormItem {
+open class BaseFormTableItem: DslTableItem, IFormItem {
 
     /// Label, 需要手动使用
     var itemLabel: String? = nil
@@ -40,6 +40,10 @@ class BaseFormTableItem: DslTableItem, IFormItem {
 
     /// 表单item的配置项
     var formItemConfig: FormItemConfig = FormItemConfig()
+
+    public required init() {
+        super.init()
+    }
 
     /// bind cell
     override func bindCellOverride(_ cell: DslCell, _ indexPath: IndexPath) {

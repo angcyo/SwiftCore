@@ -107,8 +107,10 @@ class BaseNavigationController: UINavigationController,
             //navigationController.navigationBar.isHidden = !navigation.showNavigationBar
             //navigationController.isNavigationBarHidden = !navigation.showNavigationBar
             navigationController.setNavigationBarHidden(!navigation.showNavigationBar, animated: animated)
+            navigationController.setToolbarHidden(!navigation.showToolbar, animated: animated)
         } else {
             navigationController.setNavigationBarHidden(false, animated: animated)
+            navigationController.setToolbarHidden(false, animated: animated)
         }
 
         //viewController.navigationItem.standardAppearance?.shadowColor = UIColor.clear

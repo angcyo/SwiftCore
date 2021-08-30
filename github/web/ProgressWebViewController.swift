@@ -86,8 +86,8 @@ open class ProgressWebViewController: UIViewController {
     open var tintColor: UIColor?
     open var websiteTitleInNavigationBar = true
     open var doneBarButtonItemPosition: NavigationBarPosition = .right
-    open var leftNavigaionBarItemTypes: [BarButtonItemType] = []
-    open var rightNavigaionBarItemTypes: [BarButtonItemType] = []
+    open var leftNavigationBarItemTypes: [BarButtonItemType] = []
+    open var rightNavigationBarItemTypes: [BarButtonItemType] = []
     open var toolbarItemTypes: [BarButtonItemType] = [.back, .forward, .reload, .activity]
 
     fileprivate var webView: WKWebView?
@@ -218,8 +218,8 @@ open class ProgressWebViewController: UIViewController {
         self.tintColor = progressWebViewController.tintColor
         self.websiteTitleInNavigationBar = progressWebViewController.websiteTitleInNavigationBar
         self.doneBarButtonItemPosition = progressWebViewController.doneBarButtonItemPosition
-        self.leftNavigaionBarItemTypes = progressWebViewController.leftNavigaionBarItemTypes
-        self.rightNavigaionBarItemTypes = progressWebViewController.rightNavigaionBarItemTypes
+        self.leftNavigationBarItemTypes = progressWebViewController.leftNavigationBarItemTypes
+        self.rightNavigationBarItemTypes = progressWebViewController.rightNavigationBarItemTypes
         self.toolbarItemTypes = progressWebViewController.toolbarItemTypes
         self.delegate = progressWebViewController.delegate
     }
@@ -511,19 +511,19 @@ extension ProgressWebViewController {
         if presentingViewController != nil {
             switch doneBarButtonItemPosition {
             case .left:
-                if !leftNavigaionBarItemTypes.contains(.done) {
-                    leftNavigaionBarItemTypes.insert(.done, at: 0)
+                if !leftNavigationBarItemTypes.contains(.done) {
+                    leftNavigationBarItemTypes.insert(.done, at: 0)
                 }
             case .right:
-                if !rightNavigaionBarItemTypes.contains(.done) {
-                    rightNavigaionBarItemTypes.insert(.done, at: 0)
+                if !rightNavigationBarItemTypes.contains(.done) {
+                    rightNavigationBarItemTypes.insert(.done, at: 0)
                 }
             case .none:
                 break
             }
         }
 
-        navigationItem.leftBarButtonItems = navigationItem.leftBarButtonItems ?? [] + leftNavigaionBarItemTypes.map {
+        navigationItem.leftBarButtonItems = navigationItem.leftBarButtonItems ?? [] + leftNavigationBarItemTypes.map {
             barButtonItemType in
             if let barButtonItem = barButtonItems[barButtonItemType] {
                 return barButtonItem
@@ -531,7 +531,7 @@ extension ProgressWebViewController {
             return UIBarButtonItem()
         }
 
-        navigationItem.rightBarButtonItems = navigationItem.rightBarButtonItems ?? [] + rightNavigaionBarItemTypes.map {
+        navigationItem.rightBarButtonItems = navigationItem.rightBarButtonItems ?? [] + rightNavigationBarItemTypes.map {
             barButtonItemType in
             if let barButtonItem = barButtonItems[barButtonItemType] {
                 return barButtonItem

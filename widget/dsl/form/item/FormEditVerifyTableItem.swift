@@ -31,7 +31,7 @@ class FormEditVerifyTableItem: FormEditTableItem {
         }
     }
 
-    //MARK: 代理方法
+    /*//MARK: 代理方法
 
     override func textFieldDidChangeSelection(_ textField: UITextField) {
         super.textFieldDidChangeSelection(textField)
@@ -43,7 +43,7 @@ class FormEditVerifyTableItem: FormEditTableItem {
 
     override func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         super.textField(textField, shouldChangeCharactersIn: range, replacementString: string)
-    }
+    }*/
 }
 
 class FormEditVerifyTableCell: FormEditTableCell {

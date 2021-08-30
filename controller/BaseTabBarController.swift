@@ -17,7 +17,10 @@ class BaseTabBarController: UITabBarController, INavigation {
         super.init(coder: coder)
     }
 
+    //MARK: INavigation
+
     var showNavigationBar: Bool = false
+    var showToolbar: Bool = false
 
     func initController() {
         //init

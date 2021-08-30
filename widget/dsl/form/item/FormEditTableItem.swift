@@ -7,11 +7,15 @@ import UIKit
 import TangramKit
 
 /// 简单的编辑item
-class FormEditTableItem: BaseFormTableItem, IEditItem {
+open class FormEditTableItem: BaseFormTableItem, IEditItem {
 
     var editItemConfig: EditItemConfig = EditItemConfig()
 
     var itemRightTitle: String? = nil
+
+    public required init() {
+        super.init()
+    }
 
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
@@ -29,19 +33,19 @@ class FormEditTableItem: BaseFormTableItem, IEditItem {
     //MARK: 代理方法, 需要覆盖重写才会生效. 还需要重新设置delegate = self
 
     /// 文本内容改变后,保存值
-    func textFieldDidChangeSelection(_ textField: UITextField) {
+    open func textFieldDidChangeSelection(_ textField: UITextField) {
         editItemConfig.itemEditText = textField.text
         updateFormItemValue(textField.text)
     }
 
     /// 收起键盘
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    open func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
 
     /// 限制最大输入字符数
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    open func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         guard let text = textField.text else {
             return true
         }

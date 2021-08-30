@@ -7,7 +7,7 @@ import UIKit
 import RxSwift
 
 /// 数据和界面关联的item
-class DslItem: NSObject, IDslItem {
+open class DslItem: NSObject, IDslItem {
 
     /// cell 界面, 必须
     /// 如果是在DslTableView中, 则必须是UITableViewCell的子类
@@ -80,7 +80,7 @@ class DslItem: NSObject, IDslItem {
         }
     }
 
-    required override init() {
+    public required override init() {
         super.init()
         initItem()
     }

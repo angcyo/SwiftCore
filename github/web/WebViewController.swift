@@ -6,10 +6,17 @@ import Foundation
 
 /// https://github.com/kf99916/ProgressWebViewController
 
-class WebViewController: ProgressWebViewController {
+class WebViewController: ProgressWebViewController, INavigation {
+
+    //MARK: INavigation
+
+    var showNavigationBar: Bool = true
+    var showToolbar: Bool = true
 
     override open func loadView() {
         super.loadView()
+
+        showToolbar = true
 
         tintColor = Res.color.colorPrimary //着色
         pullToRefresh = true //激活下拉刷新
