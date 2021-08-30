@@ -44,13 +44,19 @@ extension UILabel {
 
 extension Style {
 
-    // 填充提示
+    /// 填充提示
     func fillTip(_ textColor: UIColor, fillColor: UIColor? = nil) {
         backColor = fillColor ?? textColor.alpha(0.3)
         color = textColor
 
         //lineSpacing //行间距
         //kerning = .adobe(<#T##CGFloat##CoreGraphics.CGFloat#>) //字间距
+    }
+
+    /// https://github.com/malcommac/SwiftRichString
+    /// NSAttributedString.Key.link
+    func link(_ url: URL) {
+        linkURL = url
     }
 }
 

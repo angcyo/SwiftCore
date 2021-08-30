@@ -5,6 +5,9 @@
 import Foundation
 import Toast_Swift
 
+///# https://github.com/scalessec/Toast-Swift
+///pod 'Toast-Swift', '~> 5.0.1'
+
 /// 快速显示一个toast
 func toast(_ message: String?,
            duration: TimeInterval = ToastManager.shared.duration,

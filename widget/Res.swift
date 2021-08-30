@@ -12,14 +12,14 @@ struct Res {
     // MARK: - 文本资源
 
     struct text {
-        static var normal = (size: 17.0, color: UIColor.parse("#222222"))
-        static var title = (size: 20.0, color: UIColor.parse("#222222"))
-        static var big = (size: 24.0, color: UIColor.parse("#000000"))
-        static var subTitle = (size: 16.0, color: UIColor.parse("#161D26"))
-        static var des = (size: 13.0, color: UIColor.parse("#53575F"))
-        static var label = (size: 15.0, color: UIColor.parse("#ACB0B7"))
-        static var tip = (size: 12.0, color: UIColor.parse("#ACB0B7"))
-        static var body = (size: 14.0, color: UIColor.parse("#161D26"))
+        static var normal: (size: CGFloat, color: UIColor) = (size: 17.0, color: UIColor.parse("#222222"))
+        static var title: (size: CGFloat, color: UIColor) = (size: 20.0, color: UIColor.parse("#222222"))
+        static var big: (size: CGFloat, color: UIColor) = (size: 24.0, color: UIColor.parse("#000000"))
+        static var subTitle: (size: CGFloat, color: UIColor) = (size: 16.0, color: UIColor.parse("#161D26"))
+        static var des: (size: CGFloat, color: UIColor) = (size: 13.0, color: UIColor.parse("#53575F"))
+        static var label: (size: CGFloat, color: UIColor) = (size: 15.0, color: UIColor.parse("#ACB0B7"))
+        static var tip: (size: CGFloat, color: UIColor) = (size: 12.0, color: UIColor.parse("#ACB0B7"))
+        static var body: (size: CGFloat, color: UIColor) = (size: 14.0, color: UIColor.parse("#161D26"))
     }
 
     // MARK: - 颜色资源
@@ -107,7 +107,7 @@ struct Res {
 
     struct font {
 
-        static func get(_ size: CGFloat = text.normal.size.toCGFloat(), _ weight: CGFloat = UIFont.Weight.regular.rawValue) -> UIFont {
+        static func get(_ size: CGFloat = text.normal.size, _ weight: CGFloat = UIFont.Weight.regular.rawValue) -> UIFont {
             UIFont.systemFont(ofSize: size, weight: UIFont.Weight(weight))
         }
 

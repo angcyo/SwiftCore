@@ -24,7 +24,7 @@ protocol IDslCellConfig {
     /// 初始化 [UITableCell]或者[UICollectionCell]
     func initCellConfig(_ cell: UIView)
 
-    /// 获取跟视图
+    /// 获取跟视图, 此视图会被renderToCell
     func getRootView() -> UIView
 }
 

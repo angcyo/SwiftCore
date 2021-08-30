@@ -5,6 +5,7 @@
 import Foundation
 import DefaultsKit
 
+/// https://github.com/nmdias/DefaultsKit
 /// https://github.com/nmdias/DefaultsKit/blob/master/README.zh-CN.md
 
 extension Key {

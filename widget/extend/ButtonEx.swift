@@ -16,6 +16,18 @@ extension UIButton {
         }
     }
 
+    func setAttributedText(_ title: NSAttributedString?, all: Bool = true) {
+        setAttributedTitle(title, for: .normal)
+        if all {
+            setAttributedTitle(title, for: .selected)
+            setAttributedTitle(title, for: .highlighted)
+        }
+    }
+
+    func setTextSize(_ size: CGFloat) {
+        titleLabel?.setTextSize(size)
+    }
+
     func setTextColor(_ color: UIColor?, all: Bool = true) {
         setTitleColor(color, for: .normal)
         if all {
@@ -55,7 +67,7 @@ func button(_ title: String? = nil,
             titleColor: UIColor = Res.color.white,
             bgColor: UIColor = Res.color.colorAccent,
             radius: CGFloat = Res.size.roundNormal,
-            titleSize: Double = Res.text.normal.size,
+            titleSize: CGFloat = Res.text.normal.size,
             insets: UIEdgeInsets? = nil) -> UIButton {
     let view = UIButton()
     view.setTitle(title, for: .normal)
@@ -87,7 +99,7 @@ func solidButton(_ title: String? = nil,
                  fillColor: UIColor = Res.color.colorAccent,
                  radius: CGFloat = Res.size.roundNormal,
                  titleColor: UIColor = Res.color.white,
-                 titleSize: Double = Res.text.des.size,
+                 titleSize: CGFloat = Res.text.des.size,
                  insets: UIEdgeInsets? = nil) -> UIButton {
     let view = button(title, titleColor: titleColor, bgColor: fillColor,
             radius: radius, titleSize: titleSize, insets: insets)
@@ -101,7 +113,7 @@ func borderButton(_ title: String? = nil,
                   bgColor: UIColor = Res.color.white,
                   borderColor: UIColor? = nil,
                   borderWidth: CGFloat = Res.size.line,
-                  titleSize: Double = Res.text.des.size,
+                  titleSize: CGFloat = Res.text.des.size,
                   insets: UIEdgeInsets? = nil) -> UIButton {
     let view = button(title, titleColor: titleColor,
             bgColor: bgColor, radius: radius,
@@ -114,7 +126,7 @@ func borderButton(_ title: String? = nil,
 /// 偏平的文本按钮
 func labelButton(_ title: String? = nil,
                  titleColor: UIColor = Res.text.label.color,
-                 titleSize: Double = Res.text.label.size,
+                 titleSize: CGFloat = Res.text.label.size,
                  _ onClick: ((UIResponder) -> Void)? = nil) -> UIButton {
     let view = UIButton(type: .custom)
     view.backgroundColor = UIColor.clear
@@ -138,7 +150,7 @@ func labelButton(_ title: String? = nil,
 /// 勾选框 [onCheck] 返回是否可以选中/取消选中
 func checkButton(_ title: String? = nil,
                  titleColor: UIColor = Res.text.label.color,
-                 titleSize: Double = Res.text.label.size,
+                 titleSize: CGFloat = Res.text.label.size,
                  _ onCheck: ((Bool) -> Bool)? = nil) -> UIButton {
     let view = UIButton(type: .custom)
     view.backgroundColor = UIColor.clear

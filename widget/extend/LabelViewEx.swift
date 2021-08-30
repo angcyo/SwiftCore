@@ -40,6 +40,15 @@ extension UILabel {
         setBold(bold)
     }
 
+    /// 设置文本
+    func setText(_ text: String?) {
+        self.text = text
+    }
+
+    func setAttributedText(_ text: NSAttributedString?) {
+        attributedText = text
+    }
+
     /// 设置字体大小
     func setTextSize(_ size: Double) {
         font = font.withSize(size.toCGFloat())
@@ -49,6 +58,10 @@ extension UILabel {
         font = font.withSize(size.toCGFloat())
     }
 
+    func setTextSize(_ size: CGFloat) {
+        font = font.withSize(size)
+    }
+
     /// 设置文本颜色, 支持UIColor 支持hex颜色
     func setTextColor(_ color: Any?) {
         textColor = toColor(color)
@@ -56,7 +69,7 @@ extension UILabel {
 }
 
 func labelView(_ text: String? = nil,
-               size: Double = Res.text.label.size,
+               size: CGFloat = Res.text.label.size,
                color: UIColor = Res.text.label.color) -> UILabel {
     let view = UILabel()
     view.text = text
@@ -71,14 +84,14 @@ func labelView(_ text: String? = nil,
 }
 
 func titleView(_ text: String? = nil,
-               size: Double = Res.text.title.size,
+               size: CGFloat = Res.text.title.size,
                color: UIColor = Res.text.title.color) -> UILabel {
     let view = labelView(text, size: size, color: color)
     return view
 }
 
 func subTitleView(_ text: String? = nil,
-                  size: Double = Res.text.subTitle.size,
+                  size: CGFloat = Res.text.subTitle.size,
                   color: UIColor = Res.text.subTitle.color) -> UILabel {
     let view = labelView(text, size: size, color: color)
     return view
@@ -94,7 +107,7 @@ func desLabel(_ text: String? = nil) -> UILabel {
 }
 
 func desView(_ text: String? = nil,
-             size: Double = Res.text.des.size,
+             size: CGFloat = Res.text.des.size,
              color: UIColor = Res.text.des.color) -> UILabel {
     let view = labelView(text, size: size, color: color)
     return view
