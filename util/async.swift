@@ -36,3 +36,54 @@ func syncWith(_ async: @escaping (DispatchSemaphore) -> Void) {
     semaphore.wait()
     //semaphore.signal() //请记得调用
 }
+
+/// GCD定时器倒计时
+///
+/// - Parameters:
+///   - timeInterval: 间隔时间, 秒
+///   - repeatCount: 重复次数
+///   - handler: 循环事件,闭包参数: 1.timer 2.剩余执行次数
+@discardableResult
+func dispatchTimer(timeInterval: Double, repeatCount: Int, handler: @escaping (DispatchSourceTimer?, Int) -> Void) -> DispatchSourceTimer? {
+    if repeatCount <= 0 {
+        return nil
+    }
+    let timer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
+    var count = repeatCount
+    timer.schedule(deadline: .now(), repeating: timeInterval)
+    timer.setEventHandler {
+        count -= 1
+        DispatchQueue.main.async {
+            handler(timer, count)
+        }
+        if count == 0 {
+            timer.cancel()
+        }
+    }
+    timer.resume()
+    return timer
+}
+
+/// GCD实现定时器
+///
+/// - Parameters:
+///   - timeInterval: 间隔时间
+///   - handler: 事件
+///   - needRepeat: 是否重复
+func dispatchTimer(timeInterval: Double, handler: @escaping (DispatchSourceTimer?) -> Void, needRepeat: Bool) {
+
+    let timer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
+    timer.schedule(deadline: .now(), repeating: timeInterval)
+    timer.setEventHandler {
+        DispatchQueue.main.async {
+            if needRepeat {
+                handler(timer)
+            } else {
+                timer.cancel()
+                handler(nil)
+            }
+        }
+    }
+    timer.resume()
+
+}

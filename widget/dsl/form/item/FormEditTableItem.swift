@@ -26,6 +26,8 @@ class FormEditTableItem: BaseFormTableItem, IEditItem {
         cell.cellConfig.rightTitle.text = itemRightTitle
     }
 
+    //MARK: 代理方法, 需要覆盖重写才会生效. 还需要重新设置delegate = self
+
     /// 文本内容改变后,保存值
     func textFieldDidChangeSelection(_ textField: UITextField) {
         editItemConfig.itemEditText = textField.text
@@ -50,7 +52,7 @@ class FormEditTableItem: BaseFormTableItem, IEditItem {
 
 class FormEditTableCell: DslTableCell {
 
-    let cellConfig: FormEditCellConfig = FormEditCellConfig()
+    fileprivate let cellConfig: FormEditCellConfig = FormEditCellConfig()
 
     override func getCellConfig() -> IDslCellConfig? {
         cellConfig

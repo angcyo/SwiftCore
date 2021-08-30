@@ -33,6 +33,10 @@ struct Res {
         /// 控制器的默认背景颜色
         static var controllerBackgroundColor = UIColor.white
 
+        /// 禁用的颜色
+        static var disable = UIColor.parse("#ACB0B7")
+        static var clear = UIColor.clear
+
         static var white = UIColor.white
         static var black = UIColor.black
         static var line = UIColor.parse("#ECECEC")
@@ -67,6 +71,7 @@ struct Res {
         static var roundCommon: CGFloat = 15
         static var roundMax: CGFloat = 45
 
+        static var m: CGFloat = 5
         static var x: CGFloat = 10
         static var xx: CGFloat = 20
         static var xxx: CGFloat = 30
@@ -95,6 +100,7 @@ struct Res {
         static var itemMinLabelWidth: CGFloat = 65 //dsl item label最小的宽度
 
         static var passwordMaxLength: Int = 20 //密码最大的长度
+        static var codeMaxLength: Int = 6 //短信验证码最大的长度
     }
 
     // MARK: - 字体资源

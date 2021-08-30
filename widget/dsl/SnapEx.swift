@@ -14,7 +14,7 @@ enum ConstraintTarget: ConstraintRelatableTarget {
 
 extension ConstraintOffsetTarget {
     /// 取负值
-    func reverse() -> CGFloat {
+    func reverse() -> ConstraintOffsetTarget {
         let offset: CGFloat
         if let amount = self as? Float {
             offset = -CGFloat(amount)
@@ -27,7 +27,7 @@ extension ConstraintOffsetTarget {
         } else if let amount = self as? UInt {
             offset = -CGFloat(amount)
         } else {
-            offset = 0.0
+            return self
         }
         return offset
     }
@@ -269,22 +269,14 @@ extension UIView {
     /// 注意offset可能需要是负值
     func makeGravityRight(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
         make { maker in
-            if let num = offset as? Float {
-                maker.right.equalTo(parent ?? superview!).offset(-num)
-            } else {
-                maker.right.equalTo(parent ?? superview!).offset(offset)
-            }
+            maker.right.equalTo(parent ?? superview!).offset(offset.reverse())
         }
     }
 
     /// 注意offset可能需要是负值
     func makeGravityBottom(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
         make { maker in
-            if let num = offset as? Float {
-                maker.bottom.equalTo(parent ?? superview!).offset(-num)
-            } else {
-                maker.bottom.equalTo(parent ?? superview!).offset(offset)
-            }
+            maker.bottom.equalTo(parent ?? superview!).offset(offset.reverse())
         }
     }
 
@@ -309,12 +301,7 @@ extension UIView {
                             offset: ConstraintOffsetTarget = 0) {
         make { maker in
             let parent = toConstraintTargetView(parent)
-
-            if let num = offset as? Float {
-                maker.right.equalTo(parent.snp.right).offset(-num)
-            } else {
-                maker.right.equalTo(parent.snp.right).offset(offset)
-            }
+            maker.right.equalTo(parent.snp.right).offset(offset.reverse())
         }
     }
 
@@ -348,12 +335,7 @@ extension UIView {
                               offset: ConstraintOffsetTarget = 0) {
         make { maker in
             let parent = toConstraintTargetView(parent)
-
-            if let num = offset as? Float {
-                maker.bottom.equalTo(parent.snp.bottom).offset(-num)
-            } else {
-                maker.bottom.equalTo(parent.snp.bottom).offset(offset)
-            }
+            maker.bottom.equalTo(parent.snp.bottom).offset(offset.reverse())
         }
     }
 

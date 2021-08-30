@@ -45,6 +45,6 @@ func error(_ message: String) -> MessageError {
     MessageError(message: message)
 }
 
-func messageError(_ message: String) -> MessageError {
+func apiError(_ message: String) -> MessageError {
     MessageError(message: message)
 }

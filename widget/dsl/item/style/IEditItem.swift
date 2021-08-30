@@ -60,12 +60,11 @@ extension IEditItem {
     /// 初始化
     func initEditItem(_ textField: UITextField) {
         textField.delegate = self
+        textField.isSecureTextEntry = editItemConfig.itemSecureTextEntry
+        textField.placeholder = editItemConfig.itemEditPlaceholder
         textField.text = editItemConfig.itemEditText
         textField.isEnabled = editItemConfig.itemEditEnable
-        //textField.setEdit = editItemConfig.itemEditEnable
-        textField.placeholder = editItemConfig.itemEditPlaceholder
         textField.keyboardType = editItemConfig.itemEditKeyboardType
-        textField.isSecureTextEntry = editItemConfig.itemSecureTextEntry
     }
 
 }

@@ -197,8 +197,15 @@ extension DslItem {
     /// 绑定点击, 长按事件回调
     @objc func bindItemGesture(_ view: UIView) {
         gestureDisposeBag = DisposeBag() //重置手势监听
-        bindItemClick(view)
-        bindItemLongClick(view)
+        view.clearGestureRecognizers() //移除所有手势识别器, 防止被复用
+
+        if onItemClick != nil {
+            bindItemClick(view)
+        }
+
+        if onItemLongClick != nil {
+            bindItemLongClick(view)
+        }
     }
 
     func bindItemClick(_ view: UIView) {

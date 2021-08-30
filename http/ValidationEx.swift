@@ -9,7 +9,7 @@ import RxSwift
 fileprivate func _validateAuth(request: URLRequest?, response: HTTPURLResponse, data: Data?) -> Request.ValidationResult {
     if response.statusCode == 401 {
         /// 授权失败
-        return .failure(messageError("服务器授权失败"))
+        return .failure(apiError("服务器授权失败"))
     } else {
         return .success(())
     }

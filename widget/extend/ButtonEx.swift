@@ -33,8 +33,16 @@ extension UIButton {
         titleLabel?.setBold(bold)
     }
 
-    func setPadding(padding: CGFloat = 0) {
+    func setPadding(_ padding: CGFloat = 0) {
         setPadding(left: padding, top: padding, right: padding, bottom: padding)
+    }
+
+    func setPaddingHorizontal(_ padding: CGFloat) {
+        setPadding(left: padding, top: contentEdgeInsets.top, right: padding, bottom: contentEdgeInsets.bottom)
+    }
+
+    func setPaddingVertical(_ padding: CGFloat) {
+        setPadding(left: contentEdgeInsets.left, top: padding, right: contentEdgeInsets.right, bottom: padding)
     }
 
     func setPadding(left: CGFloat = 0, top: CGFloat = 0, right: CGFloat = 0, bottom: CGFloat = 0) {

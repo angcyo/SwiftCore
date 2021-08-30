@@ -161,7 +161,7 @@ extension DataRequest {
                         //成功
                     } else {
                         let msg = data.msg ?? "接口异常"
-                        onResult(nil, messageError(msg))
+                        onResult(nil, apiError(msg))
                         defHandle = false
                     }
                 }
@@ -239,7 +239,7 @@ extension DataRequest {
                         //成功
                     } else {
                         let msg = json[Http.KEY_MSG].string ?? "接口异常"
-                        onResult(nil, messageError(msg))
+                        onResult(nil, apiError(msg))
                         defHandle = false
                     }
                 }
@@ -319,7 +319,7 @@ extension Api {
                             onResult(data, nil)
                         } else {
                             let msg = json[Http.KEY_MSG].string ?? "接口异常"
-                            onResult(nil, messageError(msg))
+                            onResult(nil, apiError(msg))
                         }
                     } else {
                         onResult(data, nil)
@@ -378,7 +378,7 @@ extension Api {
                             onResult(data, nil)
                         } else {
                             let msg = bean.msg ?? "接口异常"
-                            onResult(nil, messageError(msg))
+                            onResult(nil, apiError(msg))
                         }
                     } else {
                         onResult(data, nil)

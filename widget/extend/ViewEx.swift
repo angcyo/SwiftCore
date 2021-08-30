@@ -407,9 +407,23 @@ extension UIView {
 //MARK: - 控件布局扩展
 
 extension UIView {
+
+    /// 移除所有view
     func removeAllView() {
         for view in subviews {
             view.removeFromSuperview()
+        }
+    }
+
+    /// 清除所有的手势识别器
+    func clearGestureRecognizers() {
+        while !nilOrEmpty(gestureRecognizers) {
+            if let gestureRecognizers = gestureRecognizers {
+                if let gesture = gestureRecognizers.get(0) {
+                    gesture.isEnabled = false
+                    removeGestureRecognizer(gesture)
+                }
+            }
         }
     }
 }

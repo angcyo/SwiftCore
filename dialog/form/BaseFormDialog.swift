@@ -36,7 +36,7 @@ class BaseFormDialog: UIView {
     func initDialog() {
         titleLayout.render(cancel) {
             $0.wWmH()
-            $0.setPadding(padding: 10)
+            $0.setPadding(10)
         }
 
         title.textAlignment = .center
@@ -50,7 +50,7 @@ class BaseFormDialog: UIView {
         confirm.setTitleColor(Res.color.colorAccent, for: .highlighted)
         titleLayout.render(confirm) {
             $0.wWmH()
-            $0.setPadding(padding: 10)
+            $0.setPadding(10)
         }
 
         cancel.onClick { _ in

@@ -40,7 +40,7 @@ extension DslRecycleView {
 
     //MARK: - 单独获取数据, 不检查
 
-    /// 获取表单数据
+    /// 获取表单数据, 不检查数据合规性
     func obtainData(_ params: FormParams, end: (Error?) -> Void) {
         let itemList = getItemList(params.userVisibleItem)
         _obtainData(params, itemList: itemList, index: 0, end: end)
@@ -72,41 +72,87 @@ extension DslRecycleView {
 
     //MARK: - 检查数据的同时, 获取数据
 
+    /// 检查和获取指定item的数据
+    func checkAndObtainData(_ params: FormParams, itemTags: [String], end: (IndexPath?, Error?) -> Void) {
+        let itemList = getItemList(params.userVisibleItem)
+        if itemTags.isEmpty {
+            _checkAndObtainData(params, itemList: itemList, index: 0, end: end)
+        } else {
+            var appointItemList: [DslItem] = []
+            itemList.forEach {
+                if let itemTag = $0.itemTag, itemTags.contains(itemTag) {
+                    appointItemList.append($0)
+                }
+            }
+            _checkAndObtainData(params, itemList: itemList, index: 0, appointItemList: appointItemList, end: end)
+        }
+    }
+
     func checkAndObtainData(_ params: FormParams, end: (IndexPath?, Error?) -> Void) {
         let itemList = getItemList(params.userVisibleItem)
         _checkAndObtainData(params, itemList: itemList, index: 0, end: end)
     }
 
-    func _checkAndObtainData(_ params: FormParams, itemList: [DslItem], index: Int, end: (IndexPath?, Error?) -> Void) {
+    ///
+    /// - Parameters:
+    ///   - params: 参数配置, 数据存储
+    ///   - itemList: 在此列表中获取数据
+    ///   - index: 当前获取的索引
+    ///   - appointItemList: 需要指定获取的item, 如果不指定, 则获取所有item
+    ///   - end: 结束的回调
+    func _checkAndObtainData(_ params: FormParams, itemList: [DslItem], index: Int, appointItemList: [DslItem]? = nil, end: (IndexPath?, Error?) -> Void) {
         let count = itemList.count
         if index >= count {
             end(nil, nil)
         } else {
-            let item = itemList.get(index)
-            if let formItem = item as? IFormItem {
-                params.formItem = formItem
-                print(threadName(), "->开始检查表单数据:", formItem)
-                formItem.formItemConfig.formCheck(params) { error in
-                    params.formItem = nil
-                    if let error = error {
-                        end(item?.itemIndex, error)
+
+            var next = true
+
+            if let item = itemList.get(index) {
+                // 有指定的item
+
+                var obtain = false
+                if let appointItemList = appointItemList {
+                    if appointItemList.contains(item) {
+                        //包含目标item, 则获取
+                        obtain = true
                     } else {
-                        //检查无错误, 则获取数据
+                        obtain = false
+                    }
+                } else {
+                    obtain = true
+                }
+
+                if obtain {
+                    if let formItem = item as? IFormItem {
+                        next = false
                         params.formItem = formItem
-                        print(threadName(), "->开始获取表单数据:", formItem)
-                        formItem.formItemConfig.formObtain(params) { error in
+                        print(threadName(), "->开始检查表单数据:", formItem)
+                        formItem.formItemConfig.formCheck(params) { error in
                             params.formItem = nil
                             if let error = error {
-                                end(item?.itemIndex, error)
+                                end(item.itemIndex, error)
                             } else {
-                                // 获取数据之后
-                                _checkAndObtainData(params, itemList: itemList, index: index + 1, end: end)
+                                //检查无错误, 则获取数据
+                                params.formItem = formItem
+                                print(threadName(), "->开始获取表单数据:", formItem)
+                                formItem.formItemConfig.formObtain(params) { error in
+                                    params.formItem = nil
+                                    if let error = error {
+                                        end(item.itemIndex, error)
+                                    } else {
+                                        // 获取数据之后
+                                        _checkAndObtainData(params, itemList: itemList, index: index + 1, appointItemList: appointItemList, end: end)
+                                    }
+                                }
                             }
                         }
                     }
                 }
-            } else {
-                _checkAndObtainData(params, itemList: itemList, index: index + 1, end: end)
+            }
+
+            if next {
+                _checkAndObtainData(params, itemList: itemList, index: index + 1, appointItemList: appointItemList, end: end)
             }
         }
     }
@@ -118,7 +164,7 @@ class FormHelper {
 
     var _animLayer: CALayer? = nil
 
-    /// 数据获取
+    /// 数据获取, 并检查合规. 一条一条检查, 并获取
     func checkAndObtain(_ tableView: DslTableView, _ params: FormParams? = nil, _ end: (FormParams, Error?) -> Void) {
         let p = params ?? FormParams()
         tableView.checkAndObtainData(p) { path, error in
@@ -137,6 +183,39 @@ class FormHelper {
             } else {
                 end(p, nil)
             }
+        }
+    }
+
+    /// 仅获取和检查指定的items
+    func checkAndObtain(_ tableView: DslTableView, _ params: FormParams? = nil, itemTags: [String], end: (FormParams, Error?) -> Void) {
+        let p = params ?? FormParams()
+        tableView.checkAndObtainData(p, itemTags: itemTags) { path, error in
+            if let error = error {
+                debugPrint(error.message)
+                // 不通过
+                if let path = path {
+                    // 有路径
+                    tableView.scrollToRow(at: path, at: .top, animated: true)
+                    tipCellError(tableView: tableView, at: path)
+                } else {
+                    //无路径
+                    toast(error.message, position: .top)
+                }
+                end(p, error)
+            } else {
+                end(p, nil)
+            }
+        }
+    }
+
+    /// 仅获取数据, 不检查数据合规, 不错误提示
+    func obtain(_ tableView: DslTableView, _ params: FormParams? = nil, _ end: (FormParams, Error?) -> Void) {
+        let p = params ?? FormParams()
+        tableView.obtainData(p) { error in
+            if let error = error {
+                debugPrint(error.message)
+            }
+            end(p, error)
         }
     }
 
