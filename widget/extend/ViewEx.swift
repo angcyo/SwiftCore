@@ -166,6 +166,11 @@ extension UIView {
         tag = name.hashValue
     }
 
+    /// 设置可见性
+    func setVisible(_ visible: Bool = true) {
+        isHidden = !visible
+    }
+
     /// 设置背景图片
     func setBgImage(_ image: UIImage?) {
         //        if image == nil {
@@ -365,6 +370,7 @@ extension UIView {
                 setBorder(strokeColor, lineWidth: lineWidth, fillColor: fillColor, path: path)
             }
         } else {
+            removeLayer(CAShapeLayer.self)
             let borderLayer = CAShapeLayer()
             borderLayer.frame = bounds;
             borderLayer.path = path;
@@ -402,11 +408,30 @@ extension UIView {
         }
         return nil
     }
+
+    /// 等到视图bound准备完成
+    func waitBounds(_ action: @escaping () -> Void) {
+        if bounds.isEmpty {
+            doMain {
+                self.waitBounds(action)
+            }
+        } else {
+            action()
+        }
+    }
 }
 
 //MARK: - 控件布局扩展
 
 extension UIView {
+
+    func removeView(_ viewClass: AnyClass) {
+        for view in subviews.reversed() {
+            if view.isEqualClassName(viewClass) {
+                view.removeFromSuperview()
+            }
+        }
+    }
 
     /// 移除所有view
     func removeAllView() {
@@ -427,6 +452,12 @@ extension UIView {
         }
     }
 
+    func removeLayer(_ layerClass: AnyClass) {
+        layer.sublayers?.removeAll {
+            $0.isEqualClassName(layerClass)
+        }
+    }
+
     func removeAllLayer() {
         while !nilOrEmpty(layer.sublayers) {
             if let sublayers = layer.sublayers {
@@ -436,6 +467,7 @@ extension UIView {
             }
         }
     }
+
 }
 
 /// 获取一个渐变 图层

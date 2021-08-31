@@ -60,6 +60,15 @@ extension NSObject {
         }
     }
 
+    /// 判断对象是否是指定的类
+    func isEqualClassName(_ cls: AnyClass) -> Bool {
+        let type = type(of: self)
+        if type.description() == cls.description() {
+            return true
+        }
+        return false
+    }
+
     // MARK: 对象扩展
 
     /// 设置对象数据

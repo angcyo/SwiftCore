@@ -266,14 +266,14 @@ extension UIView {
         }
     }
 
-    /// 注意offset可能需要是负值
+    /// 注意offset可能需要是负值, 已自动取负值
     func makeGravityRight(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
         make { maker in
             maker.right.equalTo(parent ?? superview!).offset(offset.reverse())
         }
     }
 
-    /// 注意offset可能需要是负值
+    /// 注意offset可能需要是负值, 已自动取负值
     func makeGravityBottom(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
         make { maker in
             maker.bottom.equalTo(parent ?? superview!).offset(offset.reverse())
@@ -339,11 +339,12 @@ extension UIView {
         }
     }
 
+    /// 已自动取负值
     func makeBottomToTopOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.LAST,
                            offset: ConstraintOffsetTarget = 0) {
         make { maker in
             let parent = toConstraintTargetView(parent)
-            maker.bottom.equalTo(parent.snp.top).offset(offset)
+            maker.bottom.equalTo(parent.snp.top).offset(offset.reverse())
         }
     }
 }

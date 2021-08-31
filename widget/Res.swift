@@ -66,12 +66,12 @@ struct Res {
         static var line: CGFloat = 1
 
         static var roundLittle: CGFloat = 2
-        static var roundMin: CGFloat = 5
+        static var roundMin: CGFloat = 6
         static var roundNormal: CGFloat = 10
-        static var roundCommon: CGFloat = 15
-        static var roundMax: CGFloat = 45
+        static var roundCommon: CGFloat = 16
+        static var roundMax: CGFloat = 46
 
-        static var m: CGFloat = 5
+        static var m: CGFloat = 6
         static var x: CGFloat = 10
         static var xx: CGFloat = 20
         static var xxx: CGFloat = 30
