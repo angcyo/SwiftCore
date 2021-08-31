@@ -39,7 +39,7 @@ class WebViewController: ProgressWebViewController, INavigation {
 
         //webView?.scrollView.contentInsetAdjustmentBehavior = .never //
 
-        bridge = WKWebViewJavascriptBridge(webView: webView)
+        bridge = WKWebViewJavascriptBridge(webView: webView!)
         initBridge()
     }
 
