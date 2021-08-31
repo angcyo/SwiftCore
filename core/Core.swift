@@ -31,14 +31,17 @@ class Core {
         SwiftyBeaverEx.initSwiftyBeaver()
     }
 
+    /// 空字符时的占位字符
     static var DEF_NIL_STRING = "--"
 
 }
 
+///单例保持对象, 防止ARC
 func hold(_ obj: NSObject) {
     Core.shared.holdObjs.insert(obj)
 }
 
+///移除
 func holdRemove(_ obj: NSObject) {
     Core.shared.holdObjs.remove(obj)
 }

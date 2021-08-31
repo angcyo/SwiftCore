@@ -37,6 +37,15 @@ class BaseTabBarController: UITabBarController, INavigation {
         //tabBar.unselectedItemTintColor = Res.color.iconColor //未选中时的着色
     }
 
+    /// Swift 的ARC, 在创建对象之后, 没有被引用会立马被回收.
+    /// https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html
+    deinit {
+        print("\(threadName())->销毁:\(self)")
+    }
+}
+
+extension UIViewController {
+
     /// 添加一个child
     func addChild(vc: UIViewController,
                   title: String,
@@ -48,11 +57,4 @@ class BaseTabBarController: UITabBarController, INavigation {
         //vc.tabBarItem.setTitleTextAttributes([.foregroundColor: UIColor.red], for: .selected) //文本颜色
         addChild(vc)
     }
-
-    /// Swift 的ARC, 在创建对象之后, 没有被引用会立马被回收.
-    /// https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html
-    deinit {
-        print("\(threadName())->销毁:\(self)")
-    }
-
 }

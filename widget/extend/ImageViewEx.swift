@@ -29,7 +29,18 @@ extension UIImageView {
     /// 显示头像
     func setAvatarUrl(_ url: String?, name: String? = nil) {
         if nilOrEmpty(url) {
-            image = nil
+            if nilOrEmpty(name) {
+                image = nil
+            } else {
+                if bounds.isEmpty {
+                    doMain {
+                        self.setAvatarUrl(url, name: name)
+                    }
+                } else {
+                    let nameImage = name?.toImage(rect: bounds) ?? image
+                    image = nameImage
+                }
+            }
         } else {
             if bounds.isEmpty {
                 doMain {
