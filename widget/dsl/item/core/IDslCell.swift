@@ -21,11 +21,12 @@ protocol IDslCell {
 /// cell中界面的配置
 protocol IDslCellConfig {
 
+    /// 获取跟视图, 此视图会被renderToCell
+    func getRootView(_ cell: UIView) -> UIView
+
     /// 初始化 [UITableCell]或者[UICollectionCell]
     func initCellConfig(_ cell: UIView)
 
-    /// 获取跟视图, 此视图会被renderToCell
-    func getRootView() -> UIView
 }
 
 /// 扩展
@@ -37,6 +38,22 @@ extension IDslCell {
             tableCell.contentView.render(root)
         } else if let collectionCell = cell as? UICollectionViewCell {
             collectionCell.contentView.render(root)
+        }
+    }
+}
+
+extension UIView {
+
+    /// 内容控件
+    var cellContentView: UIView {
+        get {
+            if let tableCell = self as? UITableViewCell {
+                return tableCell.contentView
+            } else if let collectionCell = self as? UICollectionViewCell {
+                return collectionCell.contentView
+            } else {
+                return self
+            }
         }
     }
 }

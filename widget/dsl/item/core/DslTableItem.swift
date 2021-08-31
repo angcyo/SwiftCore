@@ -113,7 +113,7 @@ class DslTableCell: UITableViewCell, IDslCell {
         //IDslCell
         if let cellConfig = getCellConfig() {
             cellConfig.initCellConfig(self)
-            renderToCell(self, cellConfig.getRootView())
+            renderToCell(self, cellConfig.getRootView(self))
         }
     }
 
@@ -186,7 +186,7 @@ class DslTableCell: UITableViewCell, IDslCell {
     override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
         //IDslCell
         if let cellConfig = getCellConfig() {
-            return cellConfig.getRootView().systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
+            return cellConfig.getRootView(self).systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
         } else {
             return super.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
         }

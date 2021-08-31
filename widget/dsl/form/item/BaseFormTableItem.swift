@@ -81,7 +81,7 @@ class BaseFormItemCellConfig: IDslCellConfig {
     var labelMinWidth = Res.size.itemMinLabelWidth
 
     /// 箭头控件, 手动add
-    var formArrow = icon(R.image.arrow_right())
+    var formArrow = icon(R.image.icon_arrow_right())
 
     /// 必填小星星, 自动add
     let formRequired = labelView("*", size: Res.text.label.size, color: UIColor.red)
@@ -90,7 +90,7 @@ class BaseFormItemCellConfig: IDslCellConfig {
     var requiredOffsetLeft = Res.size.itemRequiredOffsetLeft
     var requiredOffsetTop = Res.size.itemRequiredOffsetTop
 
-    func getRootView() -> UIView {
+    func getRootView(_ cell: UIView) -> UIView {
         formRoot
     }
 

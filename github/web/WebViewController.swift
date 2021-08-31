@@ -3,6 +3,8 @@
 //
 
 import Foundation
+import UIKit
+import WebKit
 import WKWebViewJavascriptBridge
 
 /// https://github.com/kf99916/ProgressWebViewController
@@ -75,5 +77,9 @@ class WebViewController: ProgressWebViewController, INavigation {
         progressWebViewController.url = url
         push(progressWebViewController)
         setUpState()
+    }
+
+    override public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        super.webView(webView, decidePolicyFor: navigationAction, decisionHandler: decisionHandler)
     }
 }
