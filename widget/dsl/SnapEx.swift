@@ -47,6 +47,12 @@ extension UIView {
         snp.remakeConstraints(closure)
     }
 
+    func remakeView(_ closure: (_ view: UIView) -> Void) {
+        snp.remakeConstraints { _ in
+            closure(self)
+        }
+    }
+
     /// snp dsl
     func updateMake(_ closure: (_ make: ConstraintMaker) -> Void) {
         snp.updateConstraints(closure)

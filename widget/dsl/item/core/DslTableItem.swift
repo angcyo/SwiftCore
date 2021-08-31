@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import TangramKit
 
 ///
 open class DslTableItem: DslItem {
@@ -186,10 +187,11 @@ class DslTableCell: UITableViewCell, IDslCell {
     override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
         //IDslCell
         if let cellConfig = getCellConfig() {
-            return cellConfig.getRootView(self).systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
-        } else {
-            return super.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
+            let rootView = cellConfig.getRootView(self)
+            if rootView is TGBaseLayout {
+                return rootView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
+            }
         }
-        //root.sizeThatFits(CGSize(width: targetSize.width - safeAreaInsets.left - safeAreaInsets.right, height: targetSize.height))
+        return super.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
     }
 }

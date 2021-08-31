@@ -9,6 +9,22 @@ import UIKit
 protocol DslCell {
 }
 
+extension DslCell {
+    func cellOf<T>(_ type: T.Type = T.self, action: (T) -> Void) {
+        if let cell = self as? T {
+            action(cell)
+        }
+    }
+
+    func cellConfigOf<T>(_ type: T.Type = T.self, action: (T) -> Void) {
+        if let cell = self as? IDslCell {
+            if let cellConfig = cell.getCellConfig() as? T {
+                action(cellConfig)
+            }
+        }
+    }
+}
+
 extension UITableViewCell: DslCell {
 
     /// 获取当前cell直属UITableView的UIView
