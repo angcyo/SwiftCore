@@ -3,8 +3,11 @@
 //
 
 import Foundation
+import WKWebViewJavascriptBridge
 
 /// https://github.com/kf99916/ProgressWebViewController
+/// https://github.com/Lision/WKWebViewJavascriptBridge
+/// https://github.com/Lision/WKWebViewJavascriptBridge/blob/master/README_ZH-CN.md
 
 class WebViewController: ProgressWebViewController, INavigation {
 
@@ -12,6 +15,9 @@ class WebViewController: ProgressWebViewController, INavigation {
 
     var showNavigationBar: Bool = true
     var showToolbar: Bool = true
+
+    /// https://github.com/Lision/WKWebViewJavascriptBridge/blob/master/README_ZH-CN.md
+    var bridge: WKWebViewJavascriptBridge? = nil
 
     override open func loadView() {
         super.loadView()
@@ -32,6 +38,9 @@ class WebViewController: ProgressWebViewController, INavigation {
         // set up webview, including cookies, headers, user agent, and so on.
 
         //webView?.scrollView.contentInsetAdjustmentBehavior = .never //
+
+        bridge = WKWebViewJavascriptBridge(webView: webView)
+        initBridge()
     }
 
     override func viewDidLoad() {
@@ -40,7 +49,22 @@ class WebViewController: ProgressWebViewController, INavigation {
         // Do any additional setup after loading the view.
     }
 
-    // Other methods
+    //MARK: bridge https://github.com/Lision/WKWebViewJavascriptBridge/blob/master/README_ZH-CN.md
+
+    /*
+        bridge.call(handlerName: "testJavascriptHandler", data: ["foo": "before ready"], callback: nil)
+      */
+
+    /// 初始化桥梁
+    func initBridge() {
+        //注册一个方法
+        bridge?.register(handlerName: "testiOSCallback") { (parameters, callback) in
+            print("testiOSCallback called: \(String(describing: parameters))")
+            callback?("Response from testiOSCallback")
+        }
+    }
+
+    //MARK: Other methods
 
     override func openURLWithApp(_ url: URL) -> Bool {
         super.openURLWithApp(_: url)

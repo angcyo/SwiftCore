@@ -234,6 +234,7 @@ open class ProgressWebViewController: UIViewController {
     override open func loadView() {
         let webConfiguration = WKWebViewConfiguration()
         webConfiguration.allowsInlineMediaPlayback = true
+
         let webView = WKWebView(frame: .zero, configuration: webConfiguration)
         if #available(iOS 13.0, *) {
             webView.backgroundColor = .systemBackground
