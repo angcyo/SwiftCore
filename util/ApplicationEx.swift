@@ -136,6 +136,7 @@ func push(_ viewControllerToPresent: UIViewController,
         window.rootViewController = viewControllerToPresent
     } else if let root = window.rootViewController {
         if let nav = root as? UINavigationController {
+            //nav.show(viewControllerToPresent, sender: nav)
             nav.pushViewController(viewControllerToPresent, animated: flag)
         } else if let mainNav = LoginController.mainNavigationController() {
             mainNav.setViewControllers([viewControllerToPresent], animated: false)

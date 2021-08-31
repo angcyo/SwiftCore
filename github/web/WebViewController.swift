@@ -30,6 +30,8 @@ class WebViewController: ProgressWebViewController, INavigation {
 
         //load(<#T##url: URL##Foundation.URL#>)
         // set up webview, including cookies, headers, user agent, and so on.
+
+        //webView?.scrollView.contentInsetAdjustmentBehavior = .never //
     }
 
     override func viewDidLoad() {
@@ -42,5 +44,12 @@ class WebViewController: ProgressWebViewController, INavigation {
 
     override func openURLWithApp(_ url: URL) -> Bool {
         super.openURLWithApp(_: url)
+    }
+
+    override func pushWebViewController(url: URL) {
+        let progressWebViewController = delegate?.initPushedProgressWebViewController?(url: url) ?? WebViewController(self)
+        progressWebViewController.url = url
+        push(progressWebViewController)
+        setUpState()
     }
 }

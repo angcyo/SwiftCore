@@ -51,7 +51,7 @@ open class BaseViewController: UIViewController, INavigation {
     //MARK: INavigation
 
     var showNavigationBar: Bool = true
-    var showToolbar: Bool = true
+    var showToolbar: Bool = false
 
     /// 此方法会在[viewDidLoad]之后触发
     func initController() {

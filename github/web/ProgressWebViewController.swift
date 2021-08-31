@@ -41,7 +41,7 @@ open class ProgressWebViewController: UIViewController {
     open var urlsHandledByApp = [
         "hosts": ["itunes.apple.com"],
         "schemes": ["tel", "mailto", "sms"],
-        "_blank": true
+        "_blank": false //true
     ] as [String: Any]
 
     @available(iOS, obsoleted: 1.12.0, renamed: "defaultCookies")
@@ -90,7 +90,7 @@ open class ProgressWebViewController: UIViewController {
     open var rightNavigationBarItemTypes: [BarButtonItemType] = []
     open var toolbarItemTypes: [BarButtonItemType] = [.back, .forward, .reload, .activity]
 
-    fileprivate var webView: WKWebView?
+    var webView: WKWebView?
 
     fileprivate var previousNavigationBarState: (tintColor: UIColor?, hidden: Bool) = (nil, false)
     fileprivate var previousToolbarState: (tintColor: UIColor?, hidden: Bool) = (nil, true)
@@ -437,7 +437,7 @@ public extension ProgressWebViewController {
         }
     }
 
-    func pushWebViewController(url: URL) {
+    @objc func pushWebViewController(url: URL) {
         let progressWebViewController = delegate?.initPushedProgressWebViewController?(url: url) ?? ProgressWebViewController(self)
         progressWebViewController.url = url
         show(progressWebViewController, sender: self)
@@ -631,8 +631,8 @@ extension ProgressWebViewController {
             currentNavigationController?.toolbar.tintColor = tintColor
         }
 
-        currentNavigationController?.setToolbarHidden(previousToolbarState.hidden, animated: true)
-        currentNavigationController?.setNavigationBarHidden(previousNavigationBarState.hidden, animated: true)
+        //currentNavigationController?.setToolbarHidden(previousToolbarState.hidden, animated: true)
+        //currentNavigationController?.setNavigationBarHidden(previousNavigationBarState.hidden, animated: true)
     }
 
     func checkRequestCookies(_ request: URLRequest, cookies: [HTTPCookie]) -> Bool {

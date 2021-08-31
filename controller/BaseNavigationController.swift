@@ -54,8 +54,17 @@ class BaseNavigationController: UINavigationController,
         interactivePopGestureRecognizer?.isEnabled = true
         interactivePopGestureRecognizer?.delegate = self
 
+        initAppearance()
+    }
+
+    /// 配置外观
+    func initAppearance() {
         //toolbar 显示在界面底部的工具栏
         //setToolbarHidden(false, animated: true)
+        UIBarButtonItem.appearance().tintColor = Res.color.colorAccent
+
+        //navigationBar.tintColor = tintColor
+        //toolbar.tintColor = tintColor
 
         //navigationBar 显示在界面顶部的导航栏
         //Cannot manually set the delegate on a UINavigationBar managed by a controller.
@@ -110,7 +119,7 @@ class BaseNavigationController: UINavigationController,
             navigationController.setToolbarHidden(!navigation.showToolbar, animated: animated)
         } else {
             navigationController.setNavigationBarHidden(false, animated: animated)
-            navigationController.setToolbarHidden(false, animated: animated)
+            navigationController.setToolbarHidden(true, animated: animated)
         }
 
         //viewController.navigationItem.standardAppearance?.shadowColor = UIColor.clear
