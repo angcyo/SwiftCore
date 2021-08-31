@@ -19,7 +19,7 @@ public enum RadioCheckboxStyle {
 @IBDesignable
 public class RadioCheckboxBaseButton: UIButton {
     
-    /// Oberver frame change to update style
+    /// Observer frame change to update style
     private var sizeChangeObserver: NSKeyValueObservation?
     
     /// Allow delection for button useful in Check bok stype
@@ -98,7 +98,7 @@ public class RadioCheckboxBaseButton: UIButton {
     /// Update active layer as button is selected
     internal func updateActiveLayer() { }
     
-    /// Update inative later as button is deselected
+    /// Update inactive later as button is deselected
     internal func updateInactiveLayer() { }
     
     /// call delegate as button selection state changes

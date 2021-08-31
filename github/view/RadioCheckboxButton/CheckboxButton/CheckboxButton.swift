@@ -9,17 +9,17 @@
 import UIKit
 
 // MARK:- CheckboxButtonDelegate
-public protocol CheckboxButtonDelegate: class {
+public protocol CheckboxButtonDelegate: AnyObject {
 
     /// Delegate call when Checkbox is selected
     ///
     /// - Parameter button: CheckboxButton
-    func chechboxButtonDidSelect(_ button: CheckboxButton)
+    func checkboxButtonDidSelect(_ button: CheckboxButton)
 
     /// Delegate call when Checkbox is deselected
     ///
     /// - Parameter button: CheckboxButton
-    func chechboxButtonDidDeselect(_ button: CheckboxButton)
+    func checkboxButtonDidDeselect(_ button: CheckboxButton)
 
 }
 
@@ -45,19 +45,19 @@ public class CheckboxButton: RadioCheckboxBaseButton {
         }
     }
 
-    /// Apply checkbox line to gcustomize checkbox button layout
+    /// Apply checkbox line to customize checkbox button layout
     public var checkboxLine = CheckboxLineStyle() {
         didSet {
             setupLayer()
         }
     }
 
-    /// Allow deselectiom of button
+    /// Allow deselection of button
     override internal var allowDeselection: Bool {
         return true
     }
 
-    /// Set default color of chebox
+    /// Set default color of checkbox
     override internal func setup() {
         checkBoxColor = CheckBoxColor(activeColor: tintColor, inactiveColor: UIColor.clear, inactiveBorderColor: UIColor.lightGray, checkMarkColor: UIColor.white)
         style = .rounded(radius: 2)
@@ -132,9 +132,9 @@ public class CheckboxButton: RadioCheckboxBaseButton {
     override internal func callDelegate() {
         super.callDelegate()
         if isOn {
-            delegate?.chechboxButtonDidSelect(self)
+            delegate?.checkboxButtonDidSelect(self)
         } else {
-            delegate?.chechboxButtonDidDeselect(self)
+            delegate?.checkboxButtonDidDeselect(self)
         }
     }
 

@@ -9,7 +9,7 @@
 import UIKit
 
 // MARK:- RadioButtonDelegate
-public protocol RadioButtonDelegate: class {
+public protocol RadioButtonDelegate: AnyObject {
     
     /// Delegate called when radio button is Selected
     ///
@@ -57,7 +57,7 @@ public class RadioButton: RadioCheckboxBaseButton {
         }
     }
     
-    /// Don't allow deselectio of Radio button as per standart radio button feature
+    /// Don't allow deselection of Radio button as per standart radio button feature
     override internal var allowDeselection: Bool {
         return false
     }
@@ -147,8 +147,8 @@ private extension UIBezierPath {
     /// Get inner circle layer
     static func innerCircleActive(rect: CGRect, circle: RadioButtonCircleStyle, style: RadioCheckboxStyle) -> UIBezierPath {
         let size = CGSize(width: circle.inner, height: circle.inner)
-        let origon = CGPoint(x: rect.midX-size.width/2, y: rect.midY-size.height/2)
-        let newRect = CGRect(origin: origon, size: size)
+        let origin = CGPoint(x: rect.midX-size.width/2, y: rect.midY-size.height/2)
+        let newRect = CGRect(origin: origin, size: size)
         switch style {
         case .circle: return UIBezierPath(roundedRect: newRect, cornerRadius: size.height/2)
         case .square: return UIBezierPath(rect: newRect)

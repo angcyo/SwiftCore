@@ -13,6 +13,15 @@ protocol IFormItem: IDslItem {
     var formItemConfig: FormItemConfig { get set }
 }
 
+extension IFormItem {
+
+    /// 更新表单的值
+    func updateFormItemValue(_ value: Any?) {
+        formItemConfig.formValue = value
+        (self as? DslItem)?.itemChange = true
+    }
+}
+
 class FormItemConfig {
 
     /// 表单数据key

@@ -23,7 +23,7 @@ extension DslRecycleView {
             let item = itemList.get(index)
             if let formItem = item as? IFormItem {
                 params.formItem = formItem
-                print(threadName(), "->开始检查表单数据:", formItem)
+                L.d("->开始检查表单数据:\(formItem)")
                 formItem.formItemConfig.formCheck(params) { error in
                     params.formItem = nil
                     if let error = error {
@@ -55,7 +55,7 @@ extension DslRecycleView {
             let item = itemList.get(index)
             if let formItem = item as? IFormItem {
                 params.formItem = formItem
-                print(threadName(), "->开始获取表单数据:", formItem)
+                L.d("->开始获取表单数据:\(formItem)")
                 formItem.formItemConfig.formObtain(params) { error in
                     params.formItem = nil
                     if let error = error {
@@ -127,7 +127,7 @@ extension DslRecycleView {
                     if let formItem = item as? IFormItem {
                         next = false
                         params.formItem = formItem
-                        print(threadName(), "->开始检查表单数据:", formItem)
+                        L.d("->开始检查表单数据:\(formItem)")
                         formItem.formItemConfig.formCheck(params) { error in
                             params.formItem = nil
                             if let error = error {
@@ -135,7 +135,7 @@ extension DslRecycleView {
                             } else {
                                 //检查无错误, 则获取数据
                                 params.formItem = formItem
-                                print(threadName(), "->开始获取表单数据:", formItem)
+                                L.d("->开始获取表单数据:\(formItem)")
                                 formItem.formItemConfig.formObtain(params) { error in
                                     params.formItem = nil
                                     if let error = error {
@@ -220,8 +220,16 @@ class FormHelper {
     }
 
     /// 在cell上进行错误提示
-    func tipCellError(tableView: UITableView, at: IndexPath) {
-        if let cell = tableView.cellForRow(at: at) {
+    func tipCellError(tableView: UITableView?, at: IndexPath?) {
+        if let at = at, let tableView = tableView {
+            if let cell = tableView.cellForRow(at: at) {
+                tipCellError(tableView: tableView, cell: cell)
+            }
+        }
+    }
+
+    func tipCellError(tableView: UITableView?, cell: UITableViewCell?) {
+        if let cell = cell, let tableView = tableView {
             let frame = tableView.convert(cell.frame, from: cell.itemCellView)
             tipCellError(tableView: tableView, frame: frame)
         }

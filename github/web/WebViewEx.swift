@@ -6,11 +6,15 @@ import Foundation
 import UIKit
 
 /// 显示浏览器, 并打开url
-func showUrl(_ url: String) {
-    let vc = WebViewController()
-    vc.url = url.toURL()
+func showUrl(_ url: String?) {
+    if let url = url {
+        let vc = WebViewController()
+        vc.url = url.toURL()
 
-    push(vc)
+        push(vc)
+    } else {
+        L.e("无效的url:\(url)")
+    }
 }
 
 /// 调用系统浏览器

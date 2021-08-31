@@ -64,12 +64,6 @@ open class BaseFormTableItem: DslTableItem, IFormItem {
             }
         }
     }
-
-    /// 更新表单的值
-    func updateFormItemValue(_ value: Any?) {
-        formItemConfig.formValue = value
-        itemChange = true
-    }
 }
 
 /// 表单item的config基类
