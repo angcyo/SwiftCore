@@ -21,7 +21,7 @@ class DslLabelTableItem: DslTableItem, ILabelItem {
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
 
-        cell.cellConfigOf(DslLabelTableCellConfig.self) {
+        cell.cellConfigOf(DslLabelCellConfig.self) {
             $0.label.remakeView {
                 $0.makeEdge((cell as! UIView).cellContentView, inset: itemLabelInset)
             }
@@ -32,7 +32,7 @@ class DslLabelTableItem: DslTableItem, ILabelItem {
 
 class DslLabelTableCell: DslTableCell {
 
-    fileprivate let cellConfig: DslLabelTableCellConfig = DslLabelTableCellConfig()
+    fileprivate let cellConfig: DslLabelCellConfig = DslLabelCellConfig()
 
     override func getCellConfig() -> IDslCellConfig? {
         cellConfig
@@ -42,7 +42,7 @@ class DslLabelTableCell: DslTableCell {
 
 //MARK: cell 界面声明, 用于兼容UITableView和UICollectionView
 
-class DslLabelTableCellConfig: IDslCellConfig {
+class DslLabelCellConfig: IDslCellConfig {
 
     let label = labelView()
 
