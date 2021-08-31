@@ -60,6 +60,7 @@ extension UIApplication {
 
     /// 是否开启交互, 接收touch事件
     static func isUserInteractionEnabled(_ enable: Bool = true) {
+        //UIApplication.shared.isIgnoringInteractionEvents
         mainWindow?.isUserInteractionEnabled = enable
     }
 

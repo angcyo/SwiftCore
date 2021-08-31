@@ -23,6 +23,7 @@ struct Api {
                        config: ((Http) -> Void)? = nil) -> DataRequest {
         let _url = Http.wrapUrlQuery(url, method: method, query: query)
         let _param = Http.wrapParam(method: method, param: param, query: query)
+        //UIApplication.shared.isNetworkActivityIndicatorVisible = true
         return Http.request(_url, _param, method: method, config)
                 //.log()
                 .validateAuth()

@@ -826,6 +826,14 @@ extension ProgressWebViewController: WKNavigationDelegate {
         }
     }
 
+    ///https://stackoverflow.com/questions/48411938/allow-document-upload-in-input-file-on-wkwebview
+    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> ()) {
+        var actionPolicy: WKNavigationActionPolicy = .allow
+        defer {
+            decisionHandler(actionPolicy, preferences)
+        }
+    }
+
     public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
         if viewIfLoaded?.window != nil {
             reload()
