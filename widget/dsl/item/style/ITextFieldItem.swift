@@ -5,11 +5,11 @@
 import Foundation
 import UIKit
 
-protocol IEditItem: IDslItem, UITextFieldDelegate {
+protocol ITextFieldItem: IDslItem, UITextFieldDelegate {
 
     /// 配置项
     /// var editItemConfig: EditItemConfig = EditItemConfig()
-    var editItemConfig: EditItemConfig { get set }
+    var textFieldItemConfig: TextFieldItemConfig { get set }
 
     /// 请实现以下方法
 //    /// 文本内容改变后,保存值
@@ -34,7 +34,7 @@ protocol IEditItem: IDslItem, UITextFieldDelegate {
 //    }
 }
 
-class EditItemConfig {
+class TextFieldItemConfig {
 
     /// 输入框的文本
     var itemEditText: String? = nil
@@ -55,21 +55,21 @@ class EditItemConfig {
     var itemSecureTextEntry = false
 }
 
-extension IEditItem {
+extension ITextFieldItem {
 
     /// 初始化
     func initEditItem(_ textField: UITextField) {
         textField.delegate = self
-        textField.isSecureTextEntry = editItemConfig.itemSecureTextEntry
-        textField.text = editItemConfig.itemEditText
-        textField.isEnabled = editItemConfig.itemEditEnable ?? true
+        textField.isSecureTextEntry = textFieldItemConfig.itemSecureTextEntry
+        textField.text = textFieldItemConfig.itemEditText
+        textField.isEnabled = textFieldItemConfig.itemEditEnable ?? true
         //激活状态下, 才设置占位字符
         if textField.isEnabled {
-            textField.placeholder = editItemConfig.itemEditPlaceholder
+            textField.placeholder = textFieldItemConfig.itemEditPlaceholder
         } else {
             textField.placeholder = nil
         }
-        textField.keyboardType = editItemConfig.itemEditKeyboardType
+        textField.keyboardType = textFieldItemConfig.itemEditKeyboardType
     }
 
 }

@@ -7,7 +7,7 @@ import UIKit
 import TangramKit
 
 /// 简单的编辑item, 带验证码按钮
-class FormEditVerifyTableItem: FormEditTableItem {
+class FormTextFieldVerifyTableItem: FormTextFieldTableItem {
 
     /// 请求验证码
     var onRequestCode: ((VerifyButton) -> Void)? = nil
@@ -15,7 +15,7 @@ class FormEditVerifyTableItem: FormEditTableItem {
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
 
-        guard let cell = cell as? FormEditVerifyTableCell else {
+        guard let cell = cell as? FormTextFieldVerifyTableCell else {
             return
         }
 
@@ -46,9 +46,9 @@ class FormEditVerifyTableItem: FormEditTableItem {
     }*/
 }
 
-class FormEditVerifyTableCell: FormEditTableCell {
+class FormTextFieldVerifyTableCell: FormTextFieldTableCell {
 
-    let cellConfig: FormEditVerifyCellConfig = FormEditVerifyCellConfig()
+    let cellConfig: FormTextFieldVerifyCellConfig = FormTextFieldVerifyCellConfig()
 
     override func getCellConfig() -> IDslCellConfig? {
         cellConfig
@@ -57,7 +57,7 @@ class FormEditVerifyTableCell: FormEditTableCell {
 
 //MARK: cell 界面声明, 用于兼容UITableView和UICollectionView
 
-class FormEditVerifyCellConfig: FormEditCellConfig {
+class FormTextFieldVerifyCellConfig: FormTextFieldCellConfig {
 
     let verifyButton = VerifyButton()
 

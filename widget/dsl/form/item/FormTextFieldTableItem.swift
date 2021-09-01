@@ -7,9 +7,9 @@ import UIKit
 import TangramKit
 
 /// 简单的编辑item
-open class FormEditTableItem: BaseFormTableItem, IEditItem {
+open class FormTextFieldTableItem: BaseFormTableItem, ITextFieldItem {
 
-    var editItemConfig: EditItemConfig = EditItemConfig()
+    var textFieldItemConfig: TextFieldItemConfig = TextFieldItemConfig()
 
     var itemRightTitle: String? = nil
 
@@ -20,11 +20,11 @@ open class FormEditTableItem: BaseFormTableItem, IEditItem {
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
 
-        guard let cell = cell as? FormEditTableCell else {
+        guard let cell = cell as? FormTextFieldTableCell else {
             return
         }
 
-        editItemConfig.itemEditEnable = editItemConfig.itemEditEnable ?? formItemConfig.formCanEdit
+        textFieldItemConfig.itemEditEnable = textFieldItemConfig.itemEditEnable ?? formItemConfig.formCanEdit
         initEditItem(cell.cellConfig.text)
 
         cell.cellConfig.rightTitle.text = itemRightTitle
@@ -34,7 +34,7 @@ open class FormEditTableItem: BaseFormTableItem, IEditItem {
 
     /// 文本内容改变后,保存值
     open func textFieldDidChangeSelection(_ textField: UITextField) {
-        editItemConfig.itemEditText = textField.text
+        textFieldItemConfig.itemEditText = textField.text
         updateFormItemValue(textField.text)
     }
 
@@ -50,13 +50,13 @@ open class FormEditTableItem: BaseFormTableItem, IEditItem {
             return true
         }
         let textLength = text.count + string.count - range.length
-        return textLength <= editItemConfig.itemEditMaxLength
+        return textLength <= textFieldItemConfig.itemEditMaxLength
     }
 }
 
-class FormEditTableCell: DslTableCell {
+class FormTextFieldTableCell: DslTableCell {
 
-    fileprivate let cellConfig: FormEditCellConfig = FormEditCellConfig()
+    fileprivate let cellConfig: FormTextFieldCellConfig = FormTextFieldCellConfig()
 
     override func getCellConfig() -> IDslCellConfig? {
         cellConfig
@@ -65,7 +65,7 @@ class FormEditTableCell: DslTableCell {
 
 //MARK: cell 界面声明, 用于兼容UITableView和UICollectionView
 
-class FormEditCellConfig: BaseFormItemCellConfig {
+class FormTextFieldCellConfig: BaseFormItemCellConfig {
 
     let wrap = horizontal()
     let text = textFieldView(borderStyle: .none)

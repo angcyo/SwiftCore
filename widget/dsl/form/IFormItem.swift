@@ -64,8 +64,8 @@ class FormItemConfig {
             }
 
             //其次
-            if let editItem = item as? IEditItem {
-                return editItem.editItemConfig.itemEditText
+            if let editItem = item as? ITextFieldItem {
+                return editItem.textFieldItemConfig.itemEditText
             }
             return nil
         } else {
