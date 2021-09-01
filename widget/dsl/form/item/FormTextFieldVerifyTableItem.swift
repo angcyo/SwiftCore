@@ -20,7 +20,7 @@ class FormTextFieldVerifyTableItem: FormTextFieldTableItem {
         }
 
         //BUG, 需要重新调用才生效. 牛批plus
-        initEditItem(cell.cellConfig.text)
+        initTextFieldItem(cell.cellConfig.text)
 
         // 获取验证码
         cell.cellConfig.verifyButton.onClick(bag: gestureDisposeBag) { _ in

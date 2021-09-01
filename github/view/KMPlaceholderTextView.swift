@@ -44,7 +44,7 @@ open class KMPlaceholderTextView: UITextView {
 
     private var placeholderLabelConstraints = [NSLayoutConstraint]()
 
-    @IBInspectable open var placeholder: String = "" {
+    @IBInspectable open var placeholder: String? = nil {
         didSet {
             placeholderLabel.text = placeholder
         }

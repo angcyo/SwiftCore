@@ -23,6 +23,18 @@ extension DslCell {
             }
         }
     }
+
+    func setNeedsLayout() {
+        if let view = self as? UIView {
+            view.setNeedsLayout()
+        }
+    }
+
+    func setNeedsDisplay() {
+        if let view = self as? UIView {
+            view.setNeedsDisplay()
+        }
+    }
 }
 
 extension UITableViewCell: DslCell {

@@ -20,9 +20,13 @@ import UIKit
 @IBDesignable
 open class GrowingTextView: UITextView {
     override open var text: String! {
-        didSet { setNeedsDisplay() }
+        didSet {
+            setNeedsDisplay()
+        }
     }
-    private var _heightConstraint: NSLayoutConstraint?
+
+    /// 保存了当前的高度信息 .constant
+    var _heightConstraint: NSLayoutConstraint?
 
     // Maximum length of text. 0 means no limit.
     @IBInspectable open var maxLength: Int = 0
@@ -32,19 +36,29 @@ open class GrowingTextView: UITextView {
 
     // Customization
     @IBInspectable open var minHeight: CGFloat = 0 {
-        didSet { forceLayoutSubviews() }
+        didSet {
+            forceLayoutSubviews()
+        }
     }
     @IBInspectable open var maxHeight: CGFloat = 0 {
-        didSet { forceLayoutSubviews() }
+        didSet {
+            forceLayoutSubviews()
+        }
     }
     @IBInspectable open var placeholder: String? {
-        didSet { setNeedsDisplay() }
+        didSet {
+            setNeedsDisplay()
+        }
     }
     @IBInspectable open var placeholderColor: UIColor = UIColor(white: 0.8, alpha: 1.0) {
-        didSet { setNeedsDisplay() }
+        didSet {
+            setNeedsDisplay()
+        }
     }
     open var attributedPlaceholder: NSAttributedString? {
-        didSet { setNeedsDisplay() }
+        didSet {
+            setNeedsDisplay()
+        }
     }
 
     // Initialize
@@ -98,7 +112,9 @@ open class GrowingTextView: UITextView {
     override open func layoutSubviews() {
         super.layoutSubviews()
 
-        if text == oldText && bounds.size == oldSize { return }
+        if text == oldText && bounds.size == oldSize {
+            return
+        }
         oldText = text
         oldSize = bounds.size
 

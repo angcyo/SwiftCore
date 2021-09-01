@@ -8,30 +8,10 @@ import UIKit
 protocol ITextFieldItem: IDslItem, UITextFieldDelegate {
 
     /// 配置项
-    /// var editItemConfig: EditItemConfig = EditItemConfig()
+    /// var textFieldItemConfig = TextFieldItemConfig()
     var textFieldItemConfig: TextFieldItemConfig { get set }
 
-    /// 请实现以下方法
-//    /// 文本内容改变后,保存值
-//    open func textFieldDidChangeSelection(_ textField: UITextField) {
-//        editItemConfig.itemEditText = textField.text
-//        updateFormItemValue(textField.text)
-//    }
-//
-//    /// 收起键盘
-//    open func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        textField.resignFirstResponder()
-//        return true
-//    }
-//
-//    /// 限制最大输入字符数
-//    open func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-//        guard let text = textField.text else {
-//            return true
-//        }
-//        let textLength = text.count + string.count - range.length
-//        return textLength <= editItemConfig.itemEditMaxLength
-//    }
+    /// 请主动实现部分代理方法
 }
 
 class TextFieldItemConfig {
@@ -48,6 +28,8 @@ class TextFieldItemConfig {
     /// 键盘类型
     var itemEditKeyboardType: UIKeyboardType = .default
 
+    var itemEditReturnType: UIReturnKeyType = .done
+
     /// 限制最大输入字符数
     var itemEditMaxLength: Int = Int.max
 
@@ -58,18 +40,58 @@ class TextFieldItemConfig {
 extension ITextFieldItem {
 
     /// 初始化
-    func initEditItem(_ textField: UITextField) {
+    func initTextFieldItem(_ textField: UITextField) {
         textField.delegate = self
-        textField.isSecureTextEntry = textFieldItemConfig.itemSecureTextEntry
-        textField.text = textFieldItemConfig.itemEditText
-        textField.isEnabled = textFieldItemConfig.itemEditEnable ?? true
-        //激活状态下, 才设置占位字符
-        if textField.isEnabled {
-            textField.placeholder = textFieldItemConfig.itemEditPlaceholder
-        } else {
-            textField.placeholder = nil
-        }
-        textField.keyboardType = textFieldItemConfig.itemEditKeyboardType
+        textFieldItemConfig.initTextInputTraits(textField, enable: enableItemEdit)
     }
+}
 
+extension TextFieldItemConfig {
+
+    /// 初始化输入特性
+    func initTextInputTraits(_ input: UIView, enable: Bool) {
+        if let input = input as? UITextField {
+            input.isSecureTextEntry = itemSecureTextEntry
+            input.keyboardType = itemEditKeyboardType
+            input.returnKeyType = itemEditReturnType
+
+            input.text = itemEditText
+            input.isEnabled = enable
+            //激活状态下, 才设置占位字符
+            if input.isEnabled {
+                input.placeholder = itemEditPlaceholder
+            } else {
+                input.placeholder = nil
+            }
+
+        } else if let input = input as? UITextView {
+            input.isSecureTextEntry = itemSecureTextEntry
+            input.keyboardType = itemEditKeyboardType
+            input.returnKeyType = itemEditReturnType
+
+            input.text = itemEditText
+            input.isEditable = enable
+
+            // 未激活时, 禁止滚动
+            input.alwaysBounceVertical = enable
+            input.alwaysBounceHorizontal = enable
+            input.isScrollEnabled = enable
+
+            //激活状态下, 才设置占位字符
+            if let growingTextView = input as? GrowingTextView {
+                if input.isEditable {
+                    growingTextView.placeholder = itemEditPlaceholder
+                } else {
+                    growingTextView.placeholder = nil
+                }
+            } else if let kmPlaceholderTextView = input as? KMPlaceholderTextView {
+                if input.isEditable {
+                    kmPlaceholderTextView.placeholder = itemEditPlaceholder
+                } else {
+                    kmPlaceholderTextView.placeholder = nil
+                }
+            }
+
+        }
+    }
 }

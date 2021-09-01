@@ -49,18 +49,20 @@ open class BaseFormTableItem: DslTableItem, IFormItem {
     override func bindCellOverride(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCellOverride(cell, indexPath)
 
-        if let cell = cell as? DslTableCell {
-            if let cellConfig = cell.getCellConfig() as? BaseFormItemCellConfig {
+        cell.cellConfigOf(BaseFormItemCellConfig.self) {
+            //$0.formLine.visible(_itemShowLine) //Line
+            $0.formLineVisible = _itemShowLine
 
-                cellConfig.formLine.visible(_itemShowLine) //Line
-                cellConfig.formLabel.text = itemLabel //Label
-                cellConfig.formRequired.visible(formItemConfig.formRequired) //必填提示
+            $0.formLabel.text = itemLabel //Label
 
-                if let itemLabelMinWidth = itemLabelMinWidth {
-                    //label最小宽度
-                    cellConfig.labelMinWidth = itemLabelMinWidth
-                    cellConfig.formLabel.wrap_content(minWidth: itemLabelMinWidth)
-                }
+            $0.formRequiredVisible = formItemConfig.formRequired //必填提示
+            ///$0.formRequired.visible(formItemConfig.formRequired) //必填提示
+
+            if let itemLabelMinWidth = itemLabelMinWidth {
+                //label最小宽度
+                $0.labelMinWidth = itemLabelMinWidth
+
+                //$0.formLabel.wrap_content(minWidth: itemLabelMinWidth)
             }
         }
     }
@@ -75,16 +77,32 @@ class BaseFormItemCellConfig: IDslCellConfig {
     /// 分割线, 自动add
     let formLine = lineView()
 
+    var formLineVisible = true {
+        didSet {
+            setShowLine()
+        }
+    }
+
     /// Label, 手动add
     let formLabel = labelView(size: Res.text.label.size, color: Res.text.subTitle.color)
 
-    var labelMinWidth = Res.size.itemMinLabelWidth
+    var labelMinWidth = Res.size.itemMinLabelWidth {
+        didSet {
+            setLabelMinWidth()
+        }
+    }
 
     /// 箭头控件, 手动add
     var formArrow = icon(R.image.icon_arrow_right())
 
     /// 必填小星星, 自动add
     let formRequired = labelView("*", size: Res.text.label.size, color: UIColor.red)
+
+    var formRequiredVisible = false {
+        didSet {
+            setShowRequired()
+        }
+    }
 
     /// 偏移量
     var requiredOffsetLeft = Res.size.itemRequiredOffsetLeft
@@ -101,7 +119,6 @@ class BaseFormItemCellConfig: IDslCellConfig {
         formRoot.mWwH()
         formRoot.render(initCellContent())
         formRoot.render(formRequired) {
-            $0.gone() //默认隐藏
             $0.wrap_content()
             $0.frameGravityLT(offsetLeft: self.requiredOffsetLeft, offsetTop: self.requiredOffsetTop)
         }
@@ -114,10 +131,27 @@ class BaseFormItemCellConfig: IDslCellConfig {
         // 箭头控件
         formArrow.contentMode = .scaleAspectFit
         formArrow.wh(width: 16, height: 16)
+
+        setShowLine()
+        setShowRequired()
     }
 
     /// 重写此方法, 实现布局
     func initCellContent() -> UIView {
         UIView()
+    }
+
+    /// MARK: change
+
+    func setLabelMinWidth() {
+        formLabel.wrap_content(minWidth: labelMinWidth)
+    }
+
+    func setShowLine() {
+        formLine.visible(formLineVisible)
+    }
+
+    func setShowRequired() {
+        formRequired.visible(formRequiredVisible)
     }
 }

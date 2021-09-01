@@ -5,6 +5,34 @@
 import Foundation
 import UIKit
 
+/// https://blog.csdn.net/u013406800/article/details/103859529
+/// setContentCompressionResistancePriority 压缩优先级 值越小, 优先被压缩
+/// setContentHuggingPriority 拉伸优先级 值越小, 优先被拉伸
+
+extension UIView {
+
+    /// 不拉伸
+    func lowStretch(for axis: NSLayoutConstraint.Axis = .horizontal) {
+        setContentHuggingPriority(.required, for: axis)
+    }
+
+    /// 优先拉伸
+    func highStretch(for axis: NSLayoutConstraint.Axis = .horizontal) {
+        setContentHuggingPriority(.defaultLow, for: axis)
+    }
+
+
+    /// 不压缩
+    func lowCompression(for axis: NSLayoutConstraint.Axis = .horizontal) {
+        setContentCompressionResistancePriority(.required, for: axis)
+    }
+
+    /// 优先压缩
+    func highCompression(for axis: NSLayoutConstraint.Axis = .horizontal) {
+        setContentCompressionResistancePriority(.defaultLow, for: axis)
+    }
+}
+
 class TargetObserver: NSObject, UIGestureRecognizerDelegate {
 
     /// 是否要忽略当前的UIGestureRecognizer

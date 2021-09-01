@@ -72,8 +72,11 @@ struct HttpFile {
 
     /// 秒传检查
     @discardableResult
-    static func uploadCheck(url: String = UPLOAD_API, md5: String, onEnd: @escaping (_ fileBean: FileBean?, _ error: Error?) -> Void) -> DataRequest {
-        Api.post(connectUrl(url: url), query: ["md5Code": md5])
+    static func uploadCheck(url: String = UPLOAD_API, md5: String, query: Parameters? = nil, onEnd: @escaping (_ fileBean: FileBean?, _ error: Error?) -> Void) -> DataRequest {
+        var _query: [String: Any] = [:]
+        _query.add(["md5Code": md5])
+        _query.add(query ?? [:])
+        return Api.post(connectUrl(url: url), query: _query)
                 .validateAuth()
                 .validateCode()
                 .requestBean { (bean: HttpBean<FileBean>?, error: Error?) in

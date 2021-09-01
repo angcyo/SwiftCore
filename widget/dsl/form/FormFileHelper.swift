@@ -50,6 +50,9 @@ class FormFileHelper {
     /// 上传的接口地址
     var url: String? = nil
 
+    /// 是否进行秒传检查
+    var checkMd5: Bool = true
+
     var _targetJson: JSON? = nil
 
     /// 结束的回调,子线程回调
@@ -155,8 +158,12 @@ class FormFileHelper {
     }
 
     func _checkFile(md5: String, onEnd: @escaping (FileBean?) -> Void) {
-        HttpFile.uploadCheck(url: url ?? HttpFile.UPLOAD_API, md5: md5) { fileBean, error in
-            onEnd(fileBean)
+        if checkMd5 {
+            HttpFile.uploadCheck(url: url ?? HttpFile.UPLOAD_API, md5: md5, query: onConfigQueryParameters?(md5)) { fileBean, error in
+                onEnd(fileBean)
+            }
+        } else {
+            onEnd(nil)
         }
     }
 

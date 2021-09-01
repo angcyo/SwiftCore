@@ -9,8 +9,10 @@ import TangramKit
 /// 简单的编辑item
 open class FormTextFieldTableItem: BaseFormTableItem, ITextFieldItem {
 
+    /// 配置项
     var textFieldItemConfig: TextFieldItemConfig = TextFieldItemConfig()
 
+    /// 单位提示文本
     var itemRightTitle: String? = nil
 
     public required init() {
@@ -20,14 +22,10 @@ open class FormTextFieldTableItem: BaseFormTableItem, ITextFieldItem {
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
 
-        guard let cell = cell as? FormTextFieldTableCell else {
-            return
+        cell.cellConfigOf(FormTextFieldCellConfig.self) {
+            initTextFieldItem($0.text)
+            $0.rightTitle.text = itemRightTitle
         }
-
-        textFieldItemConfig.itemEditEnable = textFieldItemConfig.itemEditEnable ?? formItemConfig.formCanEdit
-        initEditItem(cell.cellConfig.text)
-
-        cell.cellConfig.rightTitle.text = itemRightTitle
     }
 
     //MARK: 代理方法, 需要覆盖重写才会生效. 还需要重新设置delegate = self
