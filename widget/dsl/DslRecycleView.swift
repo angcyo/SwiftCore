@@ -29,6 +29,11 @@ extension DslRecycleView {
 
     // MARK: item操作
 
+    mutating func clearAllItems() {
+        _itemList.removeAll()
+        needsReload = true
+    }
+
     @discardableResult
     mutating func load<Item: DslItem>(_ item: Item, _ dsl: ((Item) -> Void)? = nil) -> Item {
         addItem(item, dsl)

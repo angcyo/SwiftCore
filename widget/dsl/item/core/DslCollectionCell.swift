@@ -17,7 +17,7 @@ class DslCollectionCell: UICollectionViewCell {
     }
 
     deinit {
-        print("\(threadName())->销毁:\(self)")
+        L.w("\(threadName())->销毁:\(self)")
     }
 
     override var contentView: UIView {

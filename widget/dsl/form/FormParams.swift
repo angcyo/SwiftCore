@@ -49,8 +49,9 @@ extension FormParams {
 
     /// 上传表单文件
     @discardableResult
-    func uploadFile(onEnd: @escaping (Error?) -> Void) -> FormFileHelper {
+    func uploadFile(url: String? = nil, onEnd: @escaping (Error?) -> Void) -> FormFileHelper {
         let helper = FormFileHelper()
+        helper.url = url
         helper.onUploadEnd = { json, error in
             if let json = json, error == nil {
                 //成功

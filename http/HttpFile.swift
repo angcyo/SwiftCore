@@ -13,8 +13,20 @@ struct HttpFile {
     static var UPLOAD_KEY = "file"
 
     /// 上传文件
+    ///
+    /// - Parameters:
+    ///   - url:  接口地址
+    ///   - data:  需要上传的数据
+    ///   - withName: key名
+    ///   - fileName: 文件名
+    ///   - mimeType: 文件类型
+    ///   - onEnd: 结束的回调
+    /// - Returns:
     @discardableResult
-    static func upload(data: Data, withName: String = UPLOAD_KEY, fileName: String? = nil, mimeType: String? = nil, onEnd: @escaping (_ fileBean: FileBean?, _ error: Error?) -> Void) -> UploadRequest {
+    static func upload(url: String = UPLOAD_API, data: Data,
+                       withName: String = UPLOAD_KEY, fileName: String? = nil, mimeType: String? = nil,
+                       query: Parameters? = nil,
+                       onEnd: @escaping (_ fileBean: FileBean?, _ error: Error?) -> Void) -> UploadRequest {
         let formData = MultipartFormData()
 
         let fileName = fileName ?? "\(data.toMd5()).png"
@@ -23,9 +35,9 @@ struct HttpFile {
         print(threadName(), "上传:", fileName, mimeType)
 
         formData.append(data, withName: withName, fileName: fileName, mimeType: mimeType)
-        return Http.upload(connectUrl(url: UPLOAD_API), multipartFormData: formData)
+        return Http.upload(connectUrl(url: url), multipartFormData: formData, query: query)
                 .uploadProgress {
-                    print(threadName(), "上传进度:", $0)
+                    print(threadName(), "上传进度:", $0, "\($0.fractionCompleted * 100)%")
                 }
                 .validateAuth()
                 .validateCode()
@@ -35,7 +47,10 @@ struct HttpFile {
     }
 
     @discardableResult
-    static func upload(fileURL: URL, withName: String = UPLOAD_KEY, fileName: String? = nil, mimeType: String? = nil, onEnd: @escaping (_ fileBean: FileBean?, _ error: Error?) -> Void) -> UploadRequest {
+    static func upload(url: String = UPLOAD_API, fileURL: URL,
+                       withName: String = UPLOAD_KEY, fileName: String? = nil, mimeType: String? = nil,
+                       query: Parameters? = nil,
+                       onEnd: @escaping (_ fileBean: FileBean?, _ error: Error?) -> Void) -> UploadRequest {
         let formData = MultipartFormData()
 
         let fileName = fileName ?? fileURL.lastPathComponent
@@ -44,9 +59,9 @@ struct HttpFile {
         print(threadName(), "上传:", fileName, mimeType)
 
         formData.append(fileURL, withName: withName, fileName: fileName, mimeType: mimeType)
-        return Http.upload(connectUrl(url: UPLOAD_API), multipartFormData: formData)
+        return Http.upload(connectUrl(url: url), multipartFormData: formData, query: query)
                 .uploadProgress {
-                    print(threadName(), "上传进度:", $0)
+                    print(threadName(), "上传进度:", $0, "\($0.fractionCompleted * 100)%")
                 }
                 .validateAuth()
                 .validateCode()
@@ -57,8 +72,8 @@ struct HttpFile {
 
     /// 秒传检查
     @discardableResult
-    static func uploadCheck(md5: String, onEnd: @escaping (_ fileBean: FileBean?, _ error: Error?) -> Void) -> DataRequest {
-        Api.post(connectUrl(url: UPLOAD_API), query: ["md5Code": md5])
+    static func uploadCheck(url: String = UPLOAD_API, md5: String, onEnd: @escaping (_ fileBean: FileBean?, _ error: Error?) -> Void) -> DataRequest {
+        Api.post(connectUrl(url: url), query: ["md5Code": md5])
                 .validateAuth()
                 .validateCode()
                 .requestBean { (bean: HttpBean<FileBean>?, error: Error?) in

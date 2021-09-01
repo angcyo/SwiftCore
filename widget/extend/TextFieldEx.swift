@@ -122,6 +122,10 @@ func textFieldView(_ placeholder: String? = "请输入...",
     view.textAlignment = .left
     //自动字体大小
     view.adjustsFontSizeToFitWidth = false
+    //view.clearsOnBeginEditing = false //再次编辑就清空
+    //view.adjustsFontSizeToFitWidth = false
+
+    //view.keyboardAppearance = .default //键盘外观
 
     //UIKeyboardTypeDefault, 默认键盘，支持所有字符
     //UIKeyboardTypeASCIICapable, 支持ASCII的默认键盘

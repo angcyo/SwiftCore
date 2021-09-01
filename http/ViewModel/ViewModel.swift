@@ -12,13 +12,13 @@ class ViewModel: NSObject {
 
     required override init() {
         super.init()
-        print("创建:\(self)")
+        L.i("创建:\(self)")
     }
 
     /// Swift 的ARC, 在创建对象之后, 没有被引用会立马被回收.
     /// https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html
     deinit {
-        print("销毁:\(self)")
+        L.w("销毁:\(self)")
     }
 
     //Rx 自动取消订阅,

@@ -69,3 +69,10 @@ pod 'Lantern', '1.1.2'
 # 颜色 https://github.com/zenangst/Hue
 pod 'Hue' #5.0.0
 ```
+
+# 2021-09-01
+
+```
+# 样式Label https://github.com/psharanda/Atributika
+pod "Atributika" #4.10.1
+```

@@ -81,18 +81,18 @@ class DslTableCell: UITableViewCell, IDslCell {
     override init(style: CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         //cellIdentifier = reuseIdentifier ?? NSStringFromClass(Self.self)
-        print("创建cell:\(self):\(style.rawValue):\(reuseIdentifier)")
+        L.i("创建cell:\(self):\(style.rawValue):\(reuseIdentifier)")
         initCell()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        print("创建cell:\(self):\(coder)")
+        L.i("创建cell:\(self):\(coder)")
         initCell()
     }
 
     deinit {
-        print("\(threadName())->销毁:\(self)")
+        L.w("\(threadName())->销毁:\(self)")
     }
 
     ///  自定义的cell需要放在这里

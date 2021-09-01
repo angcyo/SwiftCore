@@ -85,7 +85,7 @@ class Http {
     /// Swift 的ARC, 在创建对象之后, 没有被引用会立马被回收.
     /// https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html
     deinit {
-        print("销毁:\(self)")
+        L.w("销毁:\(self)")
     }
 
     /// 发送一个请求
@@ -104,9 +104,9 @@ class Http {
     /// 上传数据
     static func upload(_ url: String,
                        multipartFormData: MultipartFormData,
-                       _ query: Parameters? = nil /*拼接在url后面的数据*/,
+                       query: Parameters? = nil /*拼接在url后面的数据*/,
                        method: HTTPMethod = .post,
-                       _ dsl: ((Http) -> Void)? = nil) -> UploadRequest {
+                       dsl: ((Http) -> Void)? = nil) -> UploadRequest {
         let http = Http()
         http.url = url
         http.method = method

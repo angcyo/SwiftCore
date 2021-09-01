@@ -47,10 +47,16 @@ class FormFileHelper {
 
     //MARK: 成员
 
+    /// 上传的接口地址
+    var url: String? = nil
+
     var _targetJson: JSON? = nil
 
     /// 结束的回调,子线程回调
     var onUploadEnd: ((JSON?, Error?) -> Void)? = nil
+
+    /// 回调获取对应的查询参数
+    var onConfigQueryParameters: ((_ md5: String) -> [String: Any])? = nil
 
     /// 开始上传
     func startUpload(json: JSON) {
@@ -103,7 +109,7 @@ class FormFileHelper {
                         self._next()
                     } else {
                         if formFile is Data {
-                            HttpFile.upload(data: formFile as! Data) { fileBean, error in
+                            HttpFile.upload(url: self.url ?? HttpFile.UPLOAD_API, data: formFile as! Data, query: self.onConfigQueryParameters?(md5)) { fileBean, error in
                                 if let error = error {
                                     //上传失败
                                     self.onUploadEnd?(self._targetJson, error)
@@ -114,7 +120,7 @@ class FormFileHelper {
                                 }
                             }
                         } else if formFile is URL {
-                            HttpFile.upload(fileURL: formFile as! URL) { fileBean, error in
+                            HttpFile.upload(url: self.url ?? HttpFile.UPLOAD_API, fileURL: formFile as! URL, query: self.onConfigQueryParameters?(md5)) { fileBean, error in
                                 if let error = error {
                                     //上传失败
                                     self.onUploadEnd?(self._targetJson, error)
@@ -149,7 +155,7 @@ class FormFileHelper {
     }
 
     func _checkFile(md5: String, onEnd: @escaping (FileBean?) -> Void) {
-        HttpFile.uploadCheck(md5: md5) { fileBean, error in
+        HttpFile.uploadCheck(url: url ?? HttpFile.UPLOAD_API, md5: md5) { fileBean, error in
             onEnd(fileBean)
         }
     }

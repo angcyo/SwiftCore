@@ -24,7 +24,7 @@ open class FormEditTableItem: BaseFormTableItem, IEditItem {
             return
         }
 
-        editItemConfig.itemEditEnable = formItemConfig.formCanEdit
+        editItemConfig.itemEditEnable = editItemConfig.itemEditEnable ?? formItemConfig.formCanEdit
         initEditItem(cell.cellConfig.text)
 
         cell.cellConfig.rightTitle.text = itemRightTitle

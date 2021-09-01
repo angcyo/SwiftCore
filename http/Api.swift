@@ -11,6 +11,9 @@ import SwiftyJSON
 
 struct Api {
 
+    /// 默认错误提示
+    static var DEF_ERROR_TIP = "接口异常"
+
     /// 请求保存, 否则会被ARC回收
     static var requestHold: [DataRequest] = []
 
@@ -161,7 +164,7 @@ extension DataRequest {
                     if code >= 200 && code <= 299 {
                         //成功
                     } else {
-                        let msg = data.msg ?? "接口异常"
+                        let msg = data.msg ?? Api.DEF_ERROR_TIP
                         onResult(nil, apiError(msg))
                         defHandle = false
                     }
@@ -239,7 +242,7 @@ extension DataRequest {
                     if code >= 200 && code <= 299 {
                         //成功
                     } else {
-                        let msg = json[Http.KEY_MSG].string ?? "接口异常"
+                        let msg = json[Http.KEY_MSG].string ?? Api.DEF_ERROR_TIP
                         onResult(nil, apiError(msg))
                         defHandle = false
                     }
@@ -319,7 +322,7 @@ extension Api {
                             //成功
                             onResult(data, nil)
                         } else {
-                            let msg = json[Http.KEY_MSG].string ?? "接口异常"
+                            let msg = json[Http.KEY_MSG].string ?? Api.DEF_ERROR_TIP
                             onResult(nil, apiError(msg))
                         }
                     } else {
@@ -378,7 +381,7 @@ extension Api {
                             //成功
                             onResult(data, nil)
                         } else {
-                            let msg = bean.msg ?? "接口异常"
+                            let msg = bean.msg ?? Api.DEF_ERROR_TIP
                             onResult(nil, apiError(msg))
                         }
                     } else {

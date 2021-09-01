@@ -20,7 +20,7 @@ open class BaseViewController: UIViewController, INavigation {
     public init() {
         super.init(nibName: nil, bundle: nil)
         //bounds:(0.0, 0.0, 375.0, 812.0)
-        print("\(threadName())->创建:\(self):\(modalPresentationStyle.rawValue)") //pageSheet
+        L.i("\(threadName())->创建:\(self):\(modalPresentationStyle.rawValue)") //pageSheet
         initController()
     }
 
@@ -147,6 +147,6 @@ open class BaseViewController: UIViewController, INavigation {
     /// Swift 的ARC, 在创建对象之后, 没有被引用会立马被回收.
     /// https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html
     deinit {
-        print("\(threadName())->销毁:\(self)")
+        L.w("\(threadName())->销毁:\(self)")
     }
 }

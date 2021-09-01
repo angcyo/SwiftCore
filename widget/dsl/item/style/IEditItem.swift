@@ -13,19 +13,19 @@ protocol IEditItem: IDslItem, UITextFieldDelegate {
 
     /// 请实现以下方法
 //    /// 文本内容改变后,保存值
-//    func textFieldDidChangeSelection(_ textField: UITextField) {
+//    open func textFieldDidChangeSelection(_ textField: UITextField) {
 //        editItemConfig.itemEditText = textField.text
 //        updateFormItemValue(textField.text)
 //    }
 //
 //    /// 收起键盘
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//    open func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 //        textField.resignFirstResponder()
 //        return true
 //    }
 //
 //    /// 限制最大输入字符数
-//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//    open func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
 //        guard let text = textField.text else {
 //            return true
 //        }
@@ -42,8 +42,8 @@ class EditItemConfig {
     /// 占位字符
     var itemEditPlaceholder: String? = "请输入..."
 
-    ///是否可编辑
-    var itemEditEnable: Bool = true
+    ///是否可编辑, 默认使用表单item配置项
+    var itemEditEnable: Bool? = nil
 
     /// 键盘类型
     var itemEditKeyboardType: UIKeyboardType = .default
@@ -61,9 +61,14 @@ extension IEditItem {
     func initEditItem(_ textField: UITextField) {
         textField.delegate = self
         textField.isSecureTextEntry = editItemConfig.itemSecureTextEntry
-        textField.placeholder = editItemConfig.itemEditPlaceholder
         textField.text = editItemConfig.itemEditText
-        textField.isEnabled = editItemConfig.itemEditEnable
+        textField.isEnabled = editItemConfig.itemEditEnable ?? true
+        //激活状态下, 才设置占位字符
+        if textField.isEnabled {
+            textField.placeholder = editItemConfig.itemEditPlaceholder
+        } else {
+            textField.placeholder = nil
+        }
         textField.keyboardType = editItemConfig.itemEditKeyboardType
     }
 

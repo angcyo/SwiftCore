@@ -13,24 +13,24 @@ let L = SwiftyBeaver.self
 
 extension SwiftyBeaver {
 
-    static func v(_ message: Any, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
-        L.verbose(message, file, function, line: line)
+    static func v(_ message: Any?, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
+        L.verbose(message ?? "null", file, function, line: line)
     }
 
-    static func d(_ message: Any, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
-        L.debug(message, file, function, line: line)
+    static func d(_ message: Any?, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
+        L.debug(message ?? "null", file, function, line: line)
     }
 
-    static func i(_ message: Any, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
-        L.info(message, file, function, line: line)
+    static func i(_ message: Any?, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
+        L.info(message ?? "null", file, function, line: line)
     }
 
-    static func w(_ message: Any, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
-        L.warning(message, file, function, line: line)
+    static func w(_ message: Any?, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
+        L.warning(message ?? "null", file, function, line: line)
     }
 
-    static func e(_ message: Any, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
-        L.error(message, file, function, line: line)
+    static func e(_ message: Any?, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
+        L.error(message ?? "null", file, function, line: line)
     }
 }
 
