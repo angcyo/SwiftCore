@@ -447,6 +447,54 @@ extension UIView {
             action()
         }
     }
+
+    /// 获取第一响应者
+    func findFirstResponder() -> UIView? {
+        if isFirstResponder {
+            return self
+        }
+
+        for subview in subviews {
+            let firstResponder = subview.findFirstResponder()
+            if (firstResponder != nil) {
+                return firstResponder
+            }
+        }
+
+        return nil;
+    }
+
+    func findAttachedTableCell() -> UITableViewCell? {
+        if self is UITableViewCell {
+            return self as! UITableViewCell
+        }
+
+        if let superview = superview {
+            let cell = superview.findAttachedTableCell()
+            if (cell != nil) {
+                return cell
+            }
+            return superview.findAttachedTableCell()
+        }
+
+        return nil;
+    }
+
+    func findAttachedCollectionCell() -> UICollectionViewCell? {
+        if self is UICollectionViewCell {
+            return self as! UICollectionViewCell
+        }
+
+        if let superview = superview {
+            let cell = superview.findAttachedCollectionCell()
+            if (cell != nil) {
+                return cell
+            }
+            return superview.findAttachedCollectionCell()
+        }
+
+        return nil;
+    }
 }
 
 //MARK: - 控件布局扩展

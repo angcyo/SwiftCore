@@ -5,6 +5,7 @@
 import Foundation
 import UIKit
 import RxKeyboard
+import RxSwift
 
 class BaseTableViewController: BaseViewController {
 
@@ -16,7 +17,11 @@ class BaseTableViewController: BaseViewController {
     var clearsSelectionOnViewWillAppear: Bool = false
 
     /// 激活键盘监听
-    var enableSoftInput: Bool = true
+    var enableSoftInput: Bool = true {
+        didSet {
+            initKeyboard()
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,14 +55,27 @@ class BaseTableViewController: BaseViewController {
         }
     }
 
+    lazy var keyboardBag: DisposeBag = {
+        DisposeBag()
+    }()
+
     /// 监听键盘
     func initKeyboard() {
+        keyboardBag = DisposeBag()
         if enableSoftInput {
             //键盘监听
             RxKeyboard.instance.visibleHeight.drive(onNext: { height in
-                let inset = self.dslTableView.contentInset
-                self.dslTableView.contentInset = inset.resetBottom(height.toFloat())
-            }).disposed(by: disposeBag)
+                let tableView = self.dslTableView
+                let inset = tableView.contentInset
+                tableView.contentInset = inset.resetBottom(height.toFloat())
+
+                //滚动到具有接收者的当前行
+                if let cell = tableView.findFirstResponder()?.findAttachedTableCell() {
+                    if let index = tableView.indexPath(for: cell) {
+                        tableView.scrollToRow(at: index, at: .top, animated: true)
+                    }
+                }
+            }).disposed(by: keyboardBag)
         }
     }
 
