@@ -30,8 +30,10 @@ extension UITextView {
         textContainer.maximumNumberOfLines = 0 //最大行数
         textContainer.lineBreakMode = .byWordWrapping //最后一行行为
 
+
         //https://www.jianshu.com/p/32a4747a19fb
-        //textContainerInset = .zero
+        textContainerInset = insets(left: 0, top: 8, right: 0, bottom: 8) //系统默认
+        //contentInset = insets(left: 0, top: 8, right: 0, bottom: 8)
         //textContainer.lineFragmentPadding = 0
     }
 }

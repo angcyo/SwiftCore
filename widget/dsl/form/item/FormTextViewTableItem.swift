@@ -26,11 +26,7 @@ open class FormTextViewTableItem: BaseFormTableItem, ITextViewItem {
         super.bindCell(cell, indexPath)
 
         cell.cellConfigOf(FormTextViewCellConfig.self) {
-            /*if itemTextViewHeight > 0 {
-                $0.text.mWwH(height: itemTextViewHeight)
-            } else {
-                $0.text.mWwH(minHeight: 50)
-            }*/
+            $0.setTextViewHeight(itemTextViewHeight)
             initTextViewItem($0.text)
             $0.rightTitle.text = itemRightTitle
         }
@@ -86,7 +82,7 @@ class FormTextViewCellConfig: BaseFormItemCellConfig {
 
         formLabel.setContentHuggingPriority(.required, for: .horizontal)
         with(formLabel) {
-            $0.backgroundColor = UIColor.yellow
+            //$0.backgroundColor = UIColor.yellow
             $0.makeGravityLeft(offset: Res.size.x)
             $0.makeCenterY()
             $0.makeWidth(minWidth: labelMinWidth)
@@ -95,23 +91,17 @@ class FormTextViewCellConfig: BaseFormItemCellConfig {
 
         rightTitle.setContentHuggingPriority(.required, for: .horizontal)
         with(rightTitle) {
-            $0.backgroundColor = UIColor.green
+            //$0.backgroundColor = UIColor.green
             $0.makeGravityRight(offset: Res.size.x)
             $0.makeCenterY()
             $0.sizeToFit()
         }
 
-        with(text) {
-            $0.backgroundColor = UIColor.red
-            $0.makeLeftToRightOf(formLabel)
-            $0.makeRightToLeftOf(rightTitle)
-            $0.makeGravityTop()
-            $0.makeGravityBottom()
-//            $0.makeHeight(minHeight: Res.size.minHeight)
-        }
+        //text
+        setTextViewHeight(-1)
 
         with(formLine) {
-            $0.makeGravityBottom(text)
+            $0.makeTopToBottomOf(text)
             $0.makeGravityHorizontal(offset: Res.size.x)
             $0.makeHeight(Res.size.line)
         }
@@ -127,6 +117,18 @@ class FormTextViewCellConfig: BaseFormItemCellConfig {
         setShowRequired()
     }
 
+    func setTextViewHeight(_ height: CGFloat) {
+        text.remakeView {
+            $0.makeLeftToRightOf(formLabel)
+            $0.makeRightToLeftOf(rightTitle)
+            $0.makeGravityTop(offset: Res.size.m)
+            $0.makeGravityBottom(offset: Res.size.m)
+            if height > 0 {
+                $0.makeHeight(height)
+            }
+        }
+    }
+
     override func setLabelMinWidth() {
         formLabel.remakeView {
             $0.makeGravityLeft(offset: Res.size.x)
@@ -140,6 +142,6 @@ class FormTextViewCellConfig: BaseFormItemCellConfig {
     }
 
     override func setShowRequired() {
-        //formRequired.setVisible(formRequiredVisible)
+        formRequired.setVisible(formRequiredVisible)
     }
 }
