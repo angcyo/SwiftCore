@@ -21,6 +21,13 @@ class WebViewController: ProgressWebViewController, INavigation {
     /// https://github.com/Lision/WKWebViewJavascriptBridge/blob/master/README_ZH-CN.md
     var bridge: WKWebViewJavascriptBridge? = nil
 
+    public convenience init(_ webViewController: WebViewController) {
+        self.init()
+        initFrom(webViewController)
+        self.showNavigationBar = webViewController.showNavigationBar
+        self.showToolbar = webViewController.showToolbar
+    }
+
     override open func loadView() {
         super.loadView()
 

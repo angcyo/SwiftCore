@@ -62,9 +62,9 @@ extension NSObject {
     }
 
     /// 判断对象是否是指定的类
-    func isEqualClassName(_ cls: AnyClass) -> Bool {
+    func isEqualClassName(_ cls: AnyClass?) -> Bool {
         let type = type(of: self)
-        if type.description() == cls.description() {
+        if type.description() == cls?.description() {
             return true
         }
         return false
@@ -80,6 +80,27 @@ extension NSObject {
     /// 获取对象数据
     func getObject(_ key: inout String) -> Any? {
         objc_getAssociatedObject(self, &key)
+    }
+}
+
+/// 返回全包名类名 //"Wayto_GBSecurity_iOS.LoginController"
+func classNameOf<T>(_ any: T) -> String {
+    let type = type(of: any)
+    if let obj = type as? NSObject {
+        return obj.description
+    } else {
+        return "\(type)"
+    }
+}
+
+/// 返回无包名的类名 //"LoginController"
+func simpleClassNameOf<T>(_ any: T) -> String {
+    //NSStringFromClass(type(of: self))
+    let name = classNameOf(any)
+    if (name.contains(".")) {
+        return name.components(separatedBy: ".")[1];
+    } else {
+        return name;
     }
 }
 

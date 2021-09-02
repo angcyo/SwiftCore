@@ -168,6 +168,7 @@ func showViewController(_ viewControllerToPresent: UIViewController,
     show(viewControllerToPresent, animated: flag, completion: completion)
 }
 
+/// 弹出上层的vc
 func pop(_ viewController: UIViewController,
          animated flag: Bool = true) {
     guard let window = UIApplication.mainWindow else {
@@ -185,6 +186,40 @@ func pop(_ viewController: UIViewController,
         nav.popViewController(animated: flag)
     } else {
         hide(viewController, animated: flag)
+    }
+}
+
+/// 弹出到指定的vc
+func popTo(_ type: AnyClass?, animated flag: Bool = true) {
+    guard let window = UIApplication.mainWindow else {
+        return
+    }
+    guard let root = window.rootViewController else {
+        return
+    }
+    //https://www.jianshu.com/p/c7dc152724b2#comments
+    //viewControllerToPresent.modalPresentationStyle = .fullScreen
+
+    //root.show(<#T##vc: UIViewController##UIKit.UIViewController#>, sender: <#T##Any?##Any?#>)
+    //root.showDetailViewController(<#T##vc: UIViewController##UIKit.UIViewController#>, sender: <#T##Any?##Any?#>)
+    if let nav = root as? UINavigationController {
+
+        var target: UIViewController? = nil
+        for vc in nav.viewControllers {
+            if vc.isEqualClassName(type) {
+                target = vc
+                break
+            }
+        }
+
+        if let target = target {
+            nav.popToViewController(target, animated: flag)
+        } else {
+            L.w("未找到目标VC:\(classNameOf(type))")
+        }
+    } else {
+        //暂不支持
+        //hide(viewController, animated: flag)
     }
 }
 

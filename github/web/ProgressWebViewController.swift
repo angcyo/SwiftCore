@@ -207,6 +207,17 @@ open class ProgressWebViewController: UIViewController {
 
     public convenience init(_ progressWebViewController: ProgressWebViewController) {
         self.init()
+        initFrom(progressWebViewController)
+    }
+
+    deinit {
+        webView?.removeObserver(self, forKeyPath: estimatedProgressKeyPath)
+        webView?.removeObserver(self, forKeyPath: titleKeyPath)
+
+        webView?.scrollView.delegate = nil
+    }
+
+    open func initFrom(_ progressWebViewController: ProgressWebViewController) {
         self.bypassedSSLHosts = progressWebViewController.bypassedSSLHosts
         self.userAgent = progressWebViewController.userAgent
         self.disableZoom = progressWebViewController.disableZoom
@@ -222,13 +233,10 @@ open class ProgressWebViewController: UIViewController {
         self.rightNavigationBarItemTypes = progressWebViewController.rightNavigationBarItemTypes
         self.toolbarItemTypes = progressWebViewController.toolbarItemTypes
         self.delegate = progressWebViewController.delegate
-    }
 
-    deinit {
-        webView?.removeObserver(self, forKeyPath: estimatedProgressKeyPath)
-        webView?.removeObserver(self, forKeyPath: titleKeyPath)
-
-        webView?.scrollView.delegate = nil
+        //angcyo
+        self.onWebViewDidStart = progressWebViewController.onWebViewDidStart
+        self.onWebViewDidFinish = progressWebViewController.onWebViewDidFinish
     }
 
     override open func loadView() {
@@ -347,6 +355,14 @@ open class ProgressWebViewController: UIViewController {
     override open func targetViewController(forAction action: Selector, sender: Any?) -> UIViewController? {
         return currentNavigationController
     }
+
+    //MARK: angcyo 2021-09-02
+
+    /// 开始加载url回调
+    var onWebViewDidStart: ((_ controller: ProgressWebViewController, _ url: URL) -> Void)? = nil
+
+    /// 加载完成url回调
+    var onWebViewDidFinish: ((_ controller: ProgressWebViewController, _ url: URL) -> Void)? = nil
 }
 
 // MARK: - Public Methods
@@ -700,17 +716,50 @@ extension ProgressWebViewController: WKUIDelegate {
 
 // MARK: - WKNavigationDelegate
 extension ProgressWebViewController: WKNavigationDelegate {
+
+    //1. 开始请求网址
+    ///https://stackoverflow.com/questions/48411938/allow-document-upload-in-input-file-on-wkwebview
+    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> ()) {
+        var actionPolicy: WKNavigationActionPolicy = .allow
+        defer {
+            decisionHandler(actionPolicy, preferences)
+        }
+    }
+
+    //2. 开始导航到目标
     public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         updateBarButtonItems()
         updateProgressViewFrame()
         if let url = webView.url {
+            L.i("开始加载:\(url)")
             if !isBlank(url: url) {
                 self.url = url
             }
             delegate?.progressWebViewController?(self, didStart: url)
+            self.onWebViewDidStart?(self, url)
         }
     }
 
+    //3.导航请求发送相应后
+    public func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+        var responsePolicy: WKNavigationResponsePolicy = .allow
+        defer {
+            decisionHandler(responsePolicy)
+        }
+        guard let url = navigationResponse.response.url, !url.isFileURL else {
+            return
+        }
+
+        if let result = delegate?.progressWebViewController?(self, decidePolicy: url, response: navigationResponse.response) {
+            responsePolicy = result ? .allow : .cancel
+        }
+
+        if navigationWay == .push, responsePolicy == .cancel, let webViewController = currentNavigationController?.topViewController as? ProgressWebViewController, webViewController.url?.appendingPathComponent("") == url.appendingPathComponent("") {
+            currentNavigationController?.popViewController(animated: true)
+        }
+    }
+
+    /// 4. 请求完成
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         updateBarButtonItems()
         updateProgressViewFrame()
@@ -718,13 +767,16 @@ extension ProgressWebViewController: WKNavigationDelegate {
             refreshControl.endRefreshing()
         }
         if let url = webView.url {
+            L.i("加载完成:\(url)")
             if !isBlank(url: url) {
                 self.url = url
             }
             delegate?.progressWebViewController?(self, didFinish: url)
+            self.onWebViewDidFinish?(self, url)
         }
     }
 
+    ///3.x 请求错误
     public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         updateBarButtonItems()
         updateProgressViewFrame()
@@ -756,6 +808,7 @@ extension ProgressWebViewController: WKNavigationDelegate {
         }
     }
 
+    /// 请求新内容
     @objc public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         var actionPolicy: WKNavigationActionPolicy = .allow
         defer {
@@ -766,7 +819,7 @@ extension ProgressWebViewController: WKNavigationDelegate {
         }
 
         //https://itunes.apple.com/cn/app/id382201985?mt=8
-        L.i("浏览:\(url)")
+        L.i("请求新内容:\(url)")
 
         if let targetFrame = navigationAction.targetFrame, !targetFrame.isMainFrame {
             return
@@ -808,32 +861,6 @@ extension ProgressWebViewController: WKNavigationDelegate {
         }
     }
 
-    public func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
-        var responsePolicy: WKNavigationResponsePolicy = .allow
-        defer {
-            decisionHandler(responsePolicy)
-        }
-        guard let url = navigationResponse.response.url, !url.isFileURL else {
-            return
-        }
-
-        if let result = delegate?.progressWebViewController?(self, decidePolicy: url, response: navigationResponse.response) {
-            responsePolicy = result ? .allow : .cancel
-        }
-
-        if navigationWay == .push, responsePolicy == .cancel, let webViewController = currentNavigationController?.topViewController as? ProgressWebViewController, webViewController.url?.appendingPathComponent("") == url.appendingPathComponent("") {
-            currentNavigationController?.popViewController(animated: true)
-        }
-    }
-
-    ///https://stackoverflow.com/questions/48411938/allow-document-upload-in-input-file-on-wkwebview
-    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> ()) {
-        var actionPolicy: WKNavigationActionPolicy = .allow
-        defer {
-            decisionHandler(actionPolicy, preferences)
-        }
-    }
-
     public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
         if viewIfLoaded?.window != nil {
             reload()
@@ -868,6 +895,7 @@ extension ProgressWebViewController: UIGestureRecognizerDelegate {
 
 // MARK: - @objc
 @objc extension ProgressWebViewController {
+
     func backDidClick(sender: AnyObject) {
         webView?.goBack()
     }

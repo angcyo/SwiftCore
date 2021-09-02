@@ -13,4 +13,12 @@ extension URL {
     func isFile() -> Bool {
         isFileURL
     }
+
+    ///absoluteString "http://test.kaiyang.wayto.com.cn/kaiyangQys/kyQys/getAuth?faceOcrResultId=1&backOcrResultId=2"
+    ///host "test.kaiyang.wayto.com.cn"
+    ///path "/kaiyangQys/kyQys/getAuth"
+    ///query "faceOcrResultId=1&backOcrResultId=2"
+    ///scheme "http"
+    ///port nil
+    ///url "http://test.kaiyang.wayto.com.cn/kaiyangQys/kyQys/getAuth?faceOcrResultId=1&backOcrResultId=2"
 }
