@@ -9,12 +9,12 @@ class BaseTabBarController: UITabBarController, INavigation {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        L.i("\(threadName())->创建:\(self)")
         initController()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        initController()
     }
 
     //MARK: INavigation
@@ -23,6 +23,8 @@ class BaseTabBarController: UITabBarController, INavigation {
     var showToolbar: Bool = false
 
     func initController() {
+        L.i("->创建:\(self)")
+
         //init
         tabBar.isTranslucent = true // 半透明, 毛玻璃效果
         tabBar.backgroundColor = UIColor.white
@@ -40,7 +42,7 @@ class BaseTabBarController: UITabBarController, INavigation {
     /// Swift 的ARC, 在创建对象之后, 没有被引用会立马被回收.
     /// https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html
     deinit {
-        L.w("\(threadName())->销毁:\(self)")
+        L.w("->销毁:\(self)")
     }
 }
 

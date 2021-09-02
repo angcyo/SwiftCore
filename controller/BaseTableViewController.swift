@@ -23,13 +23,6 @@ class BaseTableViewController: BaseViewController {
         }
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        //dslTableView = DslTableView()
-        initTableView(tableView: dslTableView)
-        initKeyboard()
-    }
-
     /// 创建视图
     func createTableView() -> DslTableView {
         DslTableView(frame: .zero, style: .plain)
@@ -39,6 +32,13 @@ class BaseTableViewController: BaseViewController {
         //$0.safeAreaLayoutGuide.topAnchor.constraint(equalTo: navController.navigationBar.bottomAnchor)
         //$0.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: bottomLayoutGuide.bottomAnchor)
         //}
+    }
+
+    override func initControllerView() {
+        super.initControllerView()
+        //dslTableView = DslTableView()
+        initTableView(tableView: dslTableView)
+        initKeyboard()
     }
 
     /// 初始化

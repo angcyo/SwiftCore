@@ -20,7 +20,7 @@ open class BaseViewController: UIViewController, INavigation {
     public init() {
         super.init(nibName: nil, bundle: nil)
         //bounds:(0.0, 0.0, 375.0, 812.0)
-        L.i("\(threadName())->创建:\(self):\(modalPresentationStyle.rawValue)") //pageSheet
+        L.i("->创建:\(self):\(modalPresentationStyle.rawValue)") //pageSheet
         initController()
     }
 
@@ -53,11 +53,11 @@ open class BaseViewController: UIViewController, INavigation {
     var showNavigationBar: Bool = true
     var showToolbar: Bool = false
 
-    /// 此方法会在[viewDidLoad]之后触发
+    /// 构造方法中回调, 请勿在此方法中使用view, 否则会触发viewDidLoad
     func initController() {
         //init
-        print("initController:\(self):bounds:\(view.bounds)")
-        view.backgroundColor = Res.color.controllerBackgroundColor
+        //print("initController:\(self):bounds:\(view.bounds)")
+        //view.backgroundColor = Res.color.controllerBackgroundColor
     }
 
     /// 保存对象, 防止被ARC回收. 通常delegate都需要保存起来
@@ -83,13 +83,19 @@ open class BaseViewController: UIViewController, INavigation {
 
     open override func loadView() {
         super.loadView()
-        print("\(threadName())->加载试图:\(self)")
+        L.i("->加载试图:\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")
     }
 
     /// 加载试图
     open override func viewDidLoad() {
         super.viewDidLoad()
-        print("viewDidLoad:\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")
+        L.i("->viewDidLoad:\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")
+        initControllerView()
+    }
+
+    /// 重写此方法, 实现视图布局
+    func initControllerView() {
+
     }
 
     /// 试图将要显示, 从后台切回来时, 不会触发. 只会触发Scene相关的生命周期
@@ -147,6 +153,6 @@ open class BaseViewController: UIViewController, INavigation {
     /// Swift 的ARC, 在创建对象之后, 没有被引用会立马被回收.
     /// https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html
     deinit {
-        L.w("\(threadName())->销毁:\(self)")
+        L.w("->销毁:\(self)")
     }
 }
