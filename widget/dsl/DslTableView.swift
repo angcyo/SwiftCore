@@ -35,7 +35,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
         estimatedSectionFooterHeight = UITableView.automaticDimension
         sectionFooterHeight = UITableView.automaticDimension
 
-        estimatedRowHeight = UITableView.automaticDimension
+        estimatedRowHeight = Res.size.itemMinHeight //UITableView.automaticDimension
         rowHeight = UITableView.automaticDimension
 
         /*if style == .grouped || style == .insetGrouped {
@@ -204,7 +204,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         //return 50
         print("estimatedHeightForRowAt:\(indexPath)")
-        return getTableItem(indexPath)?.itemEstimatedHeight ?? 50
+        return getTableItem(indexPath)?.itemEstimatedHeight ?? Res.size.itemMinHeight
     }
 
     /// 头部的高度

@@ -26,9 +26,9 @@ open class FormTextViewTableItem: BaseFormTableItem, ITextViewItem {
         super.bindCell(cell, indexPath)
 
         cell.cellConfigOf(FormTextViewCellConfig.self) {
-            $0.setTextViewHeight(itemTextViewHeight)
             initTextViewItem($0.text)
             $0.rightTitle.text = itemRightTitle
+            $0.setTextViewHeight(itemTextViewHeight)
         }
     }
 
@@ -80,28 +80,24 @@ class FormTextViewCellConfig: BaseFormItemCellConfig {
         cell.cellContentView.render(formLine)
         cell.cellContentView.render(formRequired)
 
-        formLabel.setContentHuggingPriority(.required, for: .horizontal)
-        with(formLabel) {
-            //$0.backgroundColor = UIColor.yellow
-            $0.makeGravityLeft(offset: Res.size.x)
-            $0.makeCenterY()
-            $0.makeWidth(minWidth: labelMinWidth)
-            $0.sizeToFit()
-        }
+        formLabel.lowStretch()
+        setLabelMinWidth()
 
-        rightTitle.setContentHuggingPriority(.required, for: .horizontal)
+        rightTitle.lowStretch()
         with(rightTitle) {
             //$0.backgroundColor = UIColor.green
             $0.makeGravityRight(offset: Res.size.x)
             $0.makeCenterY()
-            $0.sizeToFit()
+            //$0.sizeToFit()
         }
 
         //text
+        text.highStretch()
         setTextViewHeight(-1)
 
         with(formLine) {
-            $0.makeTopToBottomOf(text)
+            //$0.makeTopToBottomOf(text, offset: Res.size.x)
+            $0.makeGravityBottom()
             $0.makeGravityHorizontal(offset: Res.size.x)
             $0.makeHeight(Res.size.line)
         }
@@ -117,12 +113,20 @@ class FormTextViewCellConfig: BaseFormItemCellConfig {
         setShowRequired()
     }
 
+    /// 文本输入视图的高度, <=0 自适应
     func setTextViewHeight(_ height: CGFloat) {
         text.remakeView {
-            $0.makeLeftToRightOf(formLabel)
-            $0.makeRightToLeftOf(rightTitle)
-            $0.makeGravityTop(offset: Res.size.m)
-            $0.makeGravityBottom(offset: Res.size.m)
+            //$0.backgroundColor = UIColor.red
+
+            let offset = Res.size.x
+            let offsetLeft = max(labelMinWidth, formLabel.sizeOf().width) + offset
+            let offsetRight = rightTitle.sizeOf(offsetWidth: offset).width
+
+            $0.makeGravityLeft(offset: offsetLeft)
+            $0.makeGravityRight(offset: offsetRight)
+            $0.makeGravityTop(offset: Res.size.x)
+            $0.makeGravityBottom(offset: Res.size.x)
+
             if height > 0 {
                 $0.makeHeight(height)
             }

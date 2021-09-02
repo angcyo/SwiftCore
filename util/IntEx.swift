@@ -71,12 +71,12 @@ public extension Int32 {
 
     /// Max double value.
     static var max: Int32 {
-        return INT32_MAX
+        INT32_MAX
     }
 
     /// Min double value.
     static var min: Int32 {
-        return -INT32_MAX
+        -INT32_MAX
     }
 }
 
@@ -84,13 +84,29 @@ public extension Float {
 
     /// Max double value. 3.4028235e+38
     static var max: Float {
-        return Float(greatestFiniteMagnitude)
+        return greatestFiniteMagnitude
     }
 
     /// Min double value. -3.4028235e+38
     static var min: Float {
-        return Float(-greatestFiniteMagnitude)
+        return -greatestFiniteMagnitude
     }
+}
+
+public extension CGFloat {
+
+    /// Max CGFloat value. CGFloat.greatestFiniteMagnitude 1.7976931348623157E+308
+    static var max: CGFloat {
+        greatestFiniteMagnitude
+    }
+
+    /// Min CGFloat value. -1.7976931348623157E+308
+    static var min: CGFloat {
+        -greatestFiniteMagnitude
+    }
+
+    //CGFloat.leastNormalMagnitude 2.2250738585072014E-308
+    //CGFloat.leastNonzeroMagnitude 4.9406564584124654E-324
 }
 
 public extension Double {

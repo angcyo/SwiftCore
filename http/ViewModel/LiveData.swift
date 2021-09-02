@@ -48,21 +48,25 @@ extension BehaviorSubject where Element: LiveData {
         }
     }
 
-    func bean<Bean>() -> Bean? {
+    func bean<Bean>(_ type: Bean.Type = Bean.self) -> Bean? {
         valueOrNil() as? Bean
     }
 
-    func data<Bean>() -> Bean? {
+    func data<Bean>(_ type: Bean.Type = Bean.self) -> Bean? {
         valueOrNil() as? Bean
     }
 
-    func beanOrNil<Bean>() -> Bean? {
+    func beanOrNil<Bean>(_ type: Bean.Type = Bean.self) -> Bean? {
         valueOrNil() as? Bean
     }
 
     /// 设置值
     func setValue(_ value: Any?) {
-        onNext(LiveData(value) as! BehaviorSubject<Element>.Element)
+        if let data = value as? LiveData {
+            onNext(data as! BehaviorSubject<Element>.Element)
+        } else {
+            onNext(LiveData(value) as! BehaviorSubject<Element>.Element)
+        }
     }
 
     /// 观察value or nil

@@ -56,8 +56,6 @@ open class BaseViewController: UIViewController, INavigation {
     /// 构造方法中回调, 请勿在此方法中使用view, 否则会触发viewDidLoad
     func initController() {
         //init
-        //print("initController:\(self):bounds:\(view.bounds)")
-        //view.backgroundColor = Res.color.controllerBackgroundColor
     }
 
     /// 保存对象, 防止被ARC回收. 通常delegate都需要保存起来
@@ -95,7 +93,8 @@ open class BaseViewController: UIViewController, INavigation {
 
     /// 重写此方法, 实现视图布局
     func initControllerView() {
-
+        //print("initController:\(self):bounds:\(view.bounds)")
+        view.backgroundColor = Res.color.controllerBackgroundColor
     }
 
     /// 试图将要显示, 从后台切回来时, 不会触发. 只会触发Scene相关的生命周期

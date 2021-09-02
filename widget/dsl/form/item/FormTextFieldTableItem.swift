@@ -73,12 +73,16 @@ class FormTextFieldCellConfig: BaseFormItemCellConfig {
         wrap.setPadding(Res.size.x)
         wrap.mWwH(minHeight: Res.size.itemMinHeight)
         wrap.setGravity(TGGravity.vert.center)
+        //wrap.tg_gravity = [TGGravity.horz.center, TGGravity.vert.baseline]
+        //wrap.backgroundColor = UIColor.red
 
         wrap.render(formLabel) {
+            //$0.backgroundColor = UIColor.yellow
             $0.wrap_content(minWidth: self.labelMinWidth)
         }
 
         wrap.render(text) {
+            //$0.backgroundColor = UIColor.green
             $0.mWwH(minHeight: Res.size.minHeight)
         }
         wrap.render(rightTitle) {

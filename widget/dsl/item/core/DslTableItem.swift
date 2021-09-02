@@ -27,7 +27,7 @@ open class DslTableItem: DslItem {
     //MARK: [DslTableView] 代理配置-Item
 
     var itemHeight: CGFloat = UITableView.automaticDimension
-    var itemEstimatedHeight: CGFloat = 50
+    var itemEstimatedHeight: CGFloat = Res.size.itemMinHeight
 
     //MARK: [DslTableView] 代理配置-Header
     var itemHeaderView: UIView? = nil
@@ -189,7 +189,7 @@ class DslTableCell: UITableViewCell, IDslCell {
         if let cellConfig = getCellConfig() {
             let rootView = cellConfig.getRootView(self)
             if rootView is TGBaseLayout {
-                return rootView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
+                return rootView.sizeThatFits(CGSize(width: targetSize.width - safeAreaInsets.left - safeAreaInsets.right, height: targetSize.height))
             }
         }
         return super.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)

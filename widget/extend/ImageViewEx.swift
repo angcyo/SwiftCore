@@ -53,7 +53,7 @@ extension UIImageView {
                         cacheKey: url,
                         placeholderImage: nameImage,
                         progress: { (progress: Progress) in
-                            L.d("加载进度:\(progress):\(url)")
+                            L.d("加载进度:\(progress.fractionCompleted * 100)% \(progress):\(url)")
                         },
                         completion: { (data: AFIDataResponse<UIImage>) in
                             L.d("加载进度完成:\(url)")
@@ -103,6 +103,13 @@ func img(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
     // 内容模式 https://www.jianshu.com/p/e1f8e4664faf
     view.contentMode = .scaleAspectFill
 
+    return view
+}
+
+/// 等比缩放到控件size
+func scaleImageView(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
+    let view = img(image, tintColor: tintColor)
+    view.contentMode = .scaleAspectFit
     return view
 }
 

@@ -8,10 +8,11 @@ import UIKit
 /// https://blog.csdn.net/u013406800/article/details/103859529
 /// setContentCompressionResistancePriority 压缩优先级 值越小, 优先被压缩
 /// setContentHuggingPriority 拉伸优先级 值越小, 优先被拉伸
+/// https://blog.csdn.net/x567851326/article/details/51513212
 
 extension UIView {
 
-    /// 不拉伸
+    /// 不拉伸, 阻止自己变大
     func lowStretch(for axis: NSLayoutConstraint.Axis = .horizontal) {
         setContentHuggingPriority(.required, for: axis)
     }
@@ -21,8 +22,7 @@ extension UIView {
         setContentHuggingPriority(.defaultLow, for: axis)
     }
 
-
-    /// 不压缩
+    /// 不压缩, 阻止自己变小
     func lowCompression(for axis: NSLayoutConstraint.Axis = .horizontal) {
         setContentCompressionResistancePriority(.required, for: axis)
     }
@@ -500,6 +500,35 @@ extension UIView {
 //MARK: - 控件布局扩展
 
 extension UIView {
+
+    var width: CGFloat {
+        get {
+            bounds.width
+        }
+    }
+
+    var height: CGFloat {
+        get {
+            bounds.height
+        }
+    }
+
+    /// 返回视图计算后的内容大小 [ignoreHidden]是否忽略视图隐藏, 不忽略则隐藏后size为0
+    func sizeOf(_ targetSize: CGSize? = nil, offsetWidth: CGFloat = 0, offsetHeight: CGFloat = 0, ignoreHidden: Bool = false) -> CGSize {
+        let targetSize = targetSize ?? cgSize(CGFloat.max, CGFloat.max)
+        var size: CGSize
+
+        if isHidden && !ignoreHidden {
+            size = .zero
+        } else {
+            size = sizeThatFits(targetSize)
+        }
+
+        size.width += offsetWidth
+        size.height += offsetHeight
+
+        return size
+    }
 
     func removeView(_ viewClass: AnyClass) {
         for view in subviews.reversed() {

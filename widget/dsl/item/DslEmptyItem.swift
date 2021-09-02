@@ -9,12 +9,16 @@ import UIKit
 
 class DslEmptyTableItem: DslTableItem {
 
+    /// 宽度
     var itemWidth: CGFloat = 0.01
 
+    /// 背景色
     var itemBackgroundColor: UIColor = UIColor.clear
 
     override func initItem() {
         super.initItem()
+
+        /// 高度
         itemHeight = 0.01
     }
 

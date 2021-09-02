@@ -62,6 +62,22 @@ func rect(_ x: CGFloat, _ y: CGFloat, _ width: CGFloat, _ height: CGFloat) -> CG
     CGRect(x: x, y: y, width: width, height: height)
 }
 
+func size(_ size: CGFloat) -> CGSize {
+    CGSize(width: size, height: size)
+}
+
+func size(_ width: CGFloat, _ height: CGFloat) -> CGSize {
+    CGSize(width: width, height: height)
+}
+
+func cgSize(_ size: CGFloat) -> CGSize {
+    CGSize(width: size, height: size)
+}
+
+func cgSize(_ width: CGFloat, _ height: CGFloat) -> CGSize {
+    CGSize(width: width, height: height)
+}
+
 func rect(_ width: CGFloat, _ height: CGFloat) -> CGRect {
     rect(0, 0, width, height)
 }

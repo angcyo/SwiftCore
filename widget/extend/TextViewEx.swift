@@ -32,7 +32,7 @@ extension UITextView {
 
 
         //https://www.jianshu.com/p/32a4747a19fb
-        textContainerInset = insets(left: 0, top: 8, right: 0, bottom: 8) //系统默认
+        textContainerInset = insets(left: 0, top: Res.size.textInset, right: 0, bottom: Res.size.textInset) //系统默认8
         //contentInset = insets(left: 0, top: 8, right: 0, bottom: 8)
         //textContainer.lineFragmentPadding = 0
     }

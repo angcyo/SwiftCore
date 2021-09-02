@@ -81,8 +81,9 @@ struct Res {
         // Flow间隙
         static var space: CGFloat = 8
 
+        static var textInset: CGFloat = 8 //ios textContainerInset 默认就是8
         // 表单左边距
-        static var leftMargin: CGFloat = 16
+        static var leftMargin: CGFloat = 16 //ios insetGrouped 边距默认也是16
         static var leadingMargin: CGFloat = 16 //头
         static var trailingMargin: CGFloat = 16 //尾
 

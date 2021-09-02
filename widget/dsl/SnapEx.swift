@@ -48,9 +48,12 @@ extension UIView {
     }
 
     func remakeView(_ closure: (_ view: UIView) -> Void) {
-        snp.remakeConstraints { _ in
+        snp.removeConstraints()
+        closure(self)
+
+        /*snp.remakeConstraints { _ in
             closure(self)
-        }
+        }*/
     }
 
     /// snp dsl
@@ -196,12 +199,12 @@ extension UIView {
                        rightOffset: ConstraintOffsetTarget = 0) {
         make { maker in
             if parent is Number {
-                maker.left.equalTo(superview!).offset(leftOffset)
-                maker.right.equalTo(superview!).offset(rightOffset)
+                maker.leading.equalTo(superview!).offset(leftOffset)
+                maker.trailing.equalTo(superview!).offset(rightOffset)
                 maker.width.equalTo(parent!)
             } else {
-                maker.left.equalTo(parent ?? superview!).offset(leftOffset)
-                maker.right.equalTo(parent ?? superview!).offset(rightOffset)
+                maker.leading.equalTo(parent ?? superview!).offset(leftOffset)
+                maker.trailing.equalTo(parent ?? superview!).offset(rightOffset)
             }
         }
     }
@@ -252,15 +255,15 @@ extension UIView {
 
     func makeGravityLeft(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
         make { maker in
-            maker.left.equalTo(parent ?? superview!).offset(offset)
+            maker.leading.equalTo(parent ?? superview!).offset(offset)
         }
     }
 
     func makeGravityHorizontal(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
         make { maker in
             let parent = toConstraintTarget(parent)
-            maker.left.equalTo(parent).offset(offset)
-            maker.right.equalTo(parent).offset(offset.reverse())
+            maker.leading.equalTo(parent).offset(offset)
+            maker.trailing.equalTo(parent).offset(offset.reverse())
         }
     }
 
@@ -275,7 +278,7 @@ extension UIView {
     /// 注意offset可能需要是负值, 已自动取负值
     func makeGravityRight(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
         make { maker in
-            maker.right.equalTo(parent ?? superview!).offset(offset.reverse())
+            maker.trailing.equalTo(parent ?? superview!).offset(offset.reverse())
         }
     }
 
@@ -291,7 +294,7 @@ extension UIView {
                            offset: ConstraintOffsetTarget = 0) {
         make { maker in
             let parent = toConstraintTargetView(parent)
-            maker.left.equalTo(parent.snp.right).offset(offset)
+            maker.leading.equalTo(parent.snp.trailing).offset(offset)
         }
     }
 
@@ -299,7 +302,7 @@ extension UIView {
                           offset: ConstraintOffsetTarget = 0) {
         make { maker in
             let parent = toConstraintTargetView(parent)
-            maker.left.equalTo(parent.snp.left).offset(offset)
+            maker.leading.equalTo(parent.snp.leading).offset(offset)
         }
     }
 
@@ -307,7 +310,7 @@ extension UIView {
                             offset: ConstraintOffsetTarget = 0) {
         make { maker in
             let parent = toConstraintTargetView(parent)
-            maker.right.equalTo(parent.snp.right).offset(offset.reverse())
+            maker.trailing.equalTo(parent.snp.trailing).offset(offset.reverse())
         }
     }
 
@@ -315,7 +318,7 @@ extension UIView {
                            offset: ConstraintOffsetTarget = 0) {
         make { maker in
             let parent = toConstraintTargetView(parent)
-            maker.right.equalTo(parent.snp.left).offset(offset)
+            maker.trailing.equalTo(parent.snp.leading).offset(offset)
         }
     }
 
