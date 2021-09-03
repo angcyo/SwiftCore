@@ -194,3 +194,21 @@ func delay(_ delay: Double, closure: @escaping () -> Void) {
     DispatchQueue.main.asyncAfter(
             deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
 }
+
+/// 复制数据
+func copyData(_ obj: Any?) {
+    let pasteboard: UIPasteboard = UIPasteboard.general
+    if let obj = obj {
+        if let s = obj as? String {
+            pasteboard.string = s
+        } else if let url = obj as? URL {
+            pasteboard.url = url
+        } else if let image = obj as? UIImage {
+            pasteboard.image = image
+        } else if let color = obj as? UIColor {
+            pasteboard.color = color
+        } else {
+            L.w("不支持的数据类型:\(classNameOf(obj))")
+        }
+    }
+}

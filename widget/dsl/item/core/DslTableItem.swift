@@ -184,6 +184,23 @@ class DslTableCell: UITableViewCell, IDslCell {
         super.draw(rect)
     }
 
+    override func sizeToFit() {
+        super.sizeToFit()
+    }
+
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        super.sizeThatFits(size)
+    }
+
+    override func systemLayoutSizeFitting(_ targetSize: CGSize) -> CGSize {
+        super.systemLayoutSizeFitting(targetSize)
+    }
+
+    /// UILayoutPriority.defaultLow.rawValue 250
+    /// UILayoutPriority.sceneSizeStayPut.rawValue 500
+    /// UILayoutPriority.defaultHigh.rawValue 750
+    /// horizontalFittingPriority 默认是 UILayoutPriority.required.rawValue 1000
+    /// verticalFittingPriority 默认时 UILayoutPriority.fittingSizeLevel.rawValue 50
     override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
         //IDslCell
         if let cellConfig = getCellConfig() {

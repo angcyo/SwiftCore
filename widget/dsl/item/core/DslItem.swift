@@ -197,6 +197,92 @@ extension DslItem {
         let cls: AnyClass? = cellName.toClass()
         return cls
     }
+
+    /// 判断当前item,是否是列表中的最后一个
+    func isLastItem() -> Bool {
+        var result = false
+
+        if let anchorIndex = itemIndex, let tableView = _dslRecyclerView as? UITableView {
+            result = anchorIndex.section == tableView.numberOfSections - 1 &&
+                    anchorIndex.row == tableView.numberOfRows(inSection: anchorIndex.section) - 1
+        }
+
+        return result
+    }
+
+    /// 获取当前cell开始, 之前cell的所有高度
+    func beforeCellHeight() -> CGFloat {
+        var result: CGFloat = 0
+
+        if let anchorIndex = itemIndex, let tableView = _dslRecyclerView as? UITableView {
+
+            // 循环获取section
+            for s in 0..<tableView.numberOfSections {
+                if s > anchorIndex.section {
+                    // 到达
+                    break
+                } else {
+                    var interrupt = false //结束
+                    let headerHeight = tableView.rectForHeader(inSection: s).height
+                    result += headerHeight
+                    for r in 0..<tableView.numberOfRows(inSection: s) {
+                        // 循环获取row
+                        if s == anchorIndex.section && r >= anchorIndex.row {
+                            //到达
+                            interrupt = true
+                            break
+                        } else {
+                            let cellHeight = tableView.rectForRow(at: indexPath(row: r, section: s)).height
+                            result += cellHeight
+                        }
+                    }
+                    if interrupt {
+                        break
+                    } else {
+                        let footerHeight = tableView.rectForFooter(inSection: s).height
+                        result += footerHeight
+                    }
+                }
+            }
+
+        }
+
+        return result
+    }
+
+    /// 获取当前cell开始, 之前cell中最大的宽度
+    func beforeCellMaxWidth() -> CGFloat {
+        var result: CGFloat = 0
+
+        if let anchorIndex = itemIndex, let tableView = _dslRecyclerView as? UITableView {
+
+            // 循环获取section
+            for s in 0..<tableView.numberOfSections {
+                if s > anchorIndex.section {
+                    // 到达
+                    break
+                } else {
+                    var interrupt = false //结束
+                    for r in 0..<tableView.numberOfRows(inSection: s) {
+                        // 循环获取row
+                        if s == anchorIndex.section && r >= anchorIndex.row {
+                            //到达
+                            interrupt = true
+                            break
+                        } else {
+                            let cellWidth = tableView.rectForRow(at: indexPath(row: r, section: s)).width
+                            result = max(result, cellWidth)
+                        }
+                    }
+                    if interrupt {
+                        break
+                    }
+                }
+            }
+        }
+
+        return result
+    }
 }
 
 extension DslItem {
