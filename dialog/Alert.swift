@@ -29,9 +29,11 @@ func showAlert(title: String? = nil,
                cancel: String? = "取消",
                _ confirmAction: ((_ alertViewController: UIAlertController, _ cancel: Bool) -> Void)? = nil) -> UIAlertController {
     let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-    alert.addAction(UIAlertAction(title: confirm, style: .default) { action in
+    let action = UIAlertAction(title: confirm, style: .default) { action in
         confirmAction?(alert, false)
-    })
+    }
+    //action.setValue(Res.color.colorAccent, forKey: "titleTextColor") //按钮文本颜色
+    alert.addAction(action)
     if let cancel = cancel {
         alert.addAction(UIAlertAction(title: cancel, style: .cancel) { action in
             confirmAction?(alert, true)

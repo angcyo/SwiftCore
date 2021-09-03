@@ -356,4 +356,17 @@ extension UIView {
             maker.bottom.equalTo(parent.snp.top).offset(offset.reverse())
         }
     }
+
+    //MARK: 比例约束 http://snapkit.io/docs/
+
+    /// 宽度是高度的多少倍, 默认是自身的高度 [amount] w/h
+    func makeWidthRatio(_ amount: ConstraintMultiplierTarget = 1, other: ConstraintRelatableTarget? = nil) {
+        makeWidth(other ?? snp.height, amount: amount)
+    }
+
+    /// 高度是宽度的多少倍, 默认是自身的高度 [amount] h/w
+    func makeHeightRatio(_ amount: ConstraintMultiplierTarget = 1, other: ConstraintRelatableTarget? = nil) {
+        makeHeight(other ?? snp.width, amount: amount)
+    }
+
 }

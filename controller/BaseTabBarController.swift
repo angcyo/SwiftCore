@@ -56,7 +56,13 @@ extension UIViewController {
         vc.tabBarItem.image = image
         vc.tabBarItem.selectedImage = selectedImage
         vc.tabBarItem.title = title
+        vc.tabBarItem.badgeColor = Res.color.colorAccent
         //vc.tabBarItem.setTitleTextAttributes([.foregroundColor: UIColor.red], for: .selected) //文本颜色
         addChild(vc)
+    }
+
+    /// 更新徽章
+    func updateBadge(_ value: String?) {
+        tabBarItem.badgeValue = value
     }
 }

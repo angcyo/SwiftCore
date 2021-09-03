@@ -113,6 +113,13 @@ func scaleImageView(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageVi
     return view
 }
 
+/// 等比填充到控件size
+func fillImageView(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
+    let view = img(image, tintColor: tintColor)
+    view.contentMode = .scaleAspectFill
+    return view
+}
+
 func image(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
     img(image, tintColor: tintColor)
 }

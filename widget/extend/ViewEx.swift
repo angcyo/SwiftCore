@@ -573,6 +573,16 @@ extension UIView {
         }
     }
 
+    /// 将当前的view, 移动到兄弟视图的前面
+    func toFront() {
+        superview?.bringSubviewToFront(self)
+    }
+
+    /// 将当前的view, 移动到兄弟视图的后面
+    func toBack() {
+        superview?.sendSubviewToBack(self)
+    }
+
 }
 
 /// 获取一个渐变 图层
