@@ -717,14 +717,16 @@ extension ProgressWebViewController: WKUIDelegate {
 // MARK: - WKNavigationDelegate
 extension ProgressWebViewController: WKNavigationDelegate {
 
-    //1. 开始请求网址
+    //1. 开始请求网址, 如果实现了此代理, 则不会触发 decidePolicyFor: decisionHandler: 回调
     ///https://stackoverflow.com/questions/48411938/allow-document-upload-in-input-file-on-wkwebview
-    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> ()) {
+    /*public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> ()) {
         var actionPolicy: WKNavigationActionPolicy = .allow
         defer {
             decisionHandler(actionPolicy, preferences)
         }
-    }
+        L.d("准备请求:\(webView.url)")
+        decisionHandler(.allow, preferences)
+    }*/
 
     //2. 开始导航到目标
     public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
@@ -778,6 +780,7 @@ extension ProgressWebViewController: WKNavigationDelegate {
 
     ///3.x 请求错误
     public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        L.w("请求失败1:\(webView.url):\(error)")
         updateBarButtonItems()
         updateProgressViewFrame()
         if pullToRefresh {
@@ -789,6 +792,7 @@ extension ProgressWebViewController: WKNavigationDelegate {
     }
 
     public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        L.w("请求失败2:\(webView.url):\(error)")
         updateBarButtonItems()
         updateProgressViewFrame()
         if pullToRefresh {
@@ -799,6 +803,7 @@ extension ProgressWebViewController: WKNavigationDelegate {
         }
     }
 
+    //1.x https ssl验证
     public func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         if let bypassedSSLHosts = bypassedSSLHosts, bypassedSSLHosts.contains(challenge.protectionSpace.host) {
             let credential = URLCredential(trust: challenge.protectionSpace.serverTrust!)

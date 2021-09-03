@@ -67,9 +67,9 @@ class WebViewController: ProgressWebViewController, INavigation {
     /// 初始化桥梁
     func initBridge() {
         //注册一个方法
-        bridge?.register(handlerName: "testiOSCallback") { (parameters, callback) in
-            print("testiOSCallback called: \(String(describing: parameters))")
-            callback?("Response from testiOSCallback")
+        bridge?.register(handlerName: "hello") { (parameters, callback) in
+            print("hello called: \(String(describing: parameters))")
+            callback?("Response from hello")
         }
     }
 
