@@ -7,7 +7,7 @@ import UIKit
 import TangramKit
 
 /// 横线item, 支持padding
-class LineItem: DslItem {
+class DslLineItem: DslItem {
 
     var itemPaddingLeft = Res.size.leftMargin
     var itemPaddingRight = Res.size.leftMargin
@@ -17,7 +17,7 @@ class LineItem: DslItem {
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
 
-        guard let cell = cell as? LineCell else {
+        guard let cell = cell as? DslLineCell else {
             return
         }
 
@@ -25,7 +25,7 @@ class LineItem: DslItem {
     }
 }
 
-class LineCell: DslTableCell, IFrameCell {
+class DslLineCell: DslTableCell, IFrameCell {
 
     let root = frameLayout()
     let line = lineView()

@@ -193,17 +193,17 @@ extension UIView {
         }
     }
 
-    func makeWidthHeight(size: ConstraintRelatableTarget) {
+    func makeWidthHeight(size: ConstraintRelatableTarget, priority: ConstraintPriority = .required) {
         make { maker in
-            maker.width.height.equalTo(size)
+            maker.width.height.equalTo(size).priority(priority)
         }
     }
 
     /// 约束自身的宽高等于目标的宽高
-    func makeWidthHeight(view: UIView, widthAmount: ConstraintMultiplierTarget = 1, heightAmount: ConstraintMultiplierTarget = 1) {
+    func makeWidthHeight(view: UIView?, widthAmount: ConstraintMultiplierTarget = 1, heightAmount: ConstraintMultiplierTarget = 1) {
         make { maker in
-            maker.width.equalTo(view.snap.width).multipliedBy(widthAmount)
-            maker.height.equalTo(view.snap.height).multipliedBy(heightAmount)
+            maker.width.equalTo((view ?? superview!).snap.width).multipliedBy(widthAmount)
+            maker.height.equalTo((view ?? superview!).snap.height).multipliedBy(heightAmount)
         }
     }
 
@@ -270,14 +270,14 @@ extension UIView {
         }
     }
 
-    /// 横向居中
+    /// 横向居中. 水平居中
     func makeCenterX(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
         make { maker in
             maker.centerX.equalTo(parent ?? superview!).offset(offset)
         }
     }
 
-    /// 竖向居中
+    /// 竖向居中, 垂直居中
     func makeCenterY(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
         make { maker in
             maker.centerY.equalTo(parent ?? superview!).offset(offset)
@@ -423,6 +423,38 @@ extension UIView {
     /// 高度是宽度的多少倍, 默认是自身的高度 [amount] h/w
     func makeHeightRatio(_ amount: ConstraintMultiplierTarget = 1, other: ConstraintRelatableTarget? = nil) {
         makeHeight(other ?? snp.width, amount: amount)
+    }
+
+    //MARK: 撑满
+
+    /// 宽度撑满, 对齐顶部
+    func makeTopIn(_ view: UIView? = nil,
+                   offsetLeft: ConstraintOffsetTarget = 0,
+                   offsetTop: ConstraintOffsetTarget = 0,
+                   offsetRight: ConstraintOffsetTarget = 0,
+                   offsetBottom: ConstraintOffsetTarget = 0) {
+        let view = view ?? superview!
+        make { maker in
+            maker.leading.equalTo(view.snap.leading).offset(offsetLeft).priority(.low)
+            maker.trailing.equalTo(view.snap.trailing).offset(offsetRight.reverse()).priority(.low)
+            maker.bottom.equalTo(view.snap.bottom).offset(offsetBottom.reverse()).priority(.low)
+            maker.top.equalTo(view.snap.top).offset(offsetTop).priority(.required)
+        }
+    }
+
+    /// 宽度撑满, 对齐底部
+    func makeBottomIn(_ view: UIView? = nil,
+                      offsetLeft: ConstraintOffsetTarget = 0,
+                      offsetTop: ConstraintOffsetTarget = 0,
+                      offsetRight: ConstraintOffsetTarget = 0,
+                      offsetBottom: ConstraintOffsetTarget = 0) {
+        let view = view ?? superview!
+        make { maker in
+            maker.leading.equalTo(view.snap.leading).offset(offsetLeft).priority(.low)
+            maker.trailing.equalTo(view.snap.trailing).offset(offsetRight.reverse()).priority(.low)
+            maker.top.equalTo(view.snap.top).offset(offsetTop).priority(.low)
+            maker.bottom.equalTo(view.snap.bottom).offset(offsetBottom.reverse()).priority(.required)
+        }
     }
 
 }

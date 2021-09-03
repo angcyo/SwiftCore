@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 import TangramKit
 
-class DeviceTableItem: DslTableItem {
+class DslDeviceTableItem: DslTableItem {
 
     /// 设备信息
     var itemDeviceInfo: String? = nil
@@ -26,7 +26,7 @@ class DeviceTableItem: DslTableItem {
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
 
-        cell.cellOf(DeviceTableCell.self) {
+        cell.cellOf(DslDeviceTableCell.self) {
             //"开阳安防平台/Wayto.GBSecurity.iOS/com.angcyo.app
             //1.0/1 w:375.0 h:812.0 s:3.0"
 
@@ -79,7 +79,7 @@ class DeviceTableItem: DslTableItem {
     }
 }
 
-class DeviceTableCell: DslTableCell {
+class DslDeviceTableCell: DslTableCell {
 
     let root = frameLayout()
     let text = labelView()
