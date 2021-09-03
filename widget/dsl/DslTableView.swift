@@ -504,10 +504,15 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
         debugPrint("scrollViewWillBeginDecelerating:\(scrollView.contentOffset):\(scrollView.contentSize):\(scrollView.contentInset):\(scrollView.adjustedContentInset)")
     }
 
-    /// 技术减速滚动
+
+    /// 回调
+    var onScrollViewDidEndDecelerating: ((UIScrollView) -> Void)? = nil
+
+    /// 结束减速滚动
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         //(0.0, -88.0):(375.0, 199.0):UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0):UIEdgeInsets(top: 88.0, left: 0.0, bottom: 34.0, right: 0.0)
         debugPrint("scrollViewDidEndDecelerating:\(scrollView.contentOffset):\(scrollView.contentSize):\(scrollView.contentInset):\(scrollView.adjustedContentInset)")
+        onScrollViewDidEndDecelerating?(scrollView)
     }
 
     /// 滚动动画结束
@@ -656,13 +661,31 @@ class DslTableViewDiffableDataSource: UITableViewDiffableDataSource<DslSection, 
 }
 
 //MARK: 高度变化的快速方法
-func changeFirstCellHeight(_ tableView: UITableView, defaultHeight: Float) {
+func changeFirstCellHeight(_ tableView: UITableView, defaultHeight: CGFloat? = nil) {
     if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) {
-        //debugPrint(cell)
-        let y = tableView.contentOffset.y
-        if y <= 0 {
-            //下拉的时候, 才放大. 上拉不处理
-            cell.frame = CGRect(x: 0, y: tableView.contentOffset.y, width: cell.frame.width, height: CGFloat(defaultHeight) - tableView.contentOffset.y)
+        changeViewHeight(tableView, view: cell, defaultHeight: defaultHeight)
+    }
+}
+
+var KEY_DEFAULT_SCROLLER_BEFORE_HEIGHT = "key_default_scroller_before_height"
+
+// y 小于0, 手指向下滑动
+func changeViewHeight(_ tableView: UITableView, view: UIView, defaultHeight: CGFloat? = nil) {
+    let y = tableView.contentOffset.y
+    if y <= 0 {
+        var height: CGFloat
+        if defaultHeight == nil {
+            if let h = view.getObject(&KEY_DEFAULT_SCROLLER_BEFORE_HEIGHT) as? CGFloat {
+                height = h
+            } else {
+                //未初始化默认高度
+                view.setObject(&KEY_DEFAULT_SCROLLER_BEFORE_HEIGHT, view.bounds.height)
+                height = view.bounds.height
+            }
+        } else {
+            height = defaultHeight!
         }
+        //下拉的时候, 才放大. 上拉不处理
+        view.frame = CGRect(x: 0, y: tableView.contentOffset.y, width: view.frame.width, height: height - tableView.contentOffset.y)
     }
 }
