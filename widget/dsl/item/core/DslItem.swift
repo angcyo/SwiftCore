@@ -18,9 +18,13 @@ open class DslItem: NSObject, IDslItem {
     /// itemCell 可复用的标识
     var identifier: String {
         if itemCell == nil {
-            debugPrint("请配置[itemCell]")
+            L.e("请配置[itemCell]")
         }
-        return NSStringFromClass(itemCell!)
+        if let cellClass = itemCell {
+            return NSStringFromClass(cellClass)
+        } else {
+            fatalError("请配置[itemCell]")
+        }
     }
 
     /// 标识, 可以用来find
@@ -109,6 +113,9 @@ open class DslItem: NSObject, IDslItem {
 
         /*guard let cell = cell as? DslCell else {
             return
+        }*/
+
+        /*cell.cellOf(MeHeaderTableCell.self) {
         }*/
     }
 
@@ -217,6 +224,19 @@ extension DslItem {
     func bindItemLongClick(_ view: UIView) {
         view.onLongClick(bag: gestureDisposeBag) { _ in
             self.onItemLongClick?()
+        }
+    }
+
+    /// 绑定点击事件
+    func bindClick(_ view: UIView, action: (() -> Void)?) {
+        view.onClick(bag: gestureDisposeBag) { _ in
+            action?()
+        }
+    }
+
+    func bindLongClick(_ view: UIView, action: (() -> Void)?) {
+        view.onLongClick(bag: gestureDisposeBag) { _ in
+            action?()
         }
     }
 }

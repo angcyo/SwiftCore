@@ -107,16 +107,22 @@ func img(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
 }
 
 /// 等比缩放到控件size
-func scaleImageView(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
+func scaleImageView(_ image: Any? = nil, tintColor: UIColor? = nil, size: CGFloat? = nil) -> UIImageView {
     let view = img(image, tintColor: tintColor)
     view.contentMode = .scaleAspectFit
+    if let size = size {
+        view.frame = rect(size, size)
+    }
     return view
 }
 
 /// 等比填充到控件size
-func fillImageView(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
+func fillImageView(_ image: Any? = nil, tintColor: UIColor? = nil, size: CGFloat? = nil) -> UIImageView {
     let view = img(image, tintColor: tintColor)
     view.contentMode = .scaleAspectFill
+    if let size = size {
+        view.frame = rect(size, size)
+    }
     return view
 }
 
@@ -135,10 +141,12 @@ func iconView(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
     icon(image, tintColor: tintColor)
 }
 
-func imageView(size: CGFloat, radius: CGFloat = Res.size.roundLittle) -> UIImageView {
+func imageView(size: CGFloat? = nil, radius: CGFloat = Res.size.roundLittle) -> UIImageView {
     let view = image()
-    view.frame = rect(size, size)
     view.setRadius(radius)
+    if let size = size {
+        view.frame = rect(size, size)
+    }
     return view
 }
 

@@ -5,6 +5,24 @@
 import Foundation
 import SnapKit
 
+/*
+http://snapkit.io/docs/
+
+ViewAttribute	NSLayoutAttribute
+view.snp.left	NSLayoutConstraint.Attribute.left
+view.snp.right	NSLayoutConstraint.Attribute.right
+view.snp.top	NSLayoutConstraint.Attribute.top
+view.snp.bottom	NSLayoutConstraint.Attribute.bottom
+view.snp.leading	NSLayoutConstraint.Attribute.leading
+view.snp.trailing	NSLayoutConstraint.Attribute.trailing
+view.snp.width	NSLayoutConstraint.Attribute.width
+view.snp.height	NSLayoutConstraint.Attribute.height
+view.snp.centerX	NSLayoutConstraint.Attribute.centerX
+view.snp.centerY	NSLayoutConstraint.Attribute.centerY
+view.snp.lastBaseline	NSLayoutConstraint.Attribute.lastBaseline
+
+ */
+
 enum ConstraintTarget: ConstraintRelatableTarget {
     //父控件
     case PARENT
@@ -36,6 +54,11 @@ extension ConstraintOffsetTarget {
 // MARK: - 布局扩展, 需要库SnapKit支持 http://snapkit.io/docs/
 
 extension UIView {
+
+    /// snp 智能提示太慢了, 换个名字
+    var snap: ConstraintViewDSL {
+        snp
+    }
 
     /// snp dsl
     func make(_ closure: (_ make: ConstraintMaker) -> Void) {
@@ -173,6 +196,21 @@ extension UIView {
     func makeWidthHeight(size: ConstraintRelatableTarget) {
         make { maker in
             maker.width.height.equalTo(size)
+        }
+    }
+
+    /// 约束自身的宽高等于目标的宽高
+    func makeWidthHeight(view: UIView, widthAmount: ConstraintMultiplierTarget = 1, heightAmount: ConstraintMultiplierTarget = 1) {
+        make { maker in
+            maker.width.equalTo(view.snap.width).multipliedBy(widthAmount)
+            maker.height.equalTo(view.snap.height).multipliedBy(heightAmount)
+        }
+    }
+
+    ///make.size.equalTo(CGSize(width: 50, height: 100))
+    func makeSize(size: ConstraintRelatableTarget) {
+        make { maker in
+            maker.size.equalTo(size)
         }
     }
 
