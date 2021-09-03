@@ -356,7 +356,7 @@ extension UIView {
                            offset: ConstraintOffsetTarget = 0) {
         make { maker in
             let parent = toConstraintTargetView(parent)
-            maker.trailing.equalTo(parent.snp.leading).offset(offset)
+            maker.trailing.equalTo(parent.snp.leading).offset(offset.reverse())
         }
     }
 

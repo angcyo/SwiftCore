@@ -82,7 +82,7 @@ class DslDeviceTableItem: DslTableItem {
 class DslDeviceTableCell: DslTableCell {
 
     let root = frameLayout()
-    let text = labelView()
+    let text = labelView(size: Res.text.min.size)
 
     override func initCell() {
         super.initCell()

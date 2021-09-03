@@ -20,6 +20,7 @@ struct Res {
         static var label: (size: CGFloat, color: UIColor) = (size: 15.0, color: UIColor.parse("#ACB0B7"))
         static var tip: (size: CGFloat, color: UIColor) = (size: 12.0, color: UIColor.parse("#ACB0B7"))
         static var body: (size: CGFloat, color: UIColor) = (size: 14.0, color: UIColor.parse("#161D26"))
+        static var min: (size: CGFloat, color: UIColor) = (size: 9.0, color: UIColor.parse("#ACB0B7"))
     }
 
     // MARK: - 颜色资源
