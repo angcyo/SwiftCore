@@ -66,6 +66,12 @@ extension UILabel {
     func setTextColor(_ color: Any?) {
         textColor = toColor(color)
     }
+
+    /// 单行显示
+    func singleLine(line: Int = 1) {
+        numberOfLines = line
+        lineBreakMode = /*.byWordWrapping + */.byTruncatingTail
+    }
 }
 
 func labelView(_ text: String? = nil,
@@ -76,7 +82,7 @@ func labelView(_ text: String? = nil,
     view.font = UIFont.systemFont(ofSize: CGFloat(size), weight: .regular)
     view.textColor = color
     view.numberOfLines = 0 //任意行
-    view.lineBreakMode = .byWordWrapping
+    view.lineBreakMode = .byWordWrapping /*+ .byTruncatingTail*/
     if !nilOrEmpty(text) {
         view.sizeToFit()
     }

@@ -137,6 +137,19 @@ extension UIView {
         hide(!bool)
     }
 
+    /// 无内容
+    func isNoContent() -> Bool {
+        if let label = self as? UILabel {
+            return isHidden || nilOrEmpty(label.text)
+        } else if let text = self as? UITextField {
+            return isHidden || nilOrEmpty(text.text)
+        } else if let text = self as? UITextView {
+            return isHidden || nilOrEmpty(text.text)
+        } else {
+            return isHidden
+        }
+    }
+
     /// 将UIVIew转换成UIImage UIView截图
     func toImage() -> UIImage? {
         let size = bounds.size
@@ -148,6 +161,12 @@ extension UIView {
             UIGraphicsEndImageContext()
         }
         return image
+    }
+
+    func eachChild(_ action: (UIView) -> Void) {
+        for view in subviews {
+            action(view)
+        }
     }
 
     /// 通过id查找控件
@@ -374,7 +393,15 @@ extension UIView {
         }
     }
 
-    // 设置圆形边框
+    /// 切成圆
+    func setCircle() {
+        waitBounds {
+            let radius = max(self.bounds.width, self.bounds.height) / 2
+            self.setRadius(radius)
+        }
+    }
+
+    /// 设置圆形边框
     func setCircleBorder(_ strokeColor: UIColor = Res.color.colorAccent,
                          lineWidth: CGFloat = Res.size.line * 2,
                          fillColor: UIColor = UIColor.clear) {

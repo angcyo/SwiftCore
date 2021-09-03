@@ -27,8 +27,8 @@ extension UIImageView {
     }
 
     /// 显示头像
-    func setAvatarUrl(_ url: String?, name: String? = nil) {
-        if nilOrEmpty(url) {
+    func setAvatarUrl(_ url: Any?, name: String? = nil) {
+        if url == nil {
             if nilOrEmpty(name) {
                 image = nil
             } else {
@@ -47,18 +47,22 @@ extension UIImageView {
                     self.setAvatarUrl(url, name: name)
                 }
             } else {
-                L.d("加载图片:\(url)")
-                let nameImage = name?.toImage(rect: bounds) ?? image
-                af.setImage(withURL: URL(string: url!)!,
-                        cacheKey: url,
-                        placeholderImage: nameImage,
-                        progress: { (progress: Progress) in
-                            L.d("加载进度:\(progress.fractionCompleted * 100)% \(progress):\(url)")
-                        },
-                        completion: { (data: AFIDataResponse<UIImage>) in
-                            L.d("加载进度完成:\(url)")
-                            self.setNeedsLayout()
-                        })
+                if let url = url as? String {
+                    L.d("加载图片:\(url)")
+                    let nameImage = name?.toImage(rect: bounds) ?? image
+                    af.setImage(withURL: URL(string: url)!,
+                            cacheKey: url,
+                            placeholderImage: nameImage,
+                            progress: { (progress: Progress) in
+                                L.d("加载进度:\(progress.fractionCompleted * 100)% \(progress):\(url)")
+                            },
+                            completion: { (data: AFIDataResponse<UIImage>) in
+                                L.d("加载进度完成:\(url)")
+                                self.setNeedsLayout()
+                            })
+                } else {
+                    setImage(url, name: name)
+                }
             }
         }
     }

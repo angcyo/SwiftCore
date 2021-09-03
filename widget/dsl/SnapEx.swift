@@ -84,6 +84,13 @@ extension UIView {
         snp.updateConstraints(closure)
     }
 
+    /// 移除所有child的约束
+    func clearChildMake() {
+        eachChild {
+            $0.snap.removeConstraints()
+        }
+    }
+
     /// 转换成约束目标
     func toConstraintTarget(_ parent: ConstraintRelatableTarget? = nil) -> ConstraintRelatableTarget {
         if parent is ConstraintTarget {
@@ -200,7 +207,8 @@ extension UIView {
     }
 
     /// 约束自身的宽高等于目标的宽高
-    func makeWidthHeight(view: UIView?, widthAmount: ConstraintMultiplierTarget = 1, heightAmount: ConstraintMultiplierTarget = 1) {
+    func makeWidthHeight(view: UIView?, widthAmount: ConstraintMultiplierTarget = 1,
+                         heightAmount: ConstraintMultiplierTarget = 1) {
         make { maker in
             maker.width.equalTo((view ?? superview!).snap.width).multipliedBy(widthAmount)
             maker.height.equalTo((view ?? superview!).snap.height).multipliedBy(heightAmount)
@@ -264,152 +272,180 @@ extension UIView {
     }
 
     /// 居中
-    func makeCenter(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
+    func makeCenter(_ parent: ConstraintRelatableTarget? = nil,
+                    offset: ConstraintOffsetTarget = 0,
+                    priority: ConstraintPriority = .required) {
         make { maker in
-            maker.center.equalTo(parent ?? superview!).offset(offset)
+            maker.center.equalTo(parent ?? superview!).offset(offset).priority(priority)
         }
     }
 
     /// 横向居中. 水平居中
-    func makeCenterX(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
+    func makeCenterX(_ parent: ConstraintRelatableTarget? = nil,
+                     offset: ConstraintOffsetTarget = 0,
+                     priority: ConstraintPriority = .required) {
         make { maker in
-            maker.centerX.equalTo(parent ?? superview!).offset(offset)
+            maker.centerX.equalTo(parent ?? superview!).offset(offset).priority(priority)
         }
     }
 
     /// 竖向居中, 垂直居中
-    func makeCenterY(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
+    func makeCenterY(_ parent: ConstraintRelatableTarget? = nil,
+                     offset: ConstraintOffsetTarget = 0,
+                     priority: ConstraintPriority = .required) {
         make { maker in
-            maker.centerY.equalTo(parent ?? superview!).offset(offset)
+            maker.centerY.equalTo(parent ?? superview!).offset(offset).priority(priority)
         }
     }
 
     /// 自身和目标顶部对齐
-    func makeGravityTop(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
+    func makeGravityTop(_ parent: ConstraintRelatableTarget? = nil,
+                        offset: ConstraintOffsetTarget = 0,
+                        priority: ConstraintPriority = .required) {
         make { maker in
-            maker.top.equalTo(parent ?? superview!).offset(offset)
+            maker.top.equalTo(parent ?? superview!).offset(offset).priority(priority)
         }
     }
 
-    func makeGravityLeft(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
+    func makeGravityLeft(_ parent: ConstraintRelatableTarget? = nil,
+                         offset: ConstraintOffsetTarget = 0,
+                         priority: ConstraintPriority = .required) {
         make { maker in
-            maker.leading.equalTo(parent ?? superview!).offset(offset)
+            maker.leading.equalTo(parent ?? superview!).offset(offset).priority(priority)
         }
     }
 
-    func makeGravityHorizontal(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
+    func makeGravityHorizontal(_ parent: ConstraintRelatableTarget? = nil,
+                               offset: ConstraintOffsetTarget = 0,
+                               priority: ConstraintPriority = .required) {
         make { maker in
             let parent = toConstraintTarget(parent)
-            maker.leading.equalTo(parent).offset(offset)
-            maker.trailing.equalTo(parent).offset(offset.reverse())
+            maker.leading.equalTo(parent).offset(offset).priority(priority)
+            maker.trailing.equalTo(parent).offset(offset.reverse()).priority(priority)
         }
     }
 
-    func makeGravityVertical(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
+    func makeGravityVertical(_ parent: ConstraintRelatableTarget? = nil,
+                             offset: ConstraintOffsetTarget = 0,
+                             priority: ConstraintPriority = .required) {
         make { maker in
             let parent = toConstraintTarget(parent)
-            maker.top.equalTo(parent).offset(offset)
-            maker.bottom.equalTo(parent).offset(offset.reverse())
+            maker.top.equalTo(parent).offset(offset).priority(priority)
+            maker.bottom.equalTo(parent).offset(offset.reverse()).priority(priority)
         }
     }
 
     /// 注意offset可能需要是负值, 已自动取负值
-    func makeGravityRight(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
+    func makeGravityRight(_ parent: ConstraintRelatableTarget? = nil,
+                          offset: ConstraintOffsetTarget = 0,
+                          priority: ConstraintPriority = .required) {
         make { maker in
-            maker.trailing.equalTo(parent ?? superview!).offset(offset.reverse())
+            maker.trailing.equalTo(parent ?? superview!).offset(offset.reverse()).priority(priority)
         }
     }
 
     /// 注意offset可能需要是负值, 已自动取负值
-    func makeGravityBottom(_ parent: ConstraintRelatableTarget? = nil, offset: ConstraintOffsetTarget = 0) {
+    func makeGravityBottom(_ parent: ConstraintRelatableTarget? = nil,
+                           offset: ConstraintOffsetTarget = 0,
+                           priority: ConstraintPriority = .required) {
         make { maker in
-            maker.bottom.equalTo(parent ?? superview!).offset(offset.reverse())
+            maker.bottom.equalTo(parent ?? superview!).offset(offset.reverse()).priority(priority)
         }
     }
 
     /// 自身左边, 对齐目标右边
     func makeLeftToRightOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.LAST,
-                           offset: ConstraintOffsetTarget = 0) {
+                           offset: ConstraintOffsetTarget = 0,
+                           priority: ConstraintPriority = .required) {
         make { maker in
             let parent = toConstraintTargetView(parent)
-            maker.leading.equalTo(parent.snp.trailing).offset(offset)
+            maker.leading.equalTo(parent.snp.trailing).offset(offset).priority(priority)
         }
     }
 
     func makeLeftToLeftOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.LAST,
-                          offset: ConstraintOffsetTarget = 0) {
+                          offset: ConstraintOffsetTarget = 0,
+                          priority: ConstraintPriority = .required) {
         make { maker in
             let parent = toConstraintTargetView(parent)
-            maker.leading.equalTo(parent.snp.leading).offset(offset)
+            maker.leading.equalTo(parent.snp.leading).offset(offset).priority(priority)
         }
     }
 
     func makeRightToRightOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.LAST,
-                            offset: ConstraintOffsetTarget = 0) {
+                            offset: ConstraintOffsetTarget = 0,
+                            priority: ConstraintPriority = .required) {
         make { maker in
             let parent = toConstraintTargetView(parent)
-            maker.trailing.equalTo(parent.snp.trailing).offset(offset.reverse())
+            maker.trailing.equalTo(parent.snp.trailing).offset(offset.reverse()).priority(priority)
         }
     }
 
     func makeRightToLeftOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.LAST,
-                           offset: ConstraintOffsetTarget = 0) {
+                           offset: ConstraintOffsetTarget = 0,
+                           priority: ConstraintPriority = .required) {
         make { maker in
             let parent = toConstraintTargetView(parent)
-            maker.trailing.equalTo(parent.snp.leading).offset(offset.reverse())
+            maker.trailing.equalTo(parent.snp.leading).offset(offset.reverse()).priority(priority)
         }
     }
 
     func makeTopToTopOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.LAST,
-                        offset: ConstraintOffsetTarget = 0) {
+                        offset: ConstraintOffsetTarget = 0,
+                        priority: ConstraintPriority = .required) {
         make { maker in
             let parent = toConstraintTargetView(parent)
-            maker.top.equalTo(parent.snp.top).offset(offset)
+            maker.top.equalTo(parent.snp.top).offset(offset).priority(priority)
         }
     }
 
     /// 自身顶部, 对齐目标底部
     func makeTopToBottomOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.LAST,
-                           offset: ConstraintOffsetTarget = 0) {
+                           offset: ConstraintOffsetTarget = 0,
+                           priority: ConstraintPriority = .required) {
         make { maker in
             let parent = toConstraintTargetView(parent)
-            maker.top.equalTo(parent.snp.bottom).offset(offset)
+            maker.top.equalTo(parent.snp.bottom).offset(offset).priority(priority)
         }
     }
 
     /// 自身顶部对齐目标y轴中心
     func makeTopToCenterYOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.PARENT,
-                            offset: ConstraintOffsetTarget = 0) {
+                            offset: ConstraintOffsetTarget = 0,
+                            priority: ConstraintPriority = .required) {
         make { maker in
             let parent = toConstraintTargetView(parent)
-            maker.top.equalTo(parent.snp.centerY).offset(offset)
+            maker.top.equalTo(parent.snp.centerY).offset(offset).priority(priority)
         }
     }
 
     /// 底部对齐底部时, 请先确定控件的高度, 否则无法准确计算
     func makeBottomToBottomOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.LAST,
-                              offset: ConstraintOffsetTarget = 0) {
+                              offset: ConstraintOffsetTarget = 0,
+                              priority: ConstraintPriority = .required) {
         make { maker in
             let parent = toConstraintTargetView(parent)
-            maker.bottom.equalTo(parent.snp.bottom).offset(offset.reverse())
+            maker.bottom.equalTo(parent.snp.bottom).offset(offset.reverse()).priority(priority)
         }
     }
 
     /// 已自动取负值
     func makeBottomToTopOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.LAST,
-                           offset: ConstraintOffsetTarget = 0) {
+                           offset: ConstraintOffsetTarget = 0,
+                           priority: ConstraintPriority = .required) {
         make { maker in
             let parent = toConstraintTargetView(parent)
-            maker.bottom.equalTo(parent.snp.top).offset(offset.reverse())
+            maker.bottom.equalTo(parent.snp.top).offset(offset.reverse()).priority(priority)
         }
     }
 
     /// 自身底部对齐目标y轴中心
     func makeBottomToCenterYOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.PARENT,
-                               offset: ConstraintOffsetTarget = 0) {
+                               offset: ConstraintOffsetTarget = 0,
+                               priority: ConstraintPriority = .required) {
         make { maker in
             let parent = toConstraintTargetView(parent)
-            maker.bottom.equalTo(parent.snp.centerY).offset(offset.reverse())
+            maker.bottom.equalTo(parent.snp.centerY).offset(offset.reverse()).priority(priority)
         }
     }
 
@@ -432,12 +468,13 @@ extension UIView {
                    offsetLeft: ConstraintOffsetTarget = 0,
                    offsetTop: ConstraintOffsetTarget = 0,
                    offsetRight: ConstraintOffsetTarget = 0,
-                   offsetBottom: ConstraintOffsetTarget = 0) {
+                   offsetBottom: ConstraintOffsetTarget = 0,
+                   priority: ConstraintPriority = .medium) {
         let view = view ?? superview!
         make { maker in
-            maker.leading.equalTo(view.snap.leading).offset(offsetLeft).priority(.low)
-            maker.trailing.equalTo(view.snap.trailing).offset(offsetRight.reverse()).priority(.low)
-            maker.bottom.equalTo(view.snap.bottom).offset(offsetBottom.reverse()).priority(.low)
+            maker.leading.equalTo(view.snap.leading).offset(offsetLeft).priority(priority)
+            maker.trailing.equalTo(view.snap.trailing).offset(offsetRight.reverse()).priority(priority)
+            maker.bottom.equalTo(view.snap.bottom).offset(offsetBottom.reverse()).priority(priority)
             maker.top.equalTo(view.snap.top).offset(offsetTop).priority(.required)
         }
     }
@@ -447,13 +484,44 @@ extension UIView {
                       offsetLeft: ConstraintOffsetTarget = 0,
                       offsetTop: ConstraintOffsetTarget = 0,
                       offsetRight: ConstraintOffsetTarget = 0,
-                      offsetBottom: ConstraintOffsetTarget = 0) {
+                      offsetBottom: ConstraintOffsetTarget = 0,
+                      priority: ConstraintPriority = .medium) {
         let view = view ?? superview!
         make { maker in
-            maker.leading.equalTo(view.snap.leading).offset(offsetLeft).priority(.low)
-            maker.trailing.equalTo(view.snap.trailing).offset(offsetRight.reverse()).priority(.low)
-            maker.top.equalTo(view.snap.top).offset(offsetTop).priority(.low)
+            maker.leading.equalTo(view.snap.leading).offset(offsetLeft).priority(priority)
+            maker.trailing.equalTo(view.snap.trailing).offset(offsetRight.reverse()).priority(priority)
+            maker.top.equalTo(view.snap.top).offset(offsetTop).priority(priority)
             maker.bottom.equalTo(view.snap.bottom).offset(offsetBottom.reverse()).priority(.required)
+        }
+    }
+
+    func makeLeftIn(_ view: UIView? = nil,
+                    offsetLeft: ConstraintOffsetTarget = 0,
+                    offsetTop: ConstraintOffsetTarget = 0,
+                    offsetRight: ConstraintOffsetTarget = 0,
+                    offsetBottom: ConstraintOffsetTarget = 0,
+                    priority: ConstraintPriority = .medium) {
+        let view = view ?? superview!
+        make { maker in
+            maker.leading.equalTo(view.snap.leading).offset(offsetLeft).priority(.required)
+            maker.trailing.equalTo(view.snap.trailing).offset(offsetRight.reverse()).priority(priority)
+            maker.bottom.equalTo(view.snap.bottom).offset(offsetBottom.reverse()).priority(priority)
+            maker.top.equalTo(view.snap.top).offset(offsetTop).priority(priority)
+        }
+    }
+
+    func makeRightIn(_ view: UIView? = nil,
+                     offsetLeft: ConstraintOffsetTarget = 0,
+                     offsetTop: ConstraintOffsetTarget = 0,
+                     offsetRight: ConstraintOffsetTarget = 0,
+                     offsetBottom: ConstraintOffsetTarget = 0,
+                     priority: ConstraintPriority = .medium) {
+        let view = view ?? superview!
+        make { maker in
+            maker.leading.equalTo(view.snap.leading).offset(offsetLeft).priority(priority)
+            maker.trailing.equalTo(view.snap.trailing).offset(offsetRight.reverse()).priority(.required)
+            maker.bottom.equalTo(view.snap.bottom).offset(offsetBottom.reverse()).priority(priority)
+            maker.top.equalTo(view.snap.top).offset(offsetTop).priority(priority)
         }
     }
 
