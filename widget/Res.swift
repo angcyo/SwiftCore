@@ -62,6 +62,10 @@ struct Res {
     // MARK: - 尺寸资源
 
     struct size {
+
+        /// 0 占位
+        static var o: CGFloat = 0
+
         static var estimatedHeight: CGFloat = 0.0000001
         static var line: CGFloat = 1
 
@@ -73,6 +77,7 @@ struct Res {
 
         static var m: CGFloat = 6
         static var x: CGFloat = 10
+        static var x2: CGFloat = 16
         static var xx: CGFloat = 20
         static var xxx: CGFloat = 30
 

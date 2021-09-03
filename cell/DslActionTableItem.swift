@@ -15,6 +15,7 @@ struct DslActionData {
 }
 
 class DslActionTableItem: DslTableItem {
+
     override func initItem() {
         super.initItem()
         itemHeight = 50
@@ -24,19 +25,22 @@ class DslActionTableItem: DslTableItem {
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
 
-        guard let cell = cell as? DslActionTableCell else {
-            return
-        }
-
-        if let data = itemData as? DslActionData {
-            cell.imageView?.image = data.image
-            cell.textLabel?.text = data.text
-            cell.detailTextLabel?.text = data.detailText
+        cell.cellOf(DslActionTableCell.self) {
+            if let data = itemData as? DslActionData {
+                $0.imageView?.image = data.image
+                $0.textLabel?.text = data.text
+                $0.detailTextLabel?.text = data.detailText
+            }
         }
     }
 
     override func bindItemGesture(_ view: UIView) {
-        //
+        //no
+    }
+
+    /// 显示内容
+    func setAction(image: UIImage? = nil, text: String? = nil, detailText: String? = nil) {
+        itemData = DslActionData(image: image, text: text, detailText: detailText)
     }
 }
 

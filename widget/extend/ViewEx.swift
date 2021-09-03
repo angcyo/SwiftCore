@@ -374,6 +374,17 @@ extension UIView {
         }
     }
 
+    // 设置圆形边框
+    func setCircleBorder(_ strokeColor: UIColor = Res.color.colorAccent,
+                         lineWidth: CGFloat = Res.size.line * 2,
+                         fillColor: UIColor = UIColor.clear) {
+        waitBounds {
+            let radius = max(self.bounds.width, self.bounds.height) / 2
+            self.setRadius(radius)
+            self.setBorder(strokeColor, radii: radius, lineWidth: lineWidth, fillColor: fillColor)
+        }
+    }
+
     /// 设置边框
     func setBorder(_ strokeColor: UIColor = Res.color.colorAccent,
                    radii: CGFloat = Res.size.roundNormal,

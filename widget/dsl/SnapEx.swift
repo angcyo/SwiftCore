@@ -339,6 +339,15 @@ extension UIView {
         }
     }
 
+    /// 自身顶部对齐目标y轴中心
+    func makeTopToCenterYOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.PARENT,
+                            offset: ConstraintOffsetTarget = 0) {
+        make { maker in
+            let parent = toConstraintTargetView(parent)
+            maker.top.equalTo(parent.snp.centerY).offset(offset)
+        }
+    }
+
     /// 底部对齐底部时, 请先确定控件的高度, 否则无法准确计算
     func makeBottomToBottomOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.LAST,
                               offset: ConstraintOffsetTarget = 0) {
@@ -354,6 +363,15 @@ extension UIView {
         make { maker in
             let parent = toConstraintTargetView(parent)
             maker.bottom.equalTo(parent.snp.top).offset(offset.reverse())
+        }
+    }
+
+    /// 自身底部对齐目标y轴中心
+    func makeBottomToCenterYOf(_ parent: ConstraintRelatableTarget? = ConstraintTarget.PARENT,
+                               offset: ConstraintOffsetTarget = 0) {
+        make { maker in
+            let parent = toConstraintTargetView(parent)
+            maker.bottom.equalTo(parent.snp.centerY).offset(offset.reverse())
         }
     }
 
