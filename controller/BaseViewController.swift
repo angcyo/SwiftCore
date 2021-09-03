@@ -79,46 +79,58 @@ open class BaseViewController: UIViewController, INavigation {
         navigationItem.standardAppearance?.shadowColor = color
     }
 
+    /// 当界面需要显示时, 更新导航栏
+    func updateNavigationStyle(navigation: UINavigationController) {
+        //do
+        //navigation.setNavigationBarHidden(!showNavigationBar, animated: false)
+        //navigation.setToolbarHidden(!showToolbar, animated: false)
+    }
+
     open override func loadView() {
         super.loadView()
-        L.i("->加载试图:\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")
+        L.d("->\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")
     }
 
     /// 加载试图
     open override func viewDidLoad() {
         super.viewDidLoad()
-        L.i("->viewDidLoad:\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")
+        L.d("->\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")
         initControllerView()
     }
 
     /// 重写此方法, 实现视图布局
     func initControllerView() {
-        //print("initController:\(self):bounds:\(view.bounds)")
+        //L.i("initController:\(self):bounds:\(view.bounds)")
         view.backgroundColor = Res.color.controllerBackgroundColor
     }
 
     /// 试图将要显示, 从后台切回来时, 不会触发. 只会触发Scene相关的生命周期
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("viewWillAppear:\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")
+        L.d("\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")
+
+        //update style
+        if let navigation = navigationController {
+            updateNavigationStyle(navigation: navigation)
+        }
     }
 
     /// 试图已显示
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        print("viewDidAppear:\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")
+        L.i("\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")
     }
 
     /// 试图将要消失
     open override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        print("viewWillDisappear:\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")
+        L.d("\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")
     }
 
     /// 试图已消失
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        print("viewDidDisappear:\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")
+        L.i("viewDidDisappear:\(self):\(view.bounds):\(view.safeAreaInsets):\(view.safeAreaLayoutGuide)")
     }
 
     open override func viewWillLayoutSubviews() {
