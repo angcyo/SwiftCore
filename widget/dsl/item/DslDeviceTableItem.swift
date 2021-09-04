@@ -42,13 +42,32 @@ class DslDeviceTableItem: DslTableItem {
                     $0.append("\(Bundle.versionName())/\(Bundle.versionCode()) ")
                     $0.append("w:\(UIScreen.width) h:\(UIScreen.height) s:\(UIScreen.scale_)")
 
-                    $0.append("\n")
-                    $0.append("statusBar:")
-                    $0.append(UIApplication.statusBarFrame)
+                    if let frame = UIApplication.statusBarFrame {
+                        $0.append("\n")
+                        $0.append("statusBar:")
+                        $0.append(frame)
+                    }
+
+                    if let frame = UIApplication.findNavigationController()?.navigationBar.frame {
+                        $0.append("\n")
+                        $0.append("navigationBar:")
+                        $0.append(frame)
+                    }
+
+                    if let frame = UIApplication.findNavigationController()?.toolbar.frame {
+                        $0.append("\n")
+                        $0.append("toolbar:")
+                        $0.append(frame)
+                    }
 
                     $0.append("\n")
-                    //$0.append("windowSafeArea:")
-                    $0.append(UIApplication.sceneWindow?.safeAreaInsets)
+                    let insets = UIApplication.sceneWindow?.safeAreaInsets ?? .zero
+                    $0.append("windowSafeArea: l:\(insets.left) t:\(insets.top) r:\(insets.right) b:\(insets.bottom)")
+                    //$0.append(UIApplication.sceneWindow?.safeAreaInsets)
+
+                    $0.append("\n")
+                    let insets2 = UIApplication.sceneWindow?.layoutMargins ?? .zero
+                    $0.append("windowLayoutMargins: l:\(insets2.left) t:\(insets2.top) r:\(insets2.right) b:\(insets2.bottom)")
 
                     $0.append("\n")
                     let device = UIDevice.current
