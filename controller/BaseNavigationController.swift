@@ -111,7 +111,7 @@ class BaseNavigationController: UINavigationController,
     //MARK: 导航代理
 
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        L.i("即将显示VC:\(viewController):\(animated)")
+        L.i("即将显示VC:\(viewController):\(animated):\(navigationController.navigationBar.frame)") //(0.0, 0.0, 375.0, 44.0)
         if let navigation = viewController as? INavigation {
             //navigationController.navigationBar.isHidden = !navigation.showNavigationBar
             //navigationController.isNavigationBarHidden = !navigation.showNavigationBar

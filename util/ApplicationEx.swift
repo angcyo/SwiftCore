@@ -76,6 +76,17 @@ extension UIApplication {
     static var topSafeInsets: CGFloat {
         UIApplication.mainWindow?.safeAreaInsets.top ?? 0
     }
+
+    static func findNavigationController() -> UINavigationController? {
+        if let root = mainWindow?.rootViewController {
+            if let nav = root as? UINavigationController {
+                //nav.topViewController
+                return nav
+            }
+            return root.navigationController
+        }
+        return nil
+    }
 }
 
 /// 创建一个新的UIWindow, 返回对象需要hold,否则会被arc回收

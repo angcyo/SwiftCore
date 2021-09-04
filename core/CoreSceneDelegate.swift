@@ -23,6 +23,9 @@ class CoreSceneDelegate: UIResponder, UIWindowSceneDelegate {
         CoreSceneDelegate.connectScene = scene
 
         L.d("场景连接:\(scene)")
+
+        //UIEdgeInsets(top: 44.0, left: 0.0, bottom: 34.0, right: 0.0)
+        //UIEdgeInsets(top: 52.0, left: 8.0, bottom: 42.0, right: 8.0)
         L.d("安全区域window:\(window?.safeAreaInsets):\(window?.layoutMargins)")
     }
 

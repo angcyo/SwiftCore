@@ -102,6 +102,14 @@ open class BaseViewController: UIViewController, INavigation {
     func initControllerView() {
         //L.i("initController:\(self):bounds:\(view.bounds)")
         view.backgroundColor = Res.color.controllerBackgroundColor
+
+        //navigationController
+        //navigationItem
+
+        //toolbarItems
+
+        //tabBarController
+        //tabBarItem
     }
 
     /// 试图将要显示, 从后台切回来时, 不会触发. 只会触发Scene相关的生命周期

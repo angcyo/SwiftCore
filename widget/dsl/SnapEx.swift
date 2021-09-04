@@ -53,6 +53,12 @@ extension ConstraintOffsetTarget {
 
 // MARK: - 布局扩展, 需要库SnapKit支持 http://snapkit.io/docs/
 
+extension UILayoutGuide {
+    var snap: ConstraintLayoutGuideDSL {
+        snp
+    }
+}
+
 extension UIView {
 
     /// snp 智能提示太慢了, 换个名字
