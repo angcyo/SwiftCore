@@ -23,6 +23,13 @@ class BaseTableViewController: BaseViewController {
         }
     }
 
+    /// 是否激活下拉刷新
+    var enableRefresh: Bool = false {
+        didSet {
+            initRefresh()
+        }
+    }
+
     /// 创建视图
     func createTableView() -> DslTableView {
         DslTableView(frame: .zero, style: .plain)
@@ -39,6 +46,7 @@ class BaseTableViewController: BaseViewController {
         //dslTableView = DslTableView()
         initTableView(tableView: dslTableView)
         initKeyboard()
+        initRefresh()
     }
 
     /// 初始化
@@ -76,6 +84,26 @@ class BaseTableViewController: BaseViewController {
                     }
                 }
             }).disposed(by: keyboardBag)
+        }
+    }
+
+    lazy var refreshControl: UIRefreshControl = {
+        UIRefreshControl()
+    }()
+
+    func initRefresh() {
+        if enableRefresh {
+            dslTableView.refreshControl = refreshControl
+            refreshControl.removeTarget(nil, action: nil, for: .valueChanged)
+            refreshControl.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
+        }
+    }
+
+    /// 刷新的回调
+    @objc func onRefresh(_ sender: Any) {
+        L.i("触发刷新:\(sender)")
+        doMain(2) {
+            self.refreshControl.endRefreshing()
         }
     }
 
