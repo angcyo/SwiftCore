@@ -661,6 +661,14 @@ func view(_ color: Any? = nil) -> UIView {
     v(color)
 }
 
+func sizeView(_ color: Any? = nil, size: CGFloat? = nil) -> UIView {
+    let view = v(color)
+    if let size = size {
+        view.frame = rect(size, size)
+    }
+    return view
+}
+
 func v(_ color: Any? = nil) -> UIView {
     let view = UIView()
     //view.backgroundColor = UIColor()
