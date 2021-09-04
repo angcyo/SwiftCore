@@ -59,8 +59,8 @@ class PickerDialog: BaseFormDialog, UIPickerViewDelegate, UIPickerViewDataSource
         }
     }
 
-    override func onDialogShow() {
-        super.onDialogShow()
+    override func onDialogShowInner() {
+        super.onDialogShowInner()
         pickerDefaultItem()
     }
 
@@ -104,6 +104,7 @@ class PickerDialog: BaseFormDialog, UIPickerViewDelegate, UIPickerViewDataSource
     }
 }
 
+/// 单个滚动选择对话框
 func pickerDialog(_ dsl: (PickerDialog) -> Void) {
     let dialog = PickerDialog()
     dsl(dialog)

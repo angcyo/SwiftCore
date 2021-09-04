@@ -7,6 +7,24 @@ import UIKit
 import SwiftMessages
 import TangramKit
 
+/// 对话框载体
+
+class BaseDialogView: BaseView {
+
+    var contentView: UIView? = nil
+
+    override func installContentView(_ contentView: UIView, insets: UIEdgeInsets = .zero) {
+        super.installContentView(contentView, insets: insets)
+        self.contentView = contentView
+    }
+
+    override func installBackgroundView(_ backgroundView: UIView, insets: UIEdgeInsets = .zero) {
+        super.installBackgroundView(backgroundView, insets: insets)
+    }
+}
+
+
+/// 对话框的内容
 class BaseDialog: UIView {
 
     required init?(coder aDecoder: NSCoder) {
@@ -19,6 +37,7 @@ class BaseDialog: UIView {
         initDialog()
     }
 
+    /// 初始化
     func initDialog() {
 
     }
@@ -35,20 +54,29 @@ class BaseDialog: UIView {
         print("willMove toWindow:\(self):\(newWindow)")
 
         if newWindow == nil {
-            onDialogHide()
+            onDialogHideInner()
         } else {
-            onDialogShow()
+            onDialogShowInner()
         }
     }
 
+    /// 是否是取消
+    var isCancel: Bool = true
+
+    /// 回调
+    var onDialogShow: (() -> Void)? = nil
+    var onDialogHide: (() -> Void)? = nil
+
     /// show
-    func onDialogShow() {
-        print("onDialogShow:\(bounds):\(safeAreaInsets):\(safeAreaLayoutGuide)")
+    func onDialogShowInner() {
+        L.i("\(self):\(bounds):\(safeAreaInsets):\(safeAreaLayoutGuide)")
+        onDialogShow?()
     }
 
     /// hide
-    func onDialogHide() {
-        print("onDialogHide:\(bounds):\(safeAreaInsets):\(safeAreaLayoutGuide)")
+    func onDialogHideInner() {
+        L.i("isCancel:\(isCancel):\(self):\(bounds):\(safeAreaInsets):\(safeAreaLayoutGuide)")
+        onDialogHide?()
     }
 
     func onCancelClick() {
@@ -58,17 +86,16 @@ class BaseDialog: UIView {
     func onConfirmClick() {
         hide()
     }
-}
 
-//MARK: SwiftMessages
-
-private let dialog = SwiftMessages()
-
-extension BaseDialog {
+    //MARK: SwiftMessages
 
     /// 创建需要显示的UIView
-    func createMessageView() -> UIView {
-        let messageView = BaseView()
+    func createMessageView() -> BaseDialogView {
+        let messageView = BaseDialogView()
+        /*messageView.tapHandler = { _ in
+            L.w("点击窗口外:\(self)")
+        }*/
+
         //view.configureBackgroundView(width: <#T##CGFloat##CoreGraphics.CGFloat#>)
         messageView.backgroundHeight = nil
         //messageView.layoutMargins = .zero
@@ -93,18 +120,31 @@ extension BaseDialog {
         return messageView
     }
 
+    /// 点击窗口外, 是否隐藏对话框
+    var cancelOnOutside: Bool = true
+
+    /// 是否拖拽返回
+    var cancelOnDrag: Bool = true
+
     /// 配置消息¬
     func configMessage(swiftMessage: SwiftMessages) {
-        swiftMessage.defaultConfig.dimMode = .blur(style: .dark, alpha: 0.5, interactive: true) //interactive 控制是否点击内容外隐藏对话库
+        swiftMessage.defaultConfig.dimMode = .blur(style: .dark, alpha: 0.5, interactive: cancelOnOutside) //interactive 控制是否点击内容外隐藏对话库
         //.gray(interactive: true)
         swiftMessage.defaultConfig.duration = .forever
-        swiftMessage.defaultConfig.interactiveHide = true // 交互隐藏, 下拉隐藏
+        swiftMessage.defaultConfig.interactiveHide = cancelOnDrag // 交互隐藏, 下拉隐藏
         swiftMessage.defaultConfig.presentationStyle = .bottom
         swiftMessage.defaultConfig.presentationContext = .automatic
         //.window(windowLevel: .statusBar)
         //.windowScene(CoreSceneDelegate.connectScene!, windowLevel: .statusBar)
         //swiftMessage.show(view: self)
     }
+}
+
+//MARK: SwiftMessages
+
+fileprivate let dialog = SwiftMessages()
+
+extension BaseDialog {
 
     /// 显示对话框
     func show() {
@@ -113,9 +153,15 @@ extension BaseDialog {
         //onDialogShow()
         dialog.show(view: messageView)
     }
+}
 
-    func hide() {
-        //onDialogHide()
-        dialog.hide(animated: true)
+/// 隐藏对话框
+func hideDialog(cancel: Bool = false) {
+    //onDialogHide()
+    if let baseDialogView: BaseDialogView = dialog.current() {
+        if let baseDialog = baseDialogView.contentView as? BaseDialog {
+            baseDialog.isCancel = cancel
+        }
     }
+    dialog.hide(animated: true)
 }

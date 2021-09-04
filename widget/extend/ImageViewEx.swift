@@ -135,13 +135,13 @@ func image(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
 }
 
 /// 图标
-func icon(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
+func icon(_ image: Any? = nil, tintColor: UIColor? = Res.color.iconColor) -> UIImageView {
     let view = img(image, tintColor: tintColor)
     view.contentMode = .center
     return view
 }
 
-func iconView(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
+func iconView(_ image: Any? = nil, tintColor: UIColor? = Res.color.iconColor) -> UIImageView {
     icon(image, tintColor: tintColor)
 }
 
