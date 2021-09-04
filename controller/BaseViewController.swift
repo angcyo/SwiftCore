@@ -28,6 +28,12 @@ open class BaseViewController: UIViewController, INavigation {
         super.init(coder: coder)
     }
 
+    /// Swift 的ARC, 在创建对象之后, 没有被引用会立马被回收.
+    /// https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html
+    deinit {
+        L.w("->销毁:\(self)")
+    }
+
     //MARK: 状态栏
 
     /// 状态栏样式
@@ -51,6 +57,7 @@ open class BaseViewController: UIViewController, INavigation {
     //MARK: INavigation
 
     var showNavigationBar: Bool = true
+
     var showToolbar: Bool = false
 
     /// 构造方法中回调, 请勿在此方法中使用view, 否则会触发viewDidLoad
@@ -68,6 +75,7 @@ open class BaseViewController: UIViewController, INavigation {
         setNavigationShadowColor(UIColor.clear)
     }
 
+    /// 确保样式
     func ensureNavigationStyle() {
         if navigationItem.standardAppearance == nil {
             navigationItem.standardAppearance = UINavigationBarAppearance()
@@ -169,9 +177,53 @@ open class BaseViewController: UIViewController, INavigation {
         super.showDetailViewController(vc, sender: sender)
     }
 
-    /// Swift 的ARC, 在创建对象之后, 没有被引用会立马被回收.
-    /// https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html
-    deinit {
-        L.w("->销毁:\(self)")
+    //MARK: UINavigationBar
+
+    lazy var navigationBarWrap: UIView = {
+        UIView()
+    }()
+
+    lazy var navigationBar: UINavigationBar = {
+        UINavigationBar()
+    }()
+
+    /// 渲染一个自定义的导航栏
+    func renderNavigationBar() {
+        view.render(navigationBarWrap)
+        navigationBarWrap.render(navigationBar)
+
+        with(navigationBarWrap) {
+            $0.makeGravityLeft()
+            $0.makeGravityRight()
+            $0.makeGravityTop()
+            $0.makeHeight(defaultNavHeight)
+        }
+
+        with(navigationBar) {
+            $0.makeGravityLeft()
+            $0.makeGravityRight()
+            $0.makeGravityTop(view.safeAreaLayoutGuide.snap.top)
+            $0.makeHeight(defaultTitleHeight)
+        }
+
+        //appearance
+        navigationBarWrap.backgroundColor = Res.color.controllerBackgroundColor
+        //navigationItem.title = title
+
+        /*navigationBar.isTranslucent = false
+        with(navigationBar.standardAppearance) {
+            $0.shadowColor = .clear
+            $0.shadowImage = nil
+            $0.backgroundColor = .clear
+        }*/
+
+        ensureNavigationStyle()
+        with(navigationItem.standardAppearance) {
+            //$0.backgroundImage = nil
+            $0.backgroundEffect = nil //去掉模糊效果
+            //$0.backgroundColor = .clear
+        }
+
+        navigationBar.pushItem(navigationItem, animated: false)
     }
 }

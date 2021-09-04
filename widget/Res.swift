@@ -110,6 +110,8 @@ struct Res {
 
         static var passwordMaxLength: Int = 20 //密码最大的长度
         static var codeMaxLength: Int = 6 //短信验证码最大的长度
+
+        static var navigationBarHeight: CGFloat = 44 //导航栏的高度
     }
 
     // MARK: - 字体资源
