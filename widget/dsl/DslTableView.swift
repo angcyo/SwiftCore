@@ -217,15 +217,19 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         //return UITableView.automaticDimension
         print("estimatedHeightForHeaderInSection:\(section)")
-        let estimatedHeight: CGFloat
+
+        if let height = getSectionFirstItem(section)?.itemHeaderEstimatedHeight {
+            return height
+        }
+
         if style == .plain {
             //这里要用auto, 用0.001还是有高度.
-            estimatedHeight = UITableView.automaticDimension //Res.size.estimatedHeight
+            return UITableView.automaticDimension //Res.size.estimatedHeight
         } else {
             //这里可以用0.001
-            estimatedHeight = Res.size.leftMargin
+            return Res.size.leftMargin
         }
-        return getSectionFirstItem(section)?.itemHeaderEstimatedHeight ?? estimatedHeight //UITableView.automaticDimension
+        //return UITableView.automaticDimension
     }
 
     /// 尾部的高度
@@ -238,7 +242,24 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
         //return UITableView.automaticDimension
         print("estimatedHeightForFooterInSection:\(section)")
-        return getSectionFirstItem(section)?.itemFooterEstimatedHeight ?? Res.size.estimatedHeight //UITableView.automaticDimension
+
+        if let height = getSectionFirstItem(section)?.itemFooterEstimatedHeight {
+            return height
+        }
+
+        if style == .plain {
+            //这里要用auto, 用0.001还是有高度.
+            return UITableView.automaticDimension //Res.size.estimatedHeight
+        } else {
+            //这里可以用0.001
+            if section == numberOfSections - 1 {
+                // 最后一个 section, 才设置高度
+                return Res.size.leftMargin
+            } else {
+                return Res.size.estimatedHeight
+            }
+        }
+        //return //Res.size.estimatedHeight //UITableView.automaticDimension
     }
 
     // MARK: 首尾试图获取
