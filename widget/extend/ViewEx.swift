@@ -486,7 +486,7 @@ extension UIView {
         }
     }
 
-    /// 获取第一响应者
+    /// 获取第一响应者, 向下查找
     func findFirstResponder() -> UIView? {
         if isFirstResponder {
             return self
@@ -502,6 +502,7 @@ extension UIView {
         return nil;
     }
 
+    /// 向上查找 UITableViewCell
     func findAttachedTableCell() -> UITableViewCell? {
         if self is UITableViewCell {
             return self as! UITableViewCell
@@ -518,6 +519,7 @@ extension UIView {
         return nil;
     }
 
+    /// 向上查找 UICollectionViewCell
     func findAttachedCollectionCell() -> UICollectionViewCell? {
         if self is UICollectionViewCell {
             return self as! UICollectionViewCell
@@ -529,6 +531,42 @@ extension UIView {
                 return cell
             }
             return superview.findAttachedCollectionCell()
+        }
+
+        return nil;
+    }
+
+    /// 向上查找 UITableView
+
+    func findAttachedTableView() -> UITableView? {
+        if self is UITableView {
+            return self as! UITableView
+        }
+
+        if let superview = superview {
+            let view = superview.findAttachedTableView()
+            if (view != nil) {
+                return view
+            }
+            return superview.findAttachedTableView()
+        }
+
+        return nil;
+    }
+
+    /// 向上查找 UICollectionView
+
+    func findAttachedCollectionView() -> UICollectionView? {
+        if self is UICollectionView {
+            return self as! UICollectionView
+        }
+
+        if let superview = superview {
+            let view = superview.findAttachedCollectionView()
+            if (view != nil) {
+                return view
+            }
+            return superview.findAttachedCollectionView()
         }
 
         return nil;

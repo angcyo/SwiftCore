@@ -4,8 +4,6 @@
 
 import Foundation
 import ProgressHUD
-import PopupDialog
-import NVActivityIndicatorView
 
 struct Loading {
 

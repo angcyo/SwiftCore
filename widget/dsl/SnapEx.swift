@@ -140,32 +140,37 @@ extension UIView {
         }
     }
 
-    func makeEdge(_ target: ConstraintRelatableTarget? = nil, inset: UIEdgeInsets? = nil) {
+    func makeEdge(_ target: ConstraintRelatableTarget? = nil, inset: UIEdgeInsets? = nil,
+                  priority: ConstraintPriority = .required) {
         make { maker in
             let target = target ?? superview!
             if let num = target as? Float {
-                makeEdge(left: num, right: num, top: num, bottom: num)
+                makeEdge(left: num, right: num, top: num, bottom: num, priority: priority)
             } else if let inset = inset {
-                maker.edges.equalTo(target).inset(inset)
+                maker.edges.equalTo(target).inset(inset).priority(priority)
             } else {
-                maker.edges.equalTo(target)
+                maker.edges.equalTo(target).priority(priority)
             }
         }
     }
 
-    func makeEdge(left: Float = 0, right: Float = 0, top: Float = 0, bottom: Float = 0) {
+    func makeEdge(left: Float = 0, right: Float = 0, top: Float = 0, bottom: Float = 0,
+                  priority: ConstraintPriority = .required) {
         make { maker in
-            maker.edges.equalTo(UIEdgeInsets(top: top.toCGFloat(), left: left.toCGFloat(),
-                    bottom: bottom.toCGFloat(), right: right.toCGFloat()))
+            maker.edges.equalTo(UIEdgeInsets(top: top.toCGFloat(),
+                            left: left.toCGFloat(),
+                            bottom: bottom.toCGFloat(),
+                            right: right.toCGFloat()))
+                    .priority(priority)
         }
     }
 
-    func makeEdgeHorizontal(size: Float = 0) {
-        makeEdge(left: size, right: size, top: 0, bottom: 0)
+    func makeEdgeHorizontal(size: Float = 0, priority: ConstraintPriority = .required) {
+        makeEdge(left: size, right: size, top: 0, bottom: 0, priority: priority)
     }
 
-    func makeEdgeVertical(size: Float = 0) {
-        makeEdge(left: 0, right: 0, top: size, bottom: size)
+    func makeEdgeVertical(size: Float = 0, priority: ConstraintPriority = .required) {
+        makeEdge(left: 0, right: 0, top: size, bottom: size, priority: priority)
     }
 
     /// 约束宽度, 支持最大宽度, 最小宽度
@@ -213,7 +218,8 @@ extension UIView {
     }
 
     /// 约束自身的宽高等于目标的宽高
-    func makeWidthHeight(view: UIView?, widthAmount: ConstraintMultiplierTarget = 1,
+    func makeWidthHeight(view: UIView?,
+                         widthAmount: ConstraintMultiplierTarget = 1,
                          heightAmount: ConstraintMultiplierTarget = 1) {
         make { maker in
             maker.width.equalTo((view ?? superview!).snap.width).multipliedBy(widthAmount)
@@ -528,6 +534,21 @@ extension UIView {
             maker.trailing.equalTo(view.snap.trailing).offset(offsetRight.reverse()).priority(.required)
             maker.bottom.equalTo(view.snap.bottom).offset(offsetBottom.reverse()).priority(priority)
             maker.top.equalTo(view.snap.top).offset(offsetTop).priority(priority)
+        }
+    }
+
+    func makeIn(_ view: UIView? = nil,
+                offsetLeft: ConstraintOffsetTarget = 0,
+                offsetTop: ConstraintOffsetTarget = 0,
+                offsetRight: ConstraintOffsetTarget = 0,
+                offsetBottom: ConstraintOffsetTarget = 0,
+                priority: ConstraintPriority = .medium) {
+        let view = view ?? superview!
+        make { maker in
+            maker.leading.equalTo(view.snap.leading).offset(offsetLeft).priority(priority)
+            maker.top.equalTo(view.snap.top).offset(offsetTop).priority(priority)
+            maker.trailing.equalTo(view.snap.trailing).offset(offsetRight.reverse()).priority(priority)
+            maker.bottom.equalTo(view.snap.bottom).offset(offsetBottom.reverse()).priority(priority)
         }
     }
 
