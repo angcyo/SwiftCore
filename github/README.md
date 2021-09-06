@@ -75,4 +75,7 @@ pod 'Hue' #5.0.0
 ```
 # 样式Label https://github.com/psharanda/Atributika
 pod "Atributika" #4.10.1
+
+# https://github.com/nvzqz/FileKit
+# pod 'FileKit', '~> 6.0.0'
 ```

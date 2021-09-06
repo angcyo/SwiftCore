@@ -27,6 +27,7 @@ class Core {
 
     /// 初始化入口
     func initCore() {
+        CrashHandler.initCrashHandler()
         Dialog.initDialog()
         SwiftyBeaverEx.initSwiftyBeaver()
     }
