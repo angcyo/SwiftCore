@@ -7,7 +7,7 @@ import UIKit
 import RxSwift
 
 /// base by Rx
-open class BaseViewController: UIViewController, INavigation {
+open class BaseViewController: UIViewController, INavigation, UISceneDelegate {
 
     //Rx 自动取消订阅,
     lazy var disposeBag: DisposeBag = {
@@ -120,6 +120,8 @@ open class BaseViewController: UIViewController, INavigation {
         //tabBarItem
     }
 
+    //MARK: 生命周期
+
     /// 试图将要显示, 从后台切回来时, 不会触发. 只会触发Scene相关的生命周期
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -160,6 +162,8 @@ open class BaseViewController: UIViewController, INavigation {
     open override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+
+    //MARK: show/dismiss
 
     open override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> ())?) {
         super.present(viewControllerToPresent, animated: flag, completion: completion)
@@ -225,5 +229,27 @@ open class BaseViewController: UIViewController, INavigation {
         }
 
         navigationBar.pushItem(navigationItem, animated: false)
+    }
+
+    //MARK: UISceneDelegate
+
+    //1 场景将要进入前台
+    public func sceneWillEnterForeground(_ scene: UIScene) {
+        L.d("\(self)")
+    }
+
+    //2 场景已经活跃
+    public func sceneDidBecomeActive(_ scene: UIScene) {
+        L.d("\(self)")
+    }
+
+    //3 场景即将不活跃
+    public func sceneWillResignActive(_ scene: UIScene) {
+        L.d("\(self)")
+    }
+
+    //4 场景进入后台
+    public func sceneDidEnterBackground(_ scene: UIScene) {
+        L.d("\(self)")
     }
 }

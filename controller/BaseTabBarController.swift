@@ -37,6 +37,8 @@ class BaseTabBarController: UITabBarController, INavigation {
         ///tabBar.selectedImageTintColor = UIColor.red //废弃, 请使用tabBar.tintColor
         //tabBar.tintColor = Res.color.colorAccent //其他状态的着色
         //tabBar.unselectedItemTintColor = Res.color.iconColor //未选中时的着色
+
+        //setViewControllers(<#T##viewControllers: [UIViewController]?##[UIKit.UIViewController]?#>, animated: <#T##Bool##Swift.Bool#>)
     }
 
     /// Swift 的ARC, 在创建对象之后, 没有被引用会立马被回收.

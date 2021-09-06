@@ -37,28 +37,72 @@ class CoreSceneDelegate: UIResponder, UIWindowSceneDelegate {
         L.d("场景断开:\(scene)")
     }
 
-    func sceneDidBecomeActive(_ scene: UIScene) {
-        // Called when the scene has moved from an inactive state to an active state.
-        // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
-        L.d("场景活跃:\(scene)")
-    }
-
-    func sceneWillResignActive(_ scene: UIScene) {
-        // Called when the scene will move from an active state to an inactive state.
-        // This may occur due to temporary interruptions (ex. an incoming phone call).
-        L.d("场景即将不活跃:\(scene)")
-    }
-
+    //1.
     func sceneWillEnterForeground(_ scene: UIScene) {
         // Called as the scene transitions from the background to the foreground.
         // Use this method to undo the changes made on entering the background.
         L.d("场景即将进入前景:\(scene)")
+        scene.activeSceneDelegate?.sceneWillEnterForeground?(scene)
     }
 
+    //2.
+    func sceneDidBecomeActive(_ scene: UIScene) {
+        // Called when the scene has moved from an inactive state to an active state.
+        // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+        L.d("场景活跃:\(scene)")
+        scene.activeSceneDelegate?.sceneDidBecomeActive?(scene)
+    }
+
+    //3.
+    func sceneWillResignActive(_ scene: UIScene) {
+        // Called when the scene will move from an active state to an inactive state.
+        // This may occur due to temporary interruptions (ex. an incoming phone call).
+        L.d("场景即将不活跃:\(scene)")
+        scene.activeSceneDelegate?.sceneWillResignActive?(scene)
+    }
+
+    //4.
     func sceneDidEnterBackground(_ scene: UIScene) {
         // Called as the scene transitions from the foreground to the background.
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
         L.d("场景进入背景:\(scene)")
+        scene.activeSceneDelegate?.sceneDidEnterBackground?(scene)
+    }
+}
+
+extension UIScene {
+
+    /// scene 中活跃的UIViewController
+    var activeViewController: UIViewController? {
+        get {
+            if let windowScene = self as? UIWindowScene {
+                if let window = windowScene.keyWindow {
+                    if let root = window.rootViewController {
+                        return root.findActiveViewController()
+                    }
+                }
+            }
+            return nil
+        }
+    }
+
+    var activeSceneDelegate: UISceneDelegate? {
+        get {
+            activeViewController as? UISceneDelegate
+        }
+    }
+}
+
+extension UIViewController {
+
+    func findActiveViewController() -> UIViewController {
+        if let navViewController = self as? UINavigationController {
+            return navViewController.topViewController?.findActiveViewController() ?? self
+        } else if let tabViewController = self as? UITabBarController {
+            return tabViewController.viewControllers?.get(tabViewController.selectedIndex)?.findActiveViewController() ?? self
+        } else {
+            return self
+        }
     }
 }

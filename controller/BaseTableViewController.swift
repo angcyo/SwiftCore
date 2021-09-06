@@ -113,4 +113,15 @@ class BaseTableViewController: BaseViewController {
             dslTableView.cancelSelected()
         }
     }
+
+    /*override func sceneDidBecomeActive(_ scene: UIScene) {
+        super.sceneDidBecomeActive(scene)
+
+        if enableSoftInput {
+            let inset = dslTableView.contentInset
+            doMain {
+                self.dslTableView.contentInset = inset
+            }
+        }
+    }*/
 }

@@ -30,9 +30,7 @@ extension UIApplication {
             var _result: UIWindow?
             if _result == nil {
                 if let scene = CoreSceneDelegate.connectScene {
-                    _result = scene.windows.first {
-                        $0.isKeyWindow
-                    } ?? scene.windows.last
+                    _result = scene.keyWindow ?? scene.windows.last
                 }
             }
             return _result
@@ -88,6 +86,19 @@ extension UIApplication {
         return nil
     }
 }
+
+extension UIWindowScene {
+
+    /**获取最主要的UIWindow*/
+    var keyWindow: UIWindow? {
+        get {
+            windows.first {
+                $0.isKeyWindow
+            }
+        }
+    }
+}
+
 
 /// 创建一个新的UIWindow, 返回对象需要hold,否则会被arc回收
 func newWindow(_ action: ((UIWindow) -> Void)? = nil) -> UIWindow {
