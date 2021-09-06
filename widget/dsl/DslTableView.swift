@@ -18,6 +18,14 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
         SectionHelper()
     }()
 
+    lazy var statusItem: IStatusItem? = {
+        DslStatusTableItem()
+    }()
+
+    lazy var loadMoreItem: IStatusItem? = {
+        DslLoadMoreTableItem()
+    }()
+
     override init(frame: CGRect = .zero, style: Style = .plain) {
         super.init(frame: frame, style: style)
         initTableView()
@@ -102,35 +110,8 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     override func layoutSubviews() {
         super.layoutSubviews()
         if needsReload {
-            loadData(_itemList)
+            self.loadData(_itemList)
         }
-    }
-
-    /// 立即更新
-    func loadDataNow(_ animatingDifferences: Bool? = nil, completion: (() -> Void)? = nil) {
-        loadData(_itemList, animatingDifferences: animatingDifferences, completion: completion)
-    }
-
-    /// 强制加载数据
-    func loadData(_ items: [DslItem], animatingDifferences: Bool? = nil, completion: (() -> Void)? = nil) {
-        var animate = true
-        if animatingDifferences == nil {
-            // 智能判断是否要动画
-            animate = !sectionHelper.visibleItems.isEmpty
-        } else {
-            animate = animatingDifferences!
-        }
-
-        registerItemCell(items)
-
-        ///diff 更新数据
-        doMain {
-            let snapshot = self.sectionHelper.createSnapshot(self._itemList)
-            //Please always submit updates either always on the main queue or always off the main queue
-            self.diffableDataSource.apply(snapshot, animatingDifferences: animate, completion: completion)
-        }
-
-        needsReload = false
     }
 
     // MARK: 辅助操作
@@ -157,6 +138,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
         let identifier = item.identifier
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
         item.bindCell(cell, indexPath)
+        item.itemUpdate = false
         return cell
     }
 
@@ -164,13 +146,15 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
 
     /// cell 即将显示
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        print("cell即将显示:\(indexPath):\(cell):\(cell.layer.cornerRadius)")
+        //print("cell即将显示:\(indexPath):\(cell):\(cell.layer.cornerRadius)")
         //cell.layer.cornerRadius = 100 // 可以修改 insetGrouped 默认圆角
+        getItem(indexPath)?.bindCellWillDisplay(cell, indexPath)
     }
 
     /// cell即将不可见
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        print("cell即将不可见:\(indexPath):\(cell)")
+        //print("cell即将不可见:\(indexPath):\(cell)")
+        getItem(indexPath)?.bindCellDidEndDisplaying(cell, indexPath)
     }
 
     /// 头部试图即将显示
@@ -619,7 +603,7 @@ class DslTableViewDiffableDataSource: UITableViewDiffableDataSource<DslSection, 
         }
     }
 
-    //MARK: DslTableViewDiffableDataSource 转发
+    //MARK: DslTableViewDiffableDataSource 数据源
 
     /// 获取section的数量
     override func numberOfSections(in tableView: UITableView) -> Int {

@@ -5,15 +5,22 @@
 import Foundation
 import UIKit
 
-protocol DslRecycleView {
+protocol DslRecycleView: AnyObject {
 
     /// 所有的数据集合, 但非全部在界面上显示. 包含界面上的所有item和隐藏的item
     var _itemList: [DslItem] { get set }
 
+    /// diff 数据更新助手
     var sectionHelper: SectionHelper { get set }
 
     /// 是否需要重新加载items
     var needsReload: Bool { get set }
+
+    /// 情感图切换item
+    var statusItem: IStatusItem? { get set }
+
+    /// 加载更多item
+    var loadMoreItem: IStatusItem? { get set }
 }
 
 extension DslRecycleView {
@@ -29,18 +36,18 @@ extension DslRecycleView {
 
     // MARK: item操作
 
-    mutating func clearAllItems() {
+    func clearAllItems() {
         _itemList.removeAll()
         needsReload = true
     }
 
     @discardableResult
-    mutating func load<Item: DslItem>(_ item: Item, _ dsl: ((Item) -> Void)? = nil) -> Item {
+    func load<Item: DslItem>(_ item: Item, _ dsl: ((Item) -> Void)? = nil) -> Item {
         addItem(item, dsl)
     }
 
     @discardableResult
-    mutating func addItem<Item: DslItem>(_ item: Item, _ dsl: ((Item) -> Void)? = nil) -> Item {
+    func addItem<Item: DslItem>(_ item: Item, _ dsl: ((Item) -> Void)? = nil) -> Item {
         _itemList.append(item)
         //init
         dsl?(item)
@@ -49,7 +56,7 @@ extension DslRecycleView {
     }
 
     @discardableResult
-    mutating func insertItem<Item: DslItem>(_ item: Item, _ at: Int, _ dsl: ((Item) -> Void)? = nil) -> Item {
+    func insertItem<Item: DslItem>(_ item: Item, _ at: Int, _ dsl: ((Item) -> Void)? = nil) -> Item {
         var index = at
         if at > _itemList.endIndex {
             index = _itemList.endIndex
@@ -65,7 +72,7 @@ extension DslRecycleView {
 
     /// 删除item
     @discardableResult
-    mutating func removeItem(_ item: DslItem) -> DslItem? {
+    func removeItem(_ item: DslItem) -> DslItem? {
         let index = _itemList.firstIndex {
             $0 == item
         }
@@ -106,6 +113,37 @@ extension DslRecycleView {
                 }
             }
         }
+    }
+
+    /// 立即更新 [animatingDifferences] 是否需要动画 [completion]完成的回调
+    func loadDataNow(_ animatingDifferences: Bool? = nil, completion: (() -> Void)? = nil) {
+        loadData(_itemList, animatingDifferences: animatingDifferences, completion: completion)
+    }
+
+    /// 强制加载数据
+    func loadData(_ items: [DslItem], animatingDifferences: Bool? = nil, completion: (() -> Void)? = nil) {
+        var animate = true
+        if animatingDifferences == nil {
+            // 智能判断是否要动画
+            animate = !sectionHelper.visibleItems.isEmpty
+        } else {
+            animate = animatingDifferences!
+        }
+
+        ///diff 更新数据
+        doMain {
+            let snapshot = self.sectionHelper.createSnapshot(self, self._itemList)
+            //Please always submit updates either always on the main queue or always off the main queue
+            if let tableView = self as? DslTableView {
+                tableView.diffableDataSource.apply(snapshot, animatingDifferences: animate, completion: completion)
+            } else if let collectionView = self as? DslCollectionView {
+                collectionView.diffableDataSource.apply(snapshot, animatingDifferences: animate, completion: completion)
+            } else {
+                L.w("不支持的DslRecyclerView:\(self)")
+            }
+        }
+
+        needsReload = false
     }
 }
 
@@ -183,7 +221,7 @@ extension DslRecycleView {
     ///   - data: 数据量, 入股为nil, 则更新一条, 如果非空对象, 则进行增删改
     /// - Returns:
     @discardableResult
-    mutating func updateItem<T: DslItem>(_ itemClass: T.Type = T.self, atItemType at: DslItem.Type = T.self, data: [Any?]? = nil, dsl: ((T) -> Void)? = nil) -> [T] {
+    func updateItem<T: DslItem>(_ itemClass: T.Type = T.self, atItemType at: DslItem.Type = T.self, data: [Any?]? = nil, dsl: ((T) -> Void)? = nil) -> [T] {
         if itemClass.description() == at.description() {
             // 更新自身
             for i in _itemList.startIndex..<_itemList.endIndex {
@@ -219,7 +257,7 @@ extension DslRecycleView {
     }
 
     @discardableResult
-    mutating func updateItem<T: DslItem>(_ itemClass: T.Type = T.self, atItemTag at: String?, data: [Any?]? = nil, dsl: ((T) -> Void)? = nil) -> [T] {
+    func updateItem<T: DslItem>(_ itemClass: T.Type = T.self, atItemTag at: String?, data: [Any?]? = nil, dsl: ((T) -> Void)? = nil) -> [T] {
         var anchorItem: DslItem? = nil
 
         //... ..< 左边小, 右边大. 否则会报错
@@ -239,7 +277,7 @@ extension DslRecycleView {
     }
 
     @discardableResult
-    mutating func updateItem<T: DslItem>(_ itemClass: T.Type = T.self, withItemTag at: String?, data: [Any?]? = nil, dsl: ((T) -> Void)? = nil) -> [T] {
+    func updateItem<T: DslItem>(_ itemClass: T.Type = T.self, withItemTag at: String?, data: [Any?]? = nil, dsl: ((T) -> Void)? = nil) -> [T] {
         var targetItemIndex: Int = -1
         // 从尾部开始查找
         for i in (_itemList.startIndex..<_itemList.endIndex).reversed() {
@@ -256,7 +294,7 @@ extension DslRecycleView {
 
     /// 在指定位置更新/插入item
     @discardableResult
-    mutating func updateItem<T: DslItem>(_ itemClass: T.Type = T.self, withIndex at: Int, data: [Any?]? = nil, dsl: ((T) -> Void)? = nil) -> [T] {
+    func updateItem<T: DslItem>(_ itemClass: T.Type = T.self, withIndex at: Int, data: [Any?]? = nil, dsl: ((T) -> Void)? = nil) -> [T] {
         if let item = _itemList.get(at) {
             if type(of: item).description() == itemClass.description() {
                 var oldItemList: [T] = [] //已存在的旧item
@@ -274,7 +312,7 @@ extension DslRecycleView {
 
     ///在at位置后面, 更新指定类型itemClass的item
     @discardableResult
-    mutating func updateItem<T: DslItem>(_ itemClass: T.Type = T.self, atItem at: DslItem?, data: [Any?]? = nil, dsl: ((T) -> Void)? = nil) -> [T] {
+    func updateItem<T: DslItem>(_ itemClass: T.Type = T.self, atItem at: DslItem?, data: [Any?]? = nil, dsl: ((T) -> Void)? = nil) -> [T] {
         if let atItem = at {
             //有锚点
             var anchorIndex = -2 //是否找到了锚点
@@ -313,7 +351,7 @@ extension DslRecycleView {
     ///   - dsl: 初始化
     /// - Returns:
     @discardableResult
-    mutating func updateItem<T: DslItem>(_ itemClass: T.Type = T.self, withIndex at: Int, oldItemList: [T], data: [Any?]? = nil, dsl: ((T) -> Void)? = nil) -> [T] {
+    func updateItem<T: DslItem>(_ itemClass: T.Type = T.self, withIndex at: Int, oldItemList: [T], data: [Any?]? = nil, dsl: ((T) -> Void)? = nil) -> [T] {
         var result: [T] = []
 
         if let data = data {

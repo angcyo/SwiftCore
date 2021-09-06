@@ -13,6 +13,7 @@ class DslDeviceTableItem: DslTableItem {
 
     override func initItem() {
         super.initItem()
+        itemFooterEstimatedHeight = 0.001
         onItemClick = {
             //showFileBrowser()
             //showFileExplorer()

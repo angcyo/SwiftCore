@@ -36,4 +36,13 @@ extension IDslItem {
         }
     }
 
+    /// item 是否隐藏了
+    var isItemHidden: Bool {
+        get {
+            if let item = self as? DslItem {
+                return item.itemHidden
+            }
+            return false
+        }
+    }
 }

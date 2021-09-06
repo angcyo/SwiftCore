@@ -5,6 +5,8 @@
 import Foundation
 import UIKit
 
+/// 通过diff 用来更新数据源
+
 class SectionHelper {
 
     /// 片段集合
@@ -13,24 +15,45 @@ class SectionHelper {
     /// 过滤后的item集合
     var visibleItems: [DslItem] = []
 
+    /// 数据拦截器
+    var interceptorList: [ISectionInterceptor] = [DefaultSectionInterceptor(),
+                                                  StatusSectionInterceptor(),
+                                                  LoadMoreSectionInterceptor()]
+
     /// 创建一个数据快照
-    func createSnapshot(_ items: [DslItem]) -> NSDiffableDataSourceSnapshot<DslSection, DslItem> {
+    func createSnapshot(_ recyclerView: DslRecycleView, _ items: [DslItem]) -> NSDiffableDataSourceSnapshot<DslSection, DslItem> {
         var _sectionList: [DslSection] = []
         var _itemList: [DslItem] = []
 
+        _itemList.addAll(items)
+        if !interceptorList.isEmpty {
+            //1. 先排序
+            interceptorList.sort { l, r in
+                //自然升序, 值越大越在后面
+                l.order < r.order
+            }
+
+            for interceptor in interceptorList {
+                let params = InterceptorParams()
+                params.dslRecyclerView = recyclerView
+                params.requestItems.addAll(_itemList)
+                interceptor.onInterceptor(params)
+
+                //交换数据
+                _itemList.reset(params.resultItems)
+
+                //中断后续的拦截器
+                if params.interrupt {
+                    break
+                }
+            }
+        }
+
+        // 开始数据分组以及diff
         var section: DslSection? = nil
         var lastSectionName: String? = nil
 
-        for item in items {
-
-            //过滤
-            if item.itemHidden {
-                continue
-            }
-
-            //数组
-            _itemList.append(item)
-
+        for item in _itemList {
             //分组
             if item.itemSectionName == lastSectionName {
                 //same section
@@ -68,6 +91,9 @@ class SectionHelper {
             }
         }
         snapshot.reloadItems(_updateItemList)
+
+        // 注册cell
+        recyclerView.registerItemCell(visibleItems)
 
         // 返回
         return snapshot

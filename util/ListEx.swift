@@ -60,10 +60,15 @@ extension Array {
         }
     }
 
-    mutating func addAll(_ array: [Element]) {
-        array.forEach {
+    mutating func addAll(_ array: [Element]?) {
+        array?.forEach {
             append($0)
         }
+    }
+
+    mutating func reset(_ array: [Element]?) {
+        removeAll()
+        addAll(array)
     }
 
     mutating func add(_ newElement: Element) {

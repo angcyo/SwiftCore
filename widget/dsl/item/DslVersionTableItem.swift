@@ -13,7 +13,7 @@ class DslVersionTableItem: DslTableItem {
 
     override func initItem() {
         super.initItem()
-
+        itemFooterEstimatedHeight = 0.001
         itemVersion = "当前版本: v\(Bundle.versionName())"
     }
 

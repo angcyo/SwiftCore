@@ -18,6 +18,10 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
         SectionHelper()
     }()
 
+    lazy var statusItem: IStatusItem? = nil
+
+    lazy var loadMoreItem: IStatusItem? = nil
+
     convenience init(frame: CGRect) {
         let layout = UICollectionViewFlowLayout()
         //layout.itemSize
@@ -51,6 +55,7 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
         let identifier = item.identifier
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
         item.bindCell(cell, indexPath)
+        item.itemUpdate = false
         return cell
     }
 
@@ -70,35 +75,8 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
     override func layoutSubviews() {
         super.layoutSubviews()
         if needsReload {
-            loadData(_itemList)
+            self.loadData(_itemList)
         }
-    }
-
-    /// 立即更新
-    func loadDataNow(_ animatingDifferences: Bool? = nil, completion: (() -> Void)? = nil) {
-        loadData(_itemList, animatingDifferences: animatingDifferences, completion: completion)
-    }
-
-    /// 强制加载数据
-    func loadData(_ items: [DslItem], animatingDifferences: Bool? = nil, completion: (() -> Void)? = nil) {
-        var animate = true
-        if animatingDifferences == nil {
-            // 智能判断是否要动画
-            animate = !sectionHelper.visibleItems.isEmpty
-        } else {
-            animate = animatingDifferences!
-        }
-
-        registerItemCell(items)
-
-        ///diff 更新数据
-        doMain {
-            let snapshot = self.sectionHelper.createSnapshot(self._itemList)
-            //Please always submit updates either always on the main queue or always off the main queue
-            self.diffableDataSource.apply(snapshot, animatingDifferences: animate, completion: completion)
-        }
-
-        needsReload = false
     }
 
     // MARK: 代理 UICollectionViewDelegate

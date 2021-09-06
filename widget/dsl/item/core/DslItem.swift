@@ -45,7 +45,7 @@ open class DslItem: NSObject, IDslItem {
         }
     }
 
-    /// 是否需要更新item, 在diff判断时使用, 在[@selector(onBindCell:::)]中取消
+    /// 是否需要更新item, 在diff判断时使用, 在[@selector(bindCell:::)]之后取消
     var itemUpdate: Bool = false {
         willSet {
             if newValue {
@@ -106,8 +106,9 @@ open class DslItem: NSObject, IDslItem {
     //MARK: - cell界面绑定
 
     /// item与cell绑定
+    /// @selector(createTableViewCell:cellForRowAt:item:)
     func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
-        debugPrint("绑定cell:\(cell):\(indexPath)")
+        L.d("绑定cell:\(cell):\(indexPath)")
         onBindCell?(cell, indexPath)
         bindCellOverride(cell, indexPath)
 
@@ -128,6 +129,18 @@ open class DslItem: NSObject, IDslItem {
 
     var onBindCell: ((_ cell: DslCell, _ indexPath: IndexPath) -> Void)? = nil
     var onBindCellOverride: ((_ cell: DslCell, _ indexPath: IndexPath) -> Void)? = nil
+
+    /// cell即将显示
+    /// @selector(tableView:willDisplay:forRowAt:)
+    func bindCellWillDisplay(_ cell: DslCell, _ indexPath: IndexPath) {
+        L.d("cell可见:\(cell):\(indexPath)")
+    }
+
+    /// cell即将不可见
+    /// @selector(tableView:didEndDisplaying:forRowAt:)
+    func bindCellDidEndDisplaying(_ cell: DslCell, _ indexPath: IndexPath) {
+        L.d("cell不可见:\(cell):\(indexPath)")
+    }
 
     //MARK: - Rx
 
