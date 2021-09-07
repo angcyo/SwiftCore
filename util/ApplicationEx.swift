@@ -257,3 +257,15 @@ func hideViewController(_ viewController: UIViewController,
                         completion: (() -> Void)? = nil) {
     hide(viewController, animated: flag, completion: completion)
 }
+
+//MARK: exit
+
+///带动画退出app https://www.jianshu.com/p/1fa06d7006cc
+func exitApp() {
+    abort()
+}
+
+///https://github.com/SwiftStudioIst/DinergateBrain/blob/main/Demo/DinergateBrain/CrashMonitor.swift
+func killApp() {
+    kill(getpid(), SIGKILL)
+}
