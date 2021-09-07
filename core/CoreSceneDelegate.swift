@@ -5,6 +5,10 @@
 import Foundation
 import UIKit
 
+/// 在plist文件中配置:
+/// Custom iOS Target Properties -> Application Scene Manifest -> Scene Configuration -> Application Session Role -> Item 0 -> Delegate Class Name
+/// https://www.jianshu.com/p/10df52dde8e5
+
 /// 场景代理
 class CoreSceneDelegate: UIResponder, UIWindowSceneDelegate {
 

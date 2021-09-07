@@ -33,6 +33,7 @@ extension Bundle {
     }
 
     static func bundleId() -> String {
+        //Bundle.main.bundleIdentifier
         get("CFBundleIdentifier") as! String
     }
 

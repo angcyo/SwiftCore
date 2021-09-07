@@ -161,6 +161,7 @@ open class BaseViewController: UIViewController, INavigation, UISceneDelegate {
 
     open override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+        L.w("...")
     }
 
     //MARK: show/dismiss
@@ -183,18 +184,21 @@ open class BaseViewController: UIViewController, INavigation, UISceneDelegate {
 
     //MARK: UINavigationBar
 
-    lazy var navigationBarWrap: UIView = {
-        UIView()
-    }()
+    var navigationBarWrap: UIView? = nil
 
-    lazy var navigationBar: UINavigationBar = {
-        UINavigationBar()
-    }()
+    var navigationBar: UINavigationBar? = nil
 
     /// 渲染一个自定义的导航栏
     func renderNavigationBar() {
-        view.render(navigationBarWrap)
-        navigationBarWrap.render(navigationBar)
+        if navigationBarWrap == nil {
+            navigationBarWrap = UIView()
+        }
+        if navigationBar == nil {
+            navigationBar = UINavigationBar()
+        }
+
+        view.render(navigationBarWrap!)
+        navigationBarWrap!.render(navigationBar!)
 
         with(navigationBarWrap) {
             $0.makeGravityLeft()
@@ -211,7 +215,7 @@ open class BaseViewController: UIViewController, INavigation, UISceneDelegate {
         }
 
         //appearance
-        navigationBarWrap.backgroundColor = Res.color.controllerBackgroundColor
+        navigationBarWrap!.backgroundColor = Res.color.controllerBackgroundColor
         //navigationItem.title = title
 
         /*navigationBar.isTranslucent = false
@@ -228,10 +232,10 @@ open class BaseViewController: UIViewController, INavigation, UISceneDelegate {
             //$0.backgroundColor = .clear
         }
 
-        navigationBar.pushItem(navigationItem, animated: false)
+        navigationBar!.pushItem(navigationItem, animated: false)
     }
 
-    //MARK: UISceneDelegate
+    //MARK: UISceneDelegate [CoreSceneDelegate]中触发回调
 
     //1 场景将要进入前台
     public func sceneWillEnterForeground(_ scene: UIScene) {

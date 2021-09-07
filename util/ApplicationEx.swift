@@ -151,11 +151,9 @@ func navWrap(_ viewController: UIViewController) -> UINavigationController {
 func push(_ viewControllerToPresent: UIViewController,
           animated flag: Bool = true,
           root: Bool = false) {
-    guard let window = UIApplication.mainWindow else {
-        return
-    }
+    let window = UIApplication.mainWindow ?? newWindow()
 
-    if root {
+    if root || window.rootViewController == nil {
         window.rootViewController = viewControllerToPresent
     } else if let root = window.rootViewController {
         if let nav = root as? UINavigationController {
@@ -174,13 +172,13 @@ func push(_ viewControllerToPresent: UIViewController,
 func show(_ viewControllerToPresent: UIViewController,
           animated flag: Bool = true,
           completion: (() -> Void)? = nil) {
-    guard let window = UIApplication.mainWindow else {
-        return
+    let window = UIApplication.mainWindow ?? newWindow()
+
+    if let root = window.rootViewController {
+        root.present(viewControllerToPresent, animated: flag, completion: completion)
+    } else {
+        window.rootViewController = viewControllerToPresent
     }
-    guard let root = window.rootViewController else {
-        return
-    }
-    root.present(viewControllerToPresent, animated: flag, completion: completion)
 }
 
 /// 显示一个[UIViewController]

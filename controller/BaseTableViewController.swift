@@ -51,18 +51,20 @@ class BaseTableViewController: BaseViewController {
 
     /// 初始化
     func initTableView(tableView: DslTableView) {
-        view.addSubview(tableView)
-        if tableView.bounds.isEmpty {
-            tableView.make { maker in
-                maker.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-                //maker.bottom.equalTo(UIScreen.height)//view.safeAreaLayoutGuide.snp.bottom
-                maker.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-                maker.leading.equalTo(view.safeAreaLayoutGuide.snp.leading)
-                maker.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing)
+        view.render(tableView)
+        if tableView.frame.isEmpty {
+            tableView.make {
+                $0.leading.equalTo(view.safeAreaLayoutGuide.snp.leading)
+                $0.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing)
+
+                $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+                //$0.bottom.equalTo(UIScreen.height)//view.safeAreaLayoutGuide.snp.bottom
+                $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             }
         }
     }
 
+    /// 键盘监听Bag
     lazy var keyboardBag: DisposeBag = {
         DisposeBag()
     }()

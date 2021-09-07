@@ -22,8 +22,14 @@ class CoreAppDelegate: UIResponder, UIApplicationDelegate {
 
         L.d(Bundle.main.infoDictionary)
 
+        initApplication()
+
         //sleep(15)
         return true
+    }
+
+    func initApplication() {
+        //init
     }
 
     // MARK: UISceneSession Lifecycle

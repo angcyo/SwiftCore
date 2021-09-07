@@ -55,6 +55,10 @@ extension CGRect {
 }
 
 func point(x: CGFloat = 0, y: CGFloat = 0) -> CGPoint {
+    cgPoint(x: x, y: y)
+}
+
+func cgPoint(x: CGFloat = 0, y: CGFloat = 0) -> CGPoint {
     CGPoint(x: x, y: y)
 }
 
