@@ -25,11 +25,16 @@ protocol ISectionInterceptor {
 
 class InterceptorParams {
 
+    //MARK: 输入参数
+
     /// 视图
     var dslRecyclerView: DslRecycleView? = nil
 
     /// 过去请求的数据源
     var requestItems: [DslItem] = []
+
+
+    //MARK: 输出参数
 
     /// 过去后的数据集合, 返回参数
     var resultItems: [DslItem] = []

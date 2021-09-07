@@ -218,6 +218,10 @@ extension UIView {
         isHidden = !visible
     }
 
+    func setHidden(_ hidden: Bool = true) {
+        isHidden = hidden
+    }
+
     /// 设置背景图片
     func setBgImage(_ image: UIImage?) {
         //        if image == nil {

@@ -34,6 +34,17 @@ extension DslRecycleView {
         }
     }
 
+    /// 获取对应位置的cell
+    func getCellForRow(at indexPath: IndexPath) -> DslCell? {
+        if let tableView = self as? UITableView {
+            return tableView.cellForRow(at: indexPath)
+        } else if let collection = self as? UICollectionView {
+            return collection.cellForItem(at: indexPath)
+        } else {
+            return nil
+        }
+    }
+
     // MARK: item操作
 
     func clearAllItems() {
@@ -122,28 +133,42 @@ extension DslRecycleView {
 
     /// 强制加载数据
     func loadData(_ items: [DslItem], animatingDifferences: Bool? = nil, completion: (() -> Void)? = nil) {
-        var animate = true
-        if animatingDifferences == nil {
-            // 智能判断是否要动画
-            animate = !sectionHelper.visibleItems.isEmpty
-        } else {
-            animate = animatingDifferences!
-        }
+        sectionHelper.updateItemList(recyclerView: self, items: items, animatingDifferences: animatingDifferences, completion: completion)
+        needsReload = false
+    }
 
-        ///diff 更新数据
-        doMain {
-            let snapshot = self.sectionHelper.createSnapshot(self, self._itemList)
-            //Please always submit updates either always on the main queue or always off the main queue
-            if let tableView = self as? DslTableView {
-                tableView.diffableDataSource.apply(snapshot, animatingDifferences: animate, completion: completion)
-            } else if let collectionView = self as? DslCollectionView {
-                collectionView.diffableDataSource.apply(snapshot, animatingDifferences: animate, completion: completion)
-            } else {
-                L.w("不支持的DslRecyclerView:\(self)")
+    //MARK: 情感图切换
+
+    func toStatus(_ status: ItemStatus, _ data: Any? = nil, _ enable: Bool = true) {
+        if let statusItem = statusItem {
+            statusItem.itemStatusEnable = enable
+            statusItem.itemStatus = status
+
+            if let item = statusItem as? DslItem {
+                item.itemData = data
             }
         }
+    }
 
-        needsReload = false
+    func toStatusRefresh(_ enable: Bool = true) {
+        toStatus(.ITEM_STATUS_REFRESH, enable)
+    }
+
+    func toStatusContent(_ enable: Bool = true) {
+        toStatus(.ITEM_STATUS_NONE, enable)
+    }
+
+    //MARK: 加载更多控制
+
+    func toLoadMore(_ status: ItemStatus = .ITEM_STATUS_REFRESH, _ data: Any? = nil, _ enable: Bool = true) {
+        if let statusItem = loadMoreItem {
+            statusItem.itemStatusEnable = enable
+            statusItem.itemStatus = status
+
+            if let item = statusItem as? DslItem {
+                item.itemData = data
+            }
+        }
     }
 }
 

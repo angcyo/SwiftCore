@@ -9,7 +9,9 @@ import NVActivityIndicatorView
 /// 情感图切换item
 
 class DslStatusTableItem: BaseStatusTableItem {
+    //no op
 }
 
 class DslStatusTableCell: BaseStatusTableCell {
+    //no op
 }

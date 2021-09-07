@@ -10,11 +10,21 @@ import NVActivityIndicatorView
 
 open class BaseStatusTableItem: DslTableItem, IStatusItem {
 
+    /// 已经通知了刷新, 等到刷新结束
+    var _isRefreshPending: Bool = false
+
     /// 当前状态
     var itemStatus: ItemStatus = .ITEM_STATUS_NONE {
         willSet {
-            if itemStatusEnable && itemStatus != newValue {
-                _dslRecyclerView?.needsReload = true
+            if itemStatus != newValue {
+                itemUpdate = true
+
+                if itemStatusEnable {
+                    if newValue != .ITEM_STATUS_REFRESH {
+                        _isRefreshPending = false
+                    }
+                    _dslRecyclerView?.needsReload = true
+                }
             }
         }
     }
@@ -28,23 +38,45 @@ open class BaseStatusTableItem: DslTableItem, IStatusItem {
         }
     }
 
+    /// 刷新回调
+    var onItemRefresh: ((DslCell) -> Void)? = nil
+
     override func initItem() {
         super.initItem()
         itemSectionName = "status"
+
+        //点击事件
+        onItemClick = {
+            if self.itemStatus == .ITEM_STATUS_ERROR {
+                self.itemStatus = .ITEM_STATUS_REFRESH
+                self._dslRecyclerView?.needsReload = true
+
+                //回调
+                if let index = self.itemIndex, let cell = self._dslRecyclerView?.getCellForRow(at: index) {
+                    self.onItemRefresh?(cell)
+                }
+            }
+        }
     }
 
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
 
         cell.cellConfigOf(StatusCellConfig.self) {
-            $0.updateStatus(itemStatus)
+            $0.updateStatus(self, itemStatus)
         }
     }
 
     override func bindCellWillDisplay(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCellWillDisplay(cell, indexPath)
         cell.cellConfigOf(StatusCellConfig.self) {
-            $0.indicator.startAnimating()
+            if itemStatus == .ITEM_STATUS_REFRESH {
+                $0.indicator.startAnimating()
+            }
+        }
+        if !_isRefreshPending && itemStatus == .ITEM_STATUS_REFRESH {
+            _isRefreshPending = true
+            onItemRefresh?(cell)
         }
     }
 
@@ -96,6 +128,12 @@ class StatusCellConfig: IDslCellConfig {
     /// 指示器的大小
     var indicatorSize: CGFloat = 30
 
+    /// 错误布局
+    let error: UIView = labelView("~出错吶, 点击重试~")
+
+    /// 无更多布局
+    let noMore: UIView = labelView("~没吶~")
+
     func getRootView(_ cell: UIView) -> UIView {
         cell.cellContentView
     }
@@ -104,15 +142,43 @@ class StatusCellConfig: IDslCellConfig {
         cell.backgroundColor = .clear
 
         cell.cellContentView.render(indicator)
+        cell.cellContentView.render(error)
+        cell.cellContentView.render(noMore)
 
         with(indicator) {
             $0.makeCenter()
             $0.makeWidthHeight(size: indicatorSize)
         }
+
+        with(error) {
+            $0.makeCenter()
+        }
+
+        with(noMore) {
+            $0.makeCenter()
+        }
     }
 
     /// 根据状态更新视图
-    func updateStatus(_ status: ItemStatus) {
+    func updateStatus(_ item: BaseStatusTableItem, _ status: ItemStatus) {
         //do
+        indicator.setHidden(status != .ITEM_STATUS_REFRESH)
+        if status != .ITEM_STATUS_REFRESH {
+            indicator.stopAnimating()
+        }
+
+        error.setHidden(status != .ITEM_STATUS_ERROR)
+        if status == .ITEM_STATUS_ERROR {
+            if let tip = item.itemData as? String, let error = error as? UILabel {
+                error.setText(tip)
+            }
+        }
+
+        noMore.setHidden(status != .ITEM_STATUS_NO_MORE)
+        if status == .ITEM_STATUS_NO_MORE {
+            if let tip = item.itemData as? String, let noMore = noMore as? UILabel {
+                noMore.setText(tip)
+            }
+        }
     }
 }

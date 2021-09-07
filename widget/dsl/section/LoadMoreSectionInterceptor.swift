@@ -14,8 +14,8 @@ class LoadMoreSectionInterceptor: ISectionInterceptor {
         params.resultItems.reset(params.requestItems)
 
         if let recyclerView = params.dslRecyclerView {
-            if let statusItem = recyclerView.statusItem, statusItem.itemStatusEnable && !statusItem.isItemHidden {
-                if let item = statusItem as? DslItem {
+            if let loadMoreItem = recyclerView.loadMoreItem, loadMoreItem.itemStatusEnable && !loadMoreItem.isItemHidden {
+                if let item = loadMoreItem as? DslItem {
                     params.resultItems.add(item)
                 }
             }
