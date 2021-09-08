@@ -79,3 +79,10 @@ pod "Atributika" #4.10.1
 # https://github.com/nvzqz/FileKit
 # pod 'FileKit', '~> 6.0.0'
 ```
+
+# 2021-09-07
+
+```
+# 角标 https://github.com/jkpang/PPBadgeView
+pod 'PPBadgeViewSwift' #3.1.0
+```
