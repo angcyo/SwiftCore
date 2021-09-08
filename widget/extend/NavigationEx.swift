@@ -49,6 +49,32 @@ extension UINavigationItem {
     }
 }
 
+extension UIBarItem {
+
+    /// 设置导航标题颜色
+    func setTitleColor(_ color: UIColor = Res.text.normal.color) {
+        var attributes = titleTextAttributes(for: .normal) ?? [:]
+        attributes[.foregroundColor] = color
+        setTitleTextAttributes(attributes, for: .normal)
+    }
+
+    /// 设置导航标题加粗
+    func setTitleBold(_ bold: Bool = true) {
+        var attributes = titleTextAttributes(for: .normal) ?? [:]
+
+        var font: UIFont = attributes[.font] as? UIFont ?? Res.font.normal
+
+        if bold {
+            font = font.bold()
+        } else {
+            font = font.normal()
+        }
+
+        attributes[.font] = font
+        setTitleTextAttributes(attributes, for: .normal)
+    }
+}
+
 extension UIBarButtonItem {
 
     /// 菜单

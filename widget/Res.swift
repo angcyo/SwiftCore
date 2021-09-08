@@ -53,11 +53,13 @@ struct Res {
         static var error = UIColor.parse("#ff4d3f")
         static var fairly = UIColor.parse("#c3c9cf")
 
-        // 阴影颜色
+        /// 阴影颜色
         static var shadowColor = UIColor.parse("#2B2B2B")
 
-        // 灰色图标颜色
+        /// 灰色图标颜色
         static var iconColor = UIColor.parse("#C3C7CF")
+        /// 更黑的图标颜色
+        static var iconColorDark = UIColor.parse("#2f3541")
     }
 
     // MARK: - 尺寸资源
