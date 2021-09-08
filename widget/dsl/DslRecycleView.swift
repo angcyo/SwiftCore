@@ -111,6 +111,22 @@ extension DslRecycleView {
         return item
     }
 
+    func getTableItem(_ indexPath: IndexPath) -> DslTableItem? {
+        getItem(indexPath) as? DslTableItem
+    }
+
+    func getCollectionItem(_ indexPath: IndexPath) -> DslCollectionItem? {
+        getItem(indexPath) as? DslCollectionItem
+    }
+
+    func getSectionFirstTableItem(_ section: Int) -> DslTableItem? {
+        sectionHelper.sectionList[section].firstItem as? DslTableItem
+    }
+
+    func getSectionFirstCollectionItem(_ section: Int) -> DslCollectionItem? {
+        sectionHelper.sectionList[section].firstItem as? DslCollectionItem
+    }
+
     /// 注册cell
     func registerItemCell(_ items: [DslItem]) {
         items.forEach { (item: DslItem) in
@@ -121,6 +137,7 @@ extension DslRecycleView {
                     tableView.register(itemCell, forCellReuseIdentifier: identifier)
                 } else if let collectionView = self as? UICollectionView {
                     collectionView.register(itemCell, forCellWithReuseIdentifier: identifier)
+                    //collectionView.register(<#T##viewClass: AnyClass?##Swift.AnyClass?#>, forSupplementaryViewOfKind: <#T##String##Swift.String#>, withReuseIdentifier: <#T##String##Swift.String#>)
                 }
             }
         }
@@ -440,5 +457,14 @@ extension DslRecycleView {
         }
 
         return result
+    }
+}
+
+extension UICollectionView {
+
+    var flowLayout: UICollectionViewFlowLayout? {
+        get {
+            collectionViewLayout as? UICollectionViewFlowLayout
+        }
     }
 }

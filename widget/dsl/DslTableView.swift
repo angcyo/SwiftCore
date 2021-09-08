@@ -114,16 +114,6 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
         }
     }
 
-    // MARK: 辅助操作
-
-    func getTableItem(_ indexPath: IndexPath) -> DslTableItem? {
-        getItem(indexPath) as? DslTableItem
-    }
-
-    func getSectionFirstItem(_ section: Int) -> DslTableItem? {
-        return sectionHelper.sectionList[section].firstItem as? DslTableItem
-    }
-
     override func cellForRow(at indexPath: IndexPath) -> UITableViewCell? {
         super.cellForRow(at: indexPath)
         //diffableDataSource.tableView(<#T##tableView: UITableView##UIKit.UITableView#>, cellForRowAt: <#T##IndexPath##Foundation.IndexPath#>)
@@ -195,14 +185,14 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         //return UITableView.automaticDimension
         print("heightForHeaderInSection:\(section)")
-        return getSectionFirstItem(section)?.itemHeaderHeight ?? UITableView.automaticDimension
+        return getSectionFirstTableItem(section)?.itemHeaderHeight ?? UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         //return UITableView.automaticDimension
         print("estimatedHeightForHeaderInSection:\(section)")
 
-        if let height = getSectionFirstItem(section)?.itemHeaderEstimatedHeight {
+        if let height = getSectionFirstTableItem(section)?.itemHeaderEstimatedHeight {
             return height
         }
 
@@ -220,14 +210,14 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         //return UITableView.automaticDimension
         print("heightForFooterInSection:\(section)")
-        return getSectionFirstItem(section)?.itemFooterHeight ?? UITableView.automaticDimension
+        return getSectionFirstTableItem(section)?.itemFooterHeight ?? UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
         //return UITableView.automaticDimension
         print("estimatedHeightForFooterInSection:\(section)")
 
-        if let height = getSectionFirstItem(section)?.itemFooterEstimatedHeight {
+        if let height = getSectionFirstTableItem(section)?.itemFooterEstimatedHeight {
             return height
         }
 
@@ -622,45 +612,45 @@ class DslTableViewDiffableDataSource: UITableViewDiffableDataSource<DslSection, 
 
     /// section 的头部标题
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        debugPrint("titleForHeaderInSection:\(section)")
-        return dslTableView.getSectionFirstItem(section)?.itemHeaderTitle
+        L.d("titleForHeaderInSection:\(section)")
+        return dslTableView.getSectionFirstTableItem(section)?.itemHeaderTitle
     }
 
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        debugPrint("titleForFooterInSection:\(section)")
-        return dslTableView.getSectionFirstItem(section)?.itemFooterTitle
+        L.d("titleForFooterInSection:\(section)")
+        return dslTableView.getSectionFirstTableItem(section)?.itemFooterTitle
     }
 
     /// titles
     override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        debugPrint("sectionIndexTitles")
+        L.d("sectionIndexTitles")
         return nil
     }
 
     /// 根据title 获取 索引
     override func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
-        debugPrint("sectionForSectionIndexTitle:\(title):\(index)")
+        L.d("sectionForSectionIndexTitle:\(title):\(index)")
         return index
     }
 
     /// 点击了侧滑按钮
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        debugPrint("commit editingStyle:\(editingStyle.rawValue):\(indexPath)")
+        L.d("commit editingStyle:\(editingStyle.rawValue):\(indexPath)")
     }
 
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        debugPrint("moveRowAt:\(sourceIndexPath) to:\(destinationIndexPath)")
+        L.d("moveRowAt:\(sourceIndexPath) to:\(destinationIndexPath)")
     }
 
     /// 是否可以编辑
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        debugPrint("canEditRowAt:\(indexPath)")
+        L.d("canEditRowAt:\(indexPath)")
         return dslTableView.getTableItem(indexPath)?.itemCanEdit ?? false
     }
 
     /// 是否可以移动
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        debugPrint("canMoveRowAt:\(indexPath)")
+        L.d("canMoveRowAt:\(indexPath)")
         return dslTableView.getTableItem(indexPath)?.itemCanMove ?? false
     }
 }

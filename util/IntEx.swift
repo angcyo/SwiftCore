@@ -39,6 +39,10 @@ extension Int: Number {
         }
         return self & other == other
     }
+
+    func toCGFloat() -> CGFloat {
+        CGFloat(self)
+    }
 }
 
 extension UInt: Number {

@@ -12,6 +12,9 @@ import AlamofireImage
 
 ///https://github.com/Alamofire/AlamofireImage
 
+/// image 支持[UIImage] 支持本地图片, 支持在线图片
+typealias AnyImage = Any
+
 extension UIImageView {
 
     /// 显示网络图片
@@ -27,7 +30,7 @@ extension UIImageView {
     }
 
     /// 显示头像
-    func setAvatarUrl(_ url: Any?, name: String? = nil) {
+    func setAvatarUrl(_ url: AnyImage?, name: String? = nil) {
         if url == nil {
             if nilOrEmpty(name) {
                 image = nil
@@ -68,7 +71,7 @@ extension UIImageView {
     }
 
     /// image 支持[UIImage] 支持本地图片, 支持在线图片
-    func setImage(_ image: Any?, name: String? = nil) {
+    func setImage(_ image: AnyImage?, name: String? = nil) {
         if let img = image {
             if let imgStr = img as? String {
                 if imgStr.starts(with: "http") {
@@ -88,7 +91,7 @@ extension UIImageView {
 }
 
 /// image 支持[UIImage] 支持本地图片, 支持在线图片
-func img(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
+func img(_ image: AnyImage? = nil, tintColor: UIColor? = nil) -> UIImageView {
     let view = UIImageView()
     view.setImage(image)
 
@@ -111,7 +114,7 @@ func img(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
 }
 
 /// 等比缩放到控件size
-func scaleImageView(_ image: Any? = nil, tintColor: UIColor? = nil, size: CGFloat? = nil) -> UIImageView {
+func scaleImageView(_ image: AnyImage? = nil, tintColor: UIColor? = nil, size: CGFloat? = nil) -> UIImageView {
     let view = img(image, tintColor: tintColor)
     view.contentMode = .scaleAspectFit
     if let size = size {
@@ -121,7 +124,7 @@ func scaleImageView(_ image: Any? = nil, tintColor: UIColor? = nil, size: CGFloa
 }
 
 /// 等比填充到控件size
-func fillImageView(_ image: Any? = nil, tintColor: UIColor? = nil, size: CGFloat? = nil) -> UIImageView {
+func fillImageView(_ image: AnyImage? = nil, tintColor: UIColor? = nil, size: CGFloat? = nil) -> UIImageView {
     let view = img(image, tintColor: tintColor)
     view.contentMode = .scaleAspectFill
     if let size = size {
@@ -130,18 +133,18 @@ func fillImageView(_ image: Any? = nil, tintColor: UIColor? = nil, size: CGFloat
     return view
 }
 
-func image(_ image: Any? = nil, tintColor: UIColor? = nil) -> UIImageView {
+func image(_ image: AnyImage? = nil, tintColor: UIColor? = nil) -> UIImageView {
     img(image, tintColor: tintColor)
 }
 
 /// 图标
-func icon(_ image: Any? = nil, tintColor: UIColor? = Res.color.iconColor) -> UIImageView {
+func icon(_ image: AnyImage? = nil, tintColor: UIColor? = Res.color.iconColor) -> UIImageView {
     let view = img(image, tintColor: tintColor)
     view.contentMode = .center
     return view
 }
 
-func iconView(_ image: Any? = nil, tintColor: UIColor? = Res.color.iconColor) -> UIImageView {
+func iconView(_ image: AnyImage? = nil, tintColor: UIColor? = Res.color.iconColor) -> UIImageView {
     icon(image, tintColor: tintColor)
 }
 

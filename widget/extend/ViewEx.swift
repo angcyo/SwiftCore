@@ -453,11 +453,14 @@ extension UIView {
     }
 
     /// 设置阴影
-    func shadow(_ color: UIColor = Res.color.shadowColor, radius: Float = 5, size: CGSize = CGSize(width: 0, height: 2)) {
+    func shadow(_ color: UIColor = Res.color.shadowColor,
+                opacity: Float = 0.4,
+                radius: CGFloat = 5,
+                offset: CGSize = CGSize(width: 0, height: 2)) {
         layer.shadowColor = color.cgColor
-        layer.shadowOffset = size
-        layer.shadowOpacity = 0.4;
-        layer.shadowRadius = CGFloat(radius)
+        layer.shadowOffset = offset
+        layer.shadowOpacity = opacity
+        layer.shadowRadius = radius
         layer.masksToBounds = false
 
         //layer.shadowColor = UIColor.black.cgColor
@@ -610,6 +613,37 @@ extension UIView {
         return size
     }
 
+    func layoutSizeOf(_ targetSize: CGSize? = nil, offsetWidth: CGFloat = 0, offsetHeight: CGFloat = 0, ignoreHidden: Bool = false) -> CGSize {
+        let targetSize = targetSize ?? UIView.layoutFittingExpandedSize //cgSize(CGFloat.max, CGFloat.max)
+        var size: CGSize
+
+        if isHidden && !ignoreHidden {
+            size = .zero
+        } else {
+            let widthPriority: UILayoutPriority
+            let heightPriority: UILayoutPriority
+
+            if targetSize.width > 0 {
+                widthPriority = .required
+            } else {
+                widthPriority = .fittingSizeLevel
+            }
+
+            if targetSize.height > 0 {
+                heightPriority = .required
+            } else {
+                heightPriority = .fittingSizeLevel
+            }
+
+            size = systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: widthPriority, verticalFittingPriority: heightPriority)
+        }
+
+        size.width += offsetWidth
+        size.height += offsetHeight
+
+        return size
+    }
+
     func removeView(_ viewClass: AnyClass) {
         for view in subviews.reversed() {
             if view.isEqualClassName(viewClass) {
@@ -738,5 +772,15 @@ func vLine(width: CGFloat = Res.size.line, color: UIColor = Res.color.line) -> U
     let view = v()
     view.makeWidth()
     view.setBackground(color)
+    return view
+}
+
+/// 支持拖拽的界面提示view
+func dragTipView() -> UIView {
+    let view = UIView()
+    view.backgroundColor = "#D3D6DD".toColor()
+    view.frame = rect(56, 5)
+    //自动大小掩码, 转成自动布局约束, 代码创建布局默认是true
+    view.translatesAutoresizingMaskIntoConstraints = true
     return view
 }

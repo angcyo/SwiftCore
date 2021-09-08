@@ -319,12 +319,24 @@ extension UIView {
         }
     }
 
+    func makeGravityTopSafe(_ parent: UIView? = nil,
+                            offset: ConstraintOffsetTarget = 0,
+                            priority: ConstraintPriority = .required) {
+        makeGravityTop((parent ?? superview!).safeAreaLayoutGuide.snap.top, offset: offset, priority: priority)
+    }
+
     func makeGravityLeft(_ parent: ConstraintRelatableTarget? = nil,
                          offset: ConstraintOffsetTarget = 0,
                          priority: ConstraintPriority = .required) {
         make { maker in
             maker.leading.equalTo(parent ?? superview!).offset(offset).priority(priority)
         }
+    }
+
+    func makeGravityLeftSafe(_ parent: UIView? = nil,
+                             offset: ConstraintOffsetTarget = 0,
+                             priority: ConstraintPriority = .required) {
+        makeGravityLeft((parent ?? superview!).safeAreaLayoutGuide.snap.leading, offset: offset, priority: priority)
     }
 
     func makeGravityHorizontal(_ parent: ConstraintRelatableTarget? = nil,
@@ -356,6 +368,12 @@ extension UIView {
         }
     }
 
+    func makeGravityRightSafe(_ parent: UIView? = nil,
+                              offset: ConstraintOffsetTarget = 0,
+                              priority: ConstraintPriority = .required) {
+        makeGravityRight((parent ?? superview!).safeAreaLayoutGuide.snap.trailing, offset: offset, priority: priority)
+    }
+
     /// 注意offset可能需要是负值, 已自动取负值
     func makeGravityBottom(_ parent: ConstraintRelatableTarget? = nil,
                            offset: ConstraintOffsetTarget = 0,
@@ -363,6 +381,12 @@ extension UIView {
         make { maker in
             maker.bottom.equalTo(parent ?? superview!).offset(offset.reverse()).priority(priority)
         }
+    }
+
+    func makeGravityBottomSafe(_ parent: UIView? = nil,
+                               offset: ConstraintOffsetTarget = 0,
+                               priority: ConstraintPriority = .required) {
+        makeGravityBottom((parent ?? superview!).safeAreaLayoutGuide.snap.bottom, offset: offset, priority: priority)
     }
 
     /// 自身左边, 对齐目标右边

@@ -9,6 +9,9 @@ import RxSwift
 /// 数据和界面关联的item
 open class DslItem: NSObject, IDslItem {
 
+    /// 需要自适应大小
+    static let automaticSize: CGFloat = 0.00000001
+
     /// cell 界面, 必须
     /// 如果是在DslTableView中, 则必须是UITableViewCell的子类
     /// 如果是在DslCollectionView中, 则必须是UICollectionViewCell的子类
@@ -109,6 +112,7 @@ open class DslItem: NSObject, IDslItem {
     /// @selector(createTableViewCell:cellForRowAt:item:)
     func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         L.d("绑定cell:\(self):\(cell):\(indexPath)")
+        bindCellBase(cell, indexPath)
         onBindCell?(cell, indexPath)
         bindCellOverride(cell, indexPath)
 
@@ -120,10 +124,18 @@ open class DslItem: NSObject, IDslItem {
         }*/
     }
 
-    func bindCellOverride(_ cell: DslCell, _ indexPath: IndexPath) {
+    func bindCellBase(_ cell: DslCell, _ indexPath: IndexPath) {
+        //bind
+        if let dslCell = cell as? IDslCell {
+            dslCell._item = self
+        }
+        //gesture
         if let view = cell as? UIView {
             bindItemGesture(view)
         }
+    }
+
+    func bindCellOverride(_ cell: DslCell, _ indexPath: IndexPath) {
         onBindCellOverride?(cell, indexPath)
     }
 
@@ -147,6 +159,29 @@ open class DslItem: NSObject, IDslItem {
         L.d("cell不可见:\(cell):\(indexPath)")
         onCellDidEndDisplaying?(cell, indexPath)
     }
+
+    //MARK: UICollectionView / UITableView 共同属性
+
+    var itemCanEdit: Bool = false
+    var itemCanMove: Bool = false
+    var itemCanHighlight: Bool = false
+    var itemCanSelect: Bool = false
+    var itemCanDeselect: Bool = false
+
+    /// 激活item的选择
+    func enableSelect(_ enable: Bool = true) {
+        itemCanHighlight = enable
+        itemCanSelect = enable
+        itemCanDeselect = enable
+    }
+
+    var onItemEditing: ((_ editing: Bool, _ animated: Bool) -> Void)? = nil //暂不支持在UICollectionView中
+    var onItemHighlighted: ((_ highlighted: Bool, _ animated: Bool) -> Void)? = nil
+    var onItemSelected: ((_ selected: Bool, _ animated: Bool) -> Void)? = nil
+
+    /// 宽高
+    var itemHeight: CGFloat = UITableView.automaticDimension //-1
+    var itemWidth: CGFloat = UITableView.automaticDimension //宽度属性只在UICollectionView中有效
 
     //MARK: - Rx
 

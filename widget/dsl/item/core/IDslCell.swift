@@ -6,7 +6,10 @@ import Foundation
 import UIKit
 
 /// 扩展cell时的基协议, 方便继承查找
-protocol IDslCell {
+protocol IDslCell: AnyObject {
+
+    /// [自动赋值]
+    var _item: DslItem? { get set }
 
 /*    /// 协议中需要访问的泛型, 需要在此声明. 用了泛型, 协议就没办法强转类型了.
     associatedtype CellConfig: IDslCellConfig
