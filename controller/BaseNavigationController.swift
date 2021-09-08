@@ -61,7 +61,9 @@ class BaseNavigationController: UINavigationController,
     func initAppearance() {
         //toolbar 显示在界面底部的工具栏
         //setToolbarHidden(false, animated: true)
-        UIBarButtonItem.appearance().tintColor = Res.color.colorAccent
+
+        //着色器
+        //UIBarButtonItem.appearance().tintColor = Res.color.colorAccent
 
         //navigationBar.tintColor = tintColor
         //toolbar.tintColor = tintColor

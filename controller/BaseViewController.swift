@@ -78,7 +78,9 @@ open class BaseViewController: UIViewController, INavigation, UISceneDelegate {
     /// 确保样式
     func ensureNavigationStyle() {
         if navigationItem.standardAppearance == nil {
-            navigationItem.standardAppearance = UINavigationBarAppearance()
+            let appearance = UINavigationBarAppearance()
+            //appearance.buttonAppearance.normal
+            navigationItem.standardAppearance = appearance
         }
     }
 

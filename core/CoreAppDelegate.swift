@@ -30,6 +30,21 @@ class CoreAppDelegate: UIResponder, UIApplicationDelegate {
 
     func initApplication() {
         //init
+        with(UINavigationBar.appearance()) {
+            //$0.barTintColor = Res.color.colorAccent
+            $0.tintColor = Res.color.colorAccent
+            //$0.setTitleColor(Res.text.normal.color)
+        }
+
+        with(UIBarButtonItem.appearance()) {
+            $0.tintColor = Res.color.colorAccent
+            //$0.setTitleTextAttributes(<#T##attributes: [Key: Any]?##[Foundation.NSAttributedString.Key: Any]?#>, for: <#T##State##UIKit.UIControl.State#>)
+        }
+
+        with(UITabBarItem.appearance()) {
+            $0.badgeColor
+            //$0.setTitleTextAttributes(<#T##attributes: [Key: Any]?##[Foundation.NSAttributedString.Key: Any]?#>, for: <#T##State##UIKit.UIControl.State#>)
+        }
     }
 
     // MARK: UISceneSession Lifecycle
