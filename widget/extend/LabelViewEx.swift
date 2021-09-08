@@ -45,6 +45,10 @@ extension UILabel {
         self.text = text
     }
 
+    func setAlignment(_ alignment: NSTextAlignment) {
+        textAlignment = alignment
+    }
+
     func setAttributedText(_ text: NSAttributedString?) {
         attributedText = text
     }

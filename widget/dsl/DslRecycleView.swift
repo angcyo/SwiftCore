@@ -467,4 +467,25 @@ extension UICollectionView {
             collectionViewLayout as? UICollectionViewFlowLayout
         }
     }
+
+    /// 等同于 contentSize
+    var collectionViewContentSize: CGSize {
+        get {
+            collectionViewLayout.collectionViewContentSize
+        }
+    }
+
+    /// 内容的宽度
+    var contentWidth: CGFloat {
+        get {
+            collectionViewContentSize.width + contentInset.left + contentInset.right
+        }
+    }
+
+    /// 内容的高度
+    var contentHeight: CGFloat {
+        get {
+            collectionViewContentSize.height + contentInset.top + contentInset.bottom
+        }
+    }
 }

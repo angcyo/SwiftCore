@@ -110,7 +110,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     override func layoutSubviews() {
         super.layoutSubviews()
         if needsReload {
-            self.loadData(_itemList)
+            loadData(_itemList)
         }
     }
 
@@ -466,7 +466,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     // MARK: UIScrollView代理
 
     /// 回调
-    var onScrollViewDidScroll: ((UITableView) -> Void)? = nil
+    var onScrollViewDidScroll: ((UIScrollView) -> Void)? = nil
 
     /// 内容已经滚动
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -662,7 +662,7 @@ func changeFirstCellHeight(_ tableView: UITableView, defaultHeight: CGFloat? = n
     }
 }
 
-var KEY_DEFAULT_SCROLLER_BEFORE_HEIGHT = "key_default_scroller_before_height"
+fileprivate var KEY_DEFAULT_SCROLLER_BEFORE_HEIGHT = "key_default_scroller_before_height"
 
 // y 小于0, 手指向下滑动
 func changeViewHeight(_ tableView: UITableView, view: UIView, defaultHeight: CGFloat? = nil) {

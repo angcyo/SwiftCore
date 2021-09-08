@@ -25,30 +25,31 @@ class DslGridCollectionItem: DslCollectionItem {
 
 class DslGridCollectionCell: DslCollectionCell {
 
-    let image = imageView()
+    let image = scaleImageView()
 
-    let text = subTitleView()
+    let text = subTitleView(size: Res.text.des.size)
 
     override func initCell() {
         contentView.render(image)
         contentView.render(text)
 
-        backgroundColor = .green
+        //backgroundColor = .green
 
         with(image) {
             $0.makeGravityLeft()
             $0.makeGravityRight()
-            $0.makeGravityTop()
+            $0.makeGravityTop(offset: Res.size.x)
             $0.makeWidthHeight(size: 52)
         }
 
         with(text) {
-            $0.backgroundColor = .red
-            $0.makeGravityLeft()
-            $0.makeGravityRight()
-            $0.makeGravityBottom()
-            $0.makeTopToBottomOf(image)
-            $0.makeHeight(20)
+            //$0.backgroundColor = .red
+            $0.makeGravityLeft(offset: Res.size.x)
+            $0.makeGravityRight(offset: Res.size.x)
+            $0.makeGravityBottom(offset: Res.size.m)
+            $0.makeTopToBottomOf(image, offset: Res.size.m)
+            //$0.makeHeight(20)
+            $0.textAlignment = .center
             //$0.sizeToFit()
         }
     }

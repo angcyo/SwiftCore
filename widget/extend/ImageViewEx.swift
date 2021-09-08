@@ -113,7 +113,7 @@ func img(_ image: AnyImage? = nil, tintColor: UIColor? = nil) -> UIImageView {
     return view
 }
 
-/// 等比缩放到控件size
+/// 等比缩放到控件size, 不剪切
 func scaleImageView(_ image: AnyImage? = nil, tintColor: UIColor? = nil, size: CGFloat? = nil) -> UIImageView {
     let view = img(image, tintColor: tintColor)
     view.contentMode = .scaleAspectFit
@@ -123,7 +123,7 @@ func scaleImageView(_ image: AnyImage? = nil, tintColor: UIColor? = nil, size: C
     return view
 }
 
-/// 等比填充到控件size
+/// 等比填充到控件size, 可能剪切
 func fillImageView(_ image: AnyImage? = nil, tintColor: UIColor? = nil, size: CGFloat? = nil) -> UIImageView {
     let view = img(image, tintColor: tintColor)
     view.contentMode = .scaleAspectFill

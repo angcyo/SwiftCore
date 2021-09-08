@@ -61,9 +61,6 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
     }
 
     func initCollectionView() {
-        dataSource = diffableDataSource
-        delegate = self
-
         bounces = true //边界回弹
         minimumZoomScale = 1
         maximumZoomScale = 1
@@ -88,6 +85,12 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
         }
 
         //collectionViewLayout
+
+        //背景颜色, 默认是黑色
+        backgroundColor = Res.color.bg
+
+        delegate = self
+        dataSource = diffableDataSource
     }
 
     /// 赋值和初始化
@@ -118,7 +121,7 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
     override func layoutSubviews() {
         super.layoutSubviews()
         if needsReload {
-            self.loadData(_itemList)
+            loadData(_itemList)
         }
     }
 
@@ -345,6 +348,120 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
 
     func collectionView(_ collectionView: UICollectionView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {
         L.d("willEndContextMenuInteraction")
+    }
+
+    // MARK: UIScrollView代理
+
+    /// 回调
+    var onScrollViewDidScroll: ((UIScrollView) -> Void)? = nil
+
+    /// 内容已经滚动
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        //debugPrint("scrollViewDidScroll:\(scrollView.contentOffset)")
+
+        onScrollViewDidScroll?(self)
+    }
+
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        debugPrint("scrollViewDidZoom:\(scrollView.zoomScale)")
+    }
+
+    /// 即将开始滚动
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        debugPrint("scrollViewWillBeginDragging")
+    }
+
+    /// 即将结束滚动
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        debugPrint("scrollViewWillEndDragging")
+    }
+
+    /// 结束滚动
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        debugPrint("scrollViewDidEndDragging")
+    }
+
+    /// 即将开始减速滚动
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        debugPrint("scrollViewWillBeginDecelerating:\(scrollView.contentOffset):\(scrollView.contentSize):\(scrollView.contentInset):\(scrollView.adjustedContentInset)")
+    }
+
+    /// 回调
+    var onScrollViewDidEndDecelerating: ((UIScrollView) -> Void)? = nil
+
+    /// 结束减速滚动
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        //(0.0, -88.0):(375.0, 199.0):UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0):UIEdgeInsets(top: 88.0, left: 0.0, bottom: 34.0, right: 0.0)
+        debugPrint("scrollViewDidEndDecelerating:\(scrollView.contentOffset):\(scrollView.contentSize):\(scrollView.contentInset):\(scrollView.adjustedContentInset)")
+        onScrollViewDidEndDecelerating?(scrollView)
+    }
+
+    /// 滚动动画结束
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        debugPrint("scrollViewDidEndScrollingAnimation")
+    }
+
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        //这里调用 scrollView.zoomScale 会死循环
+        debugPrint("viewForZooming:\(scrollView.minimumZoomScale):\(scrollView.maximumZoomScale)")
+        return nil
+    }
+
+    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+        debugPrint("scrollViewWillBeginZooming")
+    }
+
+    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        debugPrint("scrollViewDidEndZooming:\(view):\(scale)")
+    }
+
+    func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
+        fatalError("scrollViewShouldScrollToTop(_:) has not been implemented")
+    }
+
+    func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
+        debugPrint("scrollViewDidScrollToTop")
+    }
+
+    func scrollViewDidChangeAdjustedContentInset(_ scrollView: UIScrollView) {
+        debugPrint("scrollViewDidChangeAdjustedContentInset:\(scrollView.contentInset):\(scrollView.adjustedContentInset)")
+    }
+
+    //MARK:Touch
+
+    /// 手势应该开始
+    override func touchesShouldBegin(_ touches: Set<UITouch>, with event: UIEvent?, in view: UIView) -> Bool {
+        super.touchesShouldBegin(touches, with: event, in: view)
+    }
+
+    /// 手势应该取消
+    override func touchesShouldCancel(in view: UIView) -> Bool {
+        super.touchesShouldCancel(in: view)
+    }
+
+    /// 手势开始
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        endEditing(true)
+    }
+
+    ///
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event)
+    }
+
+    /// 手势结束
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+    }
+
+    /// 手势取消
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+    }
+
+    override func touchesEstimatedPropertiesUpdated(_ touches: Set<UITouch>) {
+        super.touchesEstimatedPropertiesUpdated(touches)
     }
 }
 

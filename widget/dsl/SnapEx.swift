@@ -144,7 +144,7 @@ extension UIView {
                   priority: ConstraintPriority = .required) {
         make { maker in
             let target = target ?? superview!
-            if let num = target as? Float {
+            if let num = target as? CGFloat {
                 makeEdge(left: num, right: num, top: num, bottom: num, priority: priority)
             } else if let inset = inset {
                 maker.edges.equalTo(target).inset(inset).priority(priority)
@@ -154,22 +154,18 @@ extension UIView {
         }
     }
 
-    func makeEdge(left: Float = 0, right: Float = 0, top: Float = 0, bottom: Float = 0,
+    func makeEdge(left: CGFloat = 0, right: CGFloat = 0, top: CGFloat = 0, bottom: CGFloat = 0,
                   priority: ConstraintPriority = .required) {
         make { maker in
-            maker.edges.equalTo(UIEdgeInsets(top: top.toCGFloat(),
-                            left: left.toCGFloat(),
-                            bottom: bottom.toCGFloat(),
-                            right: right.toCGFloat()))
-                    .priority(priority)
+            maker.edges.equalTo(UIEdgeInsets(top: top, left: left, bottom: bottom, right: right)).priority(priority)
         }
     }
 
-    func makeEdgeHorizontal(size: Float = 0, priority: ConstraintPriority = .required) {
+    func makeEdgeHorizontal(size: CGFloat = 0, priority: ConstraintPriority = .required) {
         makeEdge(left: size, right: size, top: 0, bottom: 0, priority: priority)
     }
 
-    func makeEdgeVertical(size: Float = 0, priority: ConstraintPriority = .required) {
+    func makeEdgeVertical(size: CGFloat = 0, priority: ConstraintPriority = .required) {
         makeEdge(left: 0, right: 0, top: size, bottom: size, priority: priority)
     }
 

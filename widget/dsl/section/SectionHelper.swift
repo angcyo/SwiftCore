@@ -7,6 +7,8 @@ import UIKit
 
 /// 通过diff 用来更新数据源
 
+typealias UpdateObserver = () -> Void
+
 class SectionHelper {
 
     /// 片段集合
@@ -19,6 +21,12 @@ class SectionHelper {
     var interceptorList: [ISectionInterceptor] = [DefaultSectionInterceptor(),
                                                   StatusSectionInterceptor(),
                                                   LoadMoreSectionInterceptor()]
+
+    /// 更新后的监听回调
+    var updateObserverList: [UpdateObserver] = []
+
+    /// 通知后, 立即清空
+    var updateObserverOnceList: [UpdateObserver] = []
 
     /// 开始更新数据
     func updateItemList(recyclerView: DslRecycleView, items: [DslItem], animatingDifferences: Bool? = nil, completion: (() -> Void)? = nil) {
@@ -46,6 +54,27 @@ class SectionHelper {
                 collectionView.diffableDataSource.apply(snapshot, animatingDifferences: animate, completion: completion)
             } else {
                 L.w("不支持的DslRecyclerView:\(recyclerView)")
+            }
+
+            do {
+                for observer in self.updateObserverList {
+                    observer()
+                }
+            } catch {
+                //
+            }
+            do {
+                for observer in self.updateObserverOnceList {
+                    observer()
+                }
+            } catch {
+                //
+            }
+
+            do {
+                self.updateObserverOnceList.removeAll()
+            } catch {
+                //
             }
         }
     }
@@ -127,5 +156,15 @@ class SectionHelper {
 
         // 返回
         return snapshot
+    }
+
+    //MARK: operate
+
+    func observerUpdate(_ action: @escaping UpdateObserver) {
+        updateObserverList.add(action)
+    }
+
+    func observerUpdateOnce(_ action: @escaping UpdateObserver) {
+        updateObserverOnceList.add(action)
     }
 }

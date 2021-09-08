@@ -614,7 +614,7 @@ extension UIView {
     }
 
     func layoutSizeOf(_ targetSize: CGSize? = nil, offsetWidth: CGFloat = 0, offsetHeight: CGFloat = 0, ignoreHidden: Bool = false) -> CGSize {
-        let targetSize = targetSize ?? UIView.layoutFittingExpandedSize //cgSize(CGFloat.max, CGFloat.max)
+        let estimatedSize = targetSize ?? UIView.layoutFittingExpandedSize //cgSize(CGFloat.max, CGFloat.max)
         var size: CGSize
 
         if isHidden && !ignoreHidden {
@@ -623,19 +623,19 @@ extension UIView {
             let widthPriority: UILayoutPriority
             let heightPriority: UILayoutPriority
 
-            if targetSize.width > 0 {
+            if targetSize?.width ?? 0 > 0 {
                 widthPriority = .required
             } else {
                 widthPriority = .fittingSizeLevel
             }
 
-            if targetSize.height > 0 {
+            if targetSize?.height ?? 0 > 0 {
                 heightPriority = .required
             } else {
                 heightPriority = .fittingSizeLevel
             }
 
-            size = systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: widthPriority, verticalFittingPriority: heightPriority)
+            size = systemLayoutSizeFitting(estimatedSize, withHorizontalFittingPriority: widthPriority, verticalFittingPriority: heightPriority)
         }
 
         size.width += offsetWidth
@@ -779,7 +779,9 @@ func vLine(width: CGFloat = Res.size.line, color: UIColor = Res.color.line) -> U
 func dragTipView() -> UIView {
     let view = UIView()
     view.backgroundColor = "#D3D6DD".toColor()
-    view.frame = rect(56, 5)
+    view.setRadius(3)
+    //view.frame = rect(56, 5)
+    view.makeWidthHeight(56, 5)
     //自动大小掩码, 转成自动布局约束, 代码创建布局默认是true
     view.translatesAutoresizingMaskIntoConstraints = true
     return view
