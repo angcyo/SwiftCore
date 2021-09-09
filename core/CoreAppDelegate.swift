@@ -22,14 +22,21 @@ class CoreAppDelegate: UIResponder, UIApplicationDelegate {
 
         L.d(Bundle.main.infoDictionary)
 
+        initApplicationAppearance()
         initApplication()
 
         //sleep(15)
         return true
     }
 
+    /// init
     func initApplication() {
         //init
+
+    }
+
+    /// 外观init
+    func initApplicationAppearance() {
         with(UINavigationBar.appearance()) {
             //$0.barTintColor = Res.color.colorAccent
             $0.tintColor = Res.color.colorAccent
@@ -39,6 +46,18 @@ class CoreAppDelegate: UIResponder, UIApplicationDelegate {
         with(UIBarButtonItem.appearance()) {
             $0.tintColor = Res.color.colorAccent
             //$0.setTitleTextAttributes(<#T##attributes: [Key: Any]?##[Foundation.NSAttributedString.Key: Any]?#>, for: <#T##State##UIKit.UIControl.State#>)
+        }
+
+        with(UITabBar.appearance()) {
+            $0.isTranslucent = false
+            $0.tintColor = Res.color.colorAccent
+            $0.barTintColor = Res.color.controllerBackgroundColor
+            $0.unselectedItemTintColor = Res.color.iconColor
+            with($0.standardAppearance) {
+                //$0.backgroundEffect = UIBlurEffect(style: .dark)
+                $0.backgroundEffect = nil //去掉模糊效果
+                //$0.backgroundColor = .red
+            }
         }
 
         with(UITabBarItem.appearance()) {

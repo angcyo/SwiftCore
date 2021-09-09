@@ -25,9 +25,10 @@ class BaseTabBarController: UITabBarController, INavigation {
     func initController() {
         L.i("->创建:\(self)")
 
-        //init
-        tabBar.isTranslucent = true // 半透明, 毛玻璃效果
-        tabBar.backgroundColor = UIColor.white
+        //init 请在[initApplicationAppearance]中初始化
+        //tabBar.isTranslucent = true // 半透明, 毛玻璃效果
+        //tabBar.backgroundColor = UIColor.white
+
         //tabBar.barTintColor = UIColor.green //背景着色器
         //tabBar.shadowImage //横向
         //tabBar.standardAppearance.shadowImage
