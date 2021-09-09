@@ -87,7 +87,7 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
         //collectionViewLayout
 
         //背景颜色, 默认是黑色
-        backgroundColor = Res.color.bg
+        backgroundColor = .clear //Res.color.bg
 
         delegate = self
         dataSource = diffableDataSource

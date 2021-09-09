@@ -319,10 +319,14 @@ extension UIView {
             }
 
             let r = radii
-            let maskPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: r, height: r))
+            let maskPath = UIBezierPath(roundedRect: bounds,
+                    byRoundingCorners: corners,
+                    cornerRadii: CGSize(width: r, height: r))
             let maskLayer = CAShapeLayer()
             maskLayer.frame = bounds
             maskLayer.path = maskPath.cgPath
+
+            //layer.masksToBounds = true //可以不需要
             layer.mask = maskLayer
         }
     }
@@ -727,6 +731,23 @@ func gradientLayer(frame: CGRect,
     //    graLayer.endPoint = CGPointMake(1, 1);
 }
 
+/// 获取一个阴影layer, 圆角阴影无效果, 待测试
+func shadowLayer(frame: CGRect) -> CALayer {
+    let layer = CALayer()
+    //let squarePath = CGMutablePath()
+    //squarePath.addPath(roundPath(bounds: frame, bottomLeft: false, bottomRight: false).cgPath)
+    let bound = cgRect(0, 0, frame.width, frame.height)
+    layer.shadowPath = roundPath(bounds: bound, bottomLeft: false, bottomRight: false).cgPath
+    layer.shadowOpacity = 0.4
+    //layer.shadowColor = UIColor.red.cgColor
+    layer.shadowRadius = 5
+    layer.shadowOffset = cgSize(0, -3)
+    //layer.backgroundColor = UIColor.red.cgColor
+    //layer.contents
+    layer.frame = bound
+    return layer
+}
+
 func emptyView(width: Float = Float.min, height: Float = Float.min) -> UIView {
     let view = v()
     view.frame = CGRect(x: 0, y: 0, width: CGFloat(width), height: CGFloat(height))
@@ -735,6 +756,12 @@ func emptyView(width: Float = Float.min, height: Float = Float.min) -> UIView {
 
 func view(_ color: Any? = nil) -> UIView {
     v(color)
+}
+
+func bgView(_ color: Any? = Res.color.bg, clips: Bool = false) -> UIView {
+    let view = v(color)
+    view.clipsToBounds = clips
+    return view
 }
 
 func sizeView(_ color: Any? = nil, size: CGFloat? = nil) -> UIView {
