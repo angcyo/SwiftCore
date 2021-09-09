@@ -201,6 +201,10 @@ open class DslItem: NSObject, IDslItem {
         gestureDisposeBag = DisposeBag()
     }
 
+    func resetGesture() {
+        gestureDisposeBag = DisposeBag()
+    }
+
     //MARK: 事件回调, 无法自动触发. 需要手动触发调用
 
     /// 点击事件的回调

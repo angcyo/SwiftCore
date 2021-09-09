@@ -133,6 +133,16 @@ func fillImageView(_ image: AnyImage? = nil, tintColor: UIColor? = nil, size: CG
     return view
 }
 
+/// 变形撑满view
+func fitImageView(_ image: AnyImage? = nil, tintColor: UIColor? = nil, size: CGFloat? = nil) -> UIImageView {
+    let view = img(image, tintColor: tintColor)
+    view.contentMode = .scaleAspectFit
+    if let size = size {
+        view.frame = rect(size, size)
+    }
+    return view
+}
+
 func image(_ image: AnyImage? = nil, tintColor: UIColor? = nil) -> UIImageView {
     img(image, tintColor: tintColor)
 }

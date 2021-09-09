@@ -68,16 +68,20 @@ extension UIView {
 
     /// snp dsl
     func make(_ closure: (_ make: ConstraintMaker) -> Void) {
-        snp.makeConstraints(closure)
+        snap.makeConstraints(closure)
     }
 
     /// snp dsl
     func remake(_ closure: (_ make: ConstraintMaker) -> Void) {
-        snp.remakeConstraints(closure)
+        snap.remakeConstraints(closure)
+    }
+
+    func removeConstraints() {
+        snap.removeConstraints()
     }
 
     func remakeView(_ closure: (_ view: UIView) -> Void) {
-        snp.removeConstraints()
+        snap.removeConstraints()
         closure(self)
 
         /*snp.remakeConstraints { _ in
@@ -87,7 +91,7 @@ extension UIView {
 
     /// snp dsl
     func updateMake(_ closure: (_ make: ConstraintMaker) -> Void) {
-        snp.updateConstraints(closure)
+        snap.updateConstraints(closure)
     }
 
     /// 移除所有child的约束

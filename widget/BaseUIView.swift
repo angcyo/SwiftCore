@@ -4,6 +4,9 @@
 
 import Foundation
 import UIKit
+import RxSwift
+
+/// 基类
 
 open class BaseUIView: UIView {
 
@@ -19,6 +22,17 @@ open class BaseUIView: UIView {
 
     open func initView() {
         //
+    }
+
+    //MARK: rx
+
+    /// 手势订阅
+    lazy var gestureDisposeBag: DisposeBag = {
+        DisposeBag()
+    }()
+
+    func resetGesture() {
+        gestureDisposeBag = DisposeBag()
     }
 
     //MARK: draw
