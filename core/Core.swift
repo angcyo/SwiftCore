@@ -27,6 +27,8 @@ class Core {
 
     /// 初始化入口
     func initCore() {
+        uuid = UIDevice.current.identifierForVendor?.uuidString ?? Util.uuid()
+
         CrashHandler.initCrashHandler()
         Dialog.initDialog()
         SwiftyBeaverEx.initSwiftyBeaver()
