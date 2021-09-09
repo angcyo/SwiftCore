@@ -69,9 +69,11 @@ extension UIView {
     }
 
     /// 长按事件
-    func onLongClick(bag: DisposeBag, _ action: @escaping (UILongPressGestureRecognizer) -> Void) {
+    func onLongClick(bag: DisposeBag, _ states: [RxGestureRecognizerState] = [.recognized], _ action: @escaping (UILongPressGestureRecognizer) -> Void) {
         rx.longPressGesture()
-                .when(.recognized) //UIGestureRecognizer.State
+                .filter { gesture in
+                    states.contains(gesture.state)
+                }
                 .subscribe(onNext: { event in
                     action(event)
                 })
@@ -79,9 +81,11 @@ extension UIView {
     }
 
     /// 捏合手势
-    func onPinch(bag: DisposeBag, _ action: @escaping (UIPinchGestureRecognizer) -> Void) {
+    func onPinch(bag: DisposeBag, _ states: [RxGestureRecognizerState] = [.recognized], _ action: @escaping (UIPinchGestureRecognizer) -> Void) {
         rx.pinchGesture()
-                .when(.recognized) //UIGestureRecognizer.State
+                .filter { gesture in
+                    states.contains(gesture.state)
+                }
                 .subscribe(onNext: { event in
                     action(event)
                 })
@@ -89,9 +93,11 @@ extension UIView {
     }
 
     /// 轻扫手势, 通常用来实现侧滑菜单
-    func onSwipe(_ directions: SwipeDirection = .left, bag: DisposeBag, _ action: @escaping (UISwipeGestureRecognizer) -> Void) {
+    func onSwipe(_ directions: SwipeDirection = .left, bag: DisposeBag, _ states: [RxGestureRecognizerState] = [.recognized], _ action: @escaping (UISwipeGestureRecognizer) -> Void) {
         rx.swipeGesture(directions)
-                .when(.recognized) //UIGestureRecognizer.State
+                .filter { gesture in
+                    states.contains(gesture.state)
+                }
                 .subscribe(onNext: { event in
                     action(event)
                 })
@@ -99,9 +105,11 @@ extension UIView {
     }
 
     /// 平移手势, 拖动/拖拽手势
-    func onPan(bag: DisposeBag, _ action: @escaping (UIPanGestureRecognizer) -> Void) {
+    func onPan(bag: DisposeBag, _ states: [RxGestureRecognizerState] = [.recognized], _ action: @escaping (UIPanGestureRecognizer) -> Void) {
         rx.panGesture()
-                .when(.recognized) //UIGestureRecognizer.State
+                .filter { gesture in
+                    states.contains(gesture.state)
+                }
                 .subscribe(onNext: { event in
                     action(event)
                 })
@@ -109,9 +117,11 @@ extension UIView {
     }
 
     /// 边界平移手势
-    func onEdgePan(bag: DisposeBag, _ action: @escaping (UIScreenEdgePanGestureRecognizer) -> Void) {
+    func onEdgePan(bag: DisposeBag, _ states: [RxGestureRecognizerState] = [.recognized], _ action: @escaping (UIScreenEdgePanGestureRecognizer) -> Void) {
         rx.screenEdgePanGesture()
-                .when(.recognized) //UIGestureRecognizer.State
+                .filter { gesture in
+                    states.contains(gesture.state)
+                }
                 .subscribe(onNext: { event in
                     action(event)
                 })
@@ -119,9 +129,11 @@ extension UIView {
     }
 
     /// 旋转手势
-    func onRotation(bag: DisposeBag, _ action: @escaping (UIRotationGestureRecognizer) -> Void) {
+    func onRotation(bag: DisposeBag, _ states: [RxGestureRecognizerState] = [.recognized], _ action: @escaping (UIRotationGestureRecognizer) -> Void) {
         rx.rotationGesture()
-                .when(.recognized) //UIGestureRecognizer.State
+                .filter { gesture in
+                    states.contains(gesture.state)
+                }
                 .subscribe(onNext: { event in
                     action(event)
                 })
