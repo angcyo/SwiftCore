@@ -9,6 +9,7 @@ protocol Number {
 }
 
 extension Number {
+
     func toString() -> String {
         "\(self)"
     }
@@ -26,6 +27,19 @@ extension Number {
         } else {
             return self
         }
+    }
+}
+
+extension Number where Self: CVarArg {
+
+    /// 转换成小数点后多少位, 四舍五入
+    func toDecimal(_ digit: Int = 2) -> String {
+        String(format: "%.\(digit)f", self)
+    }
+
+    /// 转成16进制显示
+    func toHexString(_ digit: Int = 0) -> String {
+        String(format: "%.0\(digit)x", self)
     }
 }
 
