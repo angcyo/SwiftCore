@@ -25,6 +25,8 @@ contentsRect.size.width	横向拉伸缩放	0.6
 contentsRect.size.height	纵向拉伸缩放	0.5
  */
 
+/// 动画 https://zsisme.gitbooks.io/ios-/content/index.html
+
 /// 将控件的操作放在动画中执行, 相当于Android的transition [duration]秒
 /// 注意: 需要调用 self.view.layoutIfNeeded() 触发动画
 func animate(_ duration: Double = 0.3, delay: Double = 0, options: UIView.AnimationOptions = [], _ animations: @escaping () -> Void) {

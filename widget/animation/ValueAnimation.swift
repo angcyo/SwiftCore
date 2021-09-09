@@ -5,6 +5,7 @@
 import Foundation
 import UIKit
 
+/// 动画 https://zsisme.gitbooks.io/ios-/content/index.html
 /// 值动画, 从一个值, 在指定时间内, 到另一个值的动画回调
 
 class ValueAnimation: NSObject {
@@ -88,16 +89,20 @@ class ValueAnimation: NSObject {
             stop()
         } else {
             animationFactor = CGFloat(elapsed / animationDuration)
-            animationValue = animationFrom + (animationTo - animationFrom) * animationFactor
+            updateAnimationValue(animationFactor)
         }
 
         //差值器
         if let interpolator = animationInterpolator {
             let animationFactor = interpolator.getInterpolation(input: animationFactor)
-            animationValue = animationFrom + (animationTo - animationFrom) * animationFactor
+            updateAnimationValue(animationFactor)
         }
 
         onAnimationUpdate?(self)
+    }
+
+    private func updateAnimationValue(_ factor: CGFloat) {
+        animationValue = animationFrom + (animationTo - animationFrom) * factor
     }
 }
 
