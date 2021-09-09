@@ -37,22 +37,21 @@ extension SwiftyBeaver {
 struct SwiftyBeaverEx {
 
     static func initSwiftyBeaver() {
-
         let format = "$Dyyyy-MM-dd HH:mm:ss.SSS$d $C$L$c $N.$F:$l $T - $M"
-        let console = ConsoleDestination()  // log to Xcode Console
         let file = FileDestination()  // log to Xcode Console
-
-        console.format = format
         file.format = format
         //"$DHH:mm:ss.SSS$d $C$L$c $N.$F:$l - $M"
         // add the destinations to SwiftyBeaver
-
-        console.asynchronously = false //关闭异步
         file.minLevel = .info
         //https://docs.swiftybeaver.com/article/10-log-to-file
         //file.logFileURL = URL(fileURLWithPath: "/tmp/app_info.log")  // tmp is just possible for a macOS app
 
-        L.addDestination(console)
+        if D.isDebug {
+            let console = ConsoleDestination()  // log to Xcode Console
+            console.format = format
+            console.asynchronously = false //关闭异步
+            L.addDestination(console)
+        }
         L.addDestination(file)
 
         //连不上服务器 https://api.swiftybeaver.com/api/entries
