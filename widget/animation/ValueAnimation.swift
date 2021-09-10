@@ -73,6 +73,9 @@ class ValueAnimation: NSObject {
     /// 差值器
     var animationInterpolator: Interpolator? = LinearInterpolator()
 
+    /// 动画是否执行完成
+    var isAnimationFinish: Bool = false
+
     /// 动画值更新的回调
     var onAnimationUpdate: ((ValueAnimation) -> Void)? = nil
 
@@ -86,6 +89,7 @@ class ValueAnimation: NSObject {
             //动画时间到了
             animationFactor = 1
             animationValue = animationTo
+            isAnimationFinish = true
             stop()
         } else {
             animationFactor = CGFloat(elapsed / animationDuration)

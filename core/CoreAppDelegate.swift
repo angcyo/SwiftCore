@@ -13,7 +13,8 @@ class CoreAppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         Core.shared.initCore() //优先初始化
 
-        L.d("启动程序:didFinishLaunchingWithOptions:\(launchOptions)↓")
+        let screen = UIScreen.main
+        L.d("启动程序:didFinishLaunchingWithOptions:\(launchOptions):\(screen.bounds):\(screen.nativeBounds):\(screen.scale)↓")
 
         Http.HOST = (Bundle.getPlist("ApiHost") as? String) ?? Http.HOST
         Http.headers.append(HTTPHeader(name: "source-of-request", value: "app"))
