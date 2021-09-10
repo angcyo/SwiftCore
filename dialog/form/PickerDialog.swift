@@ -14,7 +14,7 @@ class PickerDialog: BaseFormDialog, UIPickerViewDelegate, UIPickerViewDataSource
     /// 选项
     var pickerItems: [String?]? = [] {
         didSet {
-            empty.show(nilOrEmpty(pickerItems))
+            empty.showView(nilOrEmpty(pickerItems))
         }
     }
 
@@ -51,11 +51,11 @@ class PickerDialog: BaseFormDialog, UIPickerViewDelegate, UIPickerViewDataSource
         let selected = pickerView.selectedRow(inComponent: 0)
         if let result = onDialogResult {
             if !result(self, selected) {
-                hide()
+                hideDialog()
             }
         } else {
             print("选中:\(selected)")
-            hide()
+            hideDialog()
         }
     }
 
@@ -108,5 +108,5 @@ class PickerDialog: BaseFormDialog, UIPickerViewDelegate, UIPickerViewDataSource
 func pickerDialog(_ dsl: (PickerDialog) -> Void) {
     let dialog = PickerDialog()
     dsl(dialog)
-    dialog.show()
+    dialog.showDialog()
 }

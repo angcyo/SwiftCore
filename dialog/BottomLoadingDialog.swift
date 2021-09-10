@@ -52,7 +52,7 @@ class BottomLoadingDialog: BaseDialog {
 
         // 取消对话框
         icon.onClick { _ in
-            hideDialog(cancel: true)
+            self.hideDialog(cancel: true)
         }
     }
 
@@ -83,12 +83,12 @@ class BottomLoadingDialog: BaseDialog {
 /// 底部加载
 func showBottomLoading(_ text: String? = "处理中...", _ dsl: ((BottomLoadingDialog) -> Void)? = nil) {
     let dialog = BottomLoadingDialog()
-    dialog.cancelOnOutside = false
-    dialog.cancelOnDrag = false
+    dialog.hideOnOutside = false
+    dialog.hideOnDrag = false
     dialog.text.text = text
     dialog.onDialogHide = {
         dsl?(dialog)
     }
     dsl?(dialog)
-    dialog.show()
+    dialog.showDialog()
 }

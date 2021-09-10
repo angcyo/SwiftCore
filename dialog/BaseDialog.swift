@@ -13,6 +13,11 @@ class BaseDialogView: BaseView {
 
     var contentView: UIView? = nil
 
+    func setContentView(_ contentView: UIView) {
+        self.contentView = contentView
+        render(contentView)
+    }
+
     override func installContentView(_ contentView: UIView, insets: UIEdgeInsets = .zero) {
         super.installContentView(contentView, insets: insets)
         self.contentView = contentView
@@ -25,15 +30,11 @@ class BaseDialogView: BaseView {
 
 
 /// 对话框的内容
-class BaseDialog: UIView {
+/// https://github.com/SwiftKickMobile/SwiftMessages
+class BaseDialog: BaseUIView {
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        initDialog()
-    }
-
-    override required init(frame: CGRect) {
-        super.init(frame: frame)
+    override func initView() {
+        super.initView()
         initDialog()
     }
 
@@ -80,11 +81,11 @@ class BaseDialog: UIView {
     }
 
     func onCancelClick() {
-        hide()
+        hideDialog()
     }
 
     func onConfirmClick() {
-        hide()
+        hideDialog()
     }
 
     //MARK: SwiftMessages
@@ -116,22 +117,23 @@ class BaseDialog: UIView {
         //messageView.layoutMarginAdditions = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         messageView.configureDropShadow()
 
+        //重点
         messageView.installContentView(self)
         return messageView
     }
 
     /// 点击窗口外, 是否隐藏对话框
-    var cancelOnOutside: Bool = true
+    var hideOnOutside: Bool = true
 
     /// 是否拖拽返回
-    var cancelOnDrag: Bool = true
+    var hideOnDrag: Bool = true
 
     /// 配置消息¬
     func configMessage(swiftMessage: SwiftMessages) {
-        swiftMessage.defaultConfig.dimMode = .blur(style: .dark, alpha: 0.5, interactive: cancelOnOutside) //interactive 控制是否点击内容外隐藏对话库
+        swiftMessage.defaultConfig.dimMode = .blur(style: .dark, alpha: 0.5, interactive: hideOnOutside) //interactive 控制是否点击内容外隐藏对话库
         //.gray(interactive: true)
         swiftMessage.defaultConfig.duration = .forever
-        swiftMessage.defaultConfig.interactiveHide = cancelOnDrag // 交互隐藏, 下拉隐藏
+        swiftMessage.defaultConfig.interactiveHide = hideOnDrag // 交互隐藏, 下拉隐藏
         swiftMessage.defaultConfig.presentationStyle = .bottom
         swiftMessage.defaultConfig.presentationContext = .automatic
         //.window(windowLevel: .statusBar)
@@ -147,11 +149,16 @@ fileprivate let dialog = SwiftMessages()
 extension BaseDialog {
 
     /// 显示对话框
-    func show() {
+    func showDialog() {
         let messageView = createMessageView()
         configMessage(swiftMessage: dialog)
         //onDialogShow()
         dialog.show(view: messageView)
+    }
+
+    func hideDialog(cancel: Bool = false) {
+        isCancel = cancel
+        dialog.hide(animated: true)
     }
 }
 
