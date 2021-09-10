@@ -129,12 +129,12 @@ extension UIView {
         }
     }
 
-    func hide(_ bool: Bool = true) {
+    func hideView(_ bool: Bool = true) {
         isHidden = bool
     }
 
-    func show(_ bool: Bool = true) {
-        hide(!bool)
+    func showView(_ bool: Bool = true) {
+        hideView(!bool)
     }
 
     /// 无内容

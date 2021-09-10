@@ -577,3 +577,33 @@ extension UIView {
     }
 
 }
+
+extension UIView {
+
+    //MARK: Window 安全区域插入
+
+    var leftSafeInsets: CGFloat {
+        get {
+            UIApplication.mainWindow?.safeAreaInsets.left ?? 0
+        }
+    }
+
+    var rightSafeInsets: CGFloat {
+        get {
+            UIApplication.mainWindow?.safeAreaInsets.right ?? 0
+        }
+    }
+
+    var bottomSafeInsets: CGFloat {
+        get {
+            UIApplication.mainWindow?.safeAreaInsets.bottom ?? 0
+        }
+    }
+
+    var topSafeInsets: CGFloat {
+        get {
+            UIApplication.mainWindow?.safeAreaInsets.top ?? 0
+        }
+    }
+
+}

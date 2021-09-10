@@ -35,6 +35,8 @@ func animate(_ duration: Double = 0.3, delay: Double = 0, options: UIView.Animat
 
 extension UIView {
 
+    //MARK: 标准动画
+
     /// 平移到指定坐标
     func translationTo(x: CGFloat = 0, y: CGFloat = 0) {
         transform = CGAffineTransform(translationX: x, y: y)
@@ -72,5 +74,71 @@ extension UIView {
 
     func rotateBy(angle: CGFloat = 0) {
         transform = transform.rotated(by: angle)
+    }
+
+    //MARK: 动画扩展
+
+    var transformX: CGFloat {
+        get {
+            transform.tx
+        }
+    }
+
+    var transformY: CGFloat {
+        get {
+            transform.ty
+        }
+    }
+
+    var scaleX: CGFloat {
+        get {
+            transform.a
+        }
+    }
+
+    var scaleY: CGFloat {
+        get {
+            transform.d
+        }
+    }
+
+    /// 已经旋转的弧度
+    var rotate: CGFloat {
+        get {
+            var rotate: CGFloat = acosf(transform.a.toFloat()).toCGFloat()
+            // 旋转180度后，需要处理弧度的变化
+            if (transform.b < 0) {
+                rotate = .pi * 2 - rotate
+            }
+            return rotate
+        }
+    }
+
+    /// 回调
+    func translationTo(x: CGFloat? = nil, y: CGFloat? = nil,
+                       minX: CGFloat = 0, maxX: CGFloat = 0,
+                       minY: CGFloat = 0, maxY: CGFloat = 0,
+                       callback: ((_ x: CGFloat, _ y: CGFloat) -> Void)? = nil) {
+
+        if let x = x, let y = y {
+            //同时移动x和y
+            let _x = x.clamp(minX, maxX)
+            let _y = y.clamp(minY, maxY)
+
+            translationTo(x: _x, y: _y)
+        } else if let x = x {
+            //只移动x
+            let _x = x.clamp(minX, maxX)
+            let _y = transform.ty
+
+            translationTo(x: _x, y: _y)
+        } else if let y = y {
+            //只移动y
+            let _x = transform.tx
+            let _y = y.clamp(minY, maxY)
+
+            translationTo(x: _x, y: _y)
+        }
+        callback?(transform.tx, transform.ty)
     }
 }

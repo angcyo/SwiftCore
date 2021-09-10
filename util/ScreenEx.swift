@@ -11,18 +11,30 @@ import UIKit
 extension UIScreen {
 
     /// 屏幕的宽度
-    static var width: Float {
-        UIScreen.main.bounds.w
+    static var width: CGFloat {
+        UIScreen.main.bounds.width
     }
 
     /// 屏幕的高度
-    static var height: Float {
-        UIScreen.main.bounds.h
+    static var height: CGFloat {
+        UIScreen.main.bounds.height
     }
 
     /// 屏幕的缩放比例
-    static var scale_: Float {
-        UIScreen.main.scale.toFloat()
+    static var scale_: CGFloat {
+        UIScreen.main.scale
+    }
+}
+
+var screenWidth: CGFloat {
+    get {
+        UIScreen.width
+    }
+}
+
+var screenHeight: CGFloat {
+    get {
+        UIScreen.height
     }
 }
 

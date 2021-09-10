@@ -67,6 +67,14 @@ extension UIApplication {
         statusBarManager()?.statusBarFrame
     }
 
+    static var leftSafeInsets: CGFloat {
+        UIApplication.mainWindow?.safeAreaInsets.left ?? 0
+    }
+
+    static var rightSafeInsets: CGFloat {
+        UIApplication.mainWindow?.safeAreaInsets.right ?? 0
+    }
+
     static var bottomSafeInsets: CGFloat {
         UIApplication.mainWindow?.safeAreaInsets.bottom ?? 0
     }

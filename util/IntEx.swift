@@ -57,6 +57,16 @@ extension Int: Number {
     func toCGFloat() -> CGFloat {
         CGFloat(self)
     }
+
+    /// 角度转弧度
+    func toRadians() -> CGFloat {
+        toCGFloat().toRadians()
+    }
+
+    /// 弧度转角度
+    func toAngle() -> CGFloat {
+        toCGFloat().toAngle()
+    }
 }
 
 extension UInt: Number {
@@ -125,6 +135,16 @@ public extension CGFloat {
 
     //CGFloat.leastNormalMagnitude 2.2250738585072014E-308
     //CGFloat.leastNonzeroMagnitude 4.9406564584124654E-324
+
+    /// 角度转弧度
+    func toRadians() -> CGFloat {
+        self * .pi / 180.0
+    }
+
+    /// 弧度转角度
+    func toAngle() -> CGFloat {
+        self * 180.0 / .pi
+    }
 }
 
 public extension Double {

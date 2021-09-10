@@ -11,14 +11,17 @@ import Foundation
 
 //Path("/var/mobile/Containers/Data/Application/D1D29368-F11B-47D0-98E3-584D8363617B")
 //let p = Path.userHome
+NSHomeDirectory()
 
 // Path.current = Path("/")
 
 //Path("/var/mobile/Containers/Data/Application/D1D29368-F11B-47D0-98E3-584D8363617B/Library/Caches")
 //Path.userCaches
 
+//0 values
 let fileManager = FileManager.default
 let u1 = fileManager.urls(for: .userDirectory, in: .userDomainMask)
+NSHomeDirectory()
 
 //"file:///var/mobile/Containers/Data/Application/D1D29368-F11B-47D0-98E3-584D8363617B/Desktop/"
 let u2 = fileManager.urls(for: .desktopDirectory, in: .userDomainMask)
@@ -34,9 +37,26 @@ let u5 = fileManager.urls(for: .downloadsDirectory, in: .userDomainMask)
 
 //"file:///var/mobile/Containers/Data/Application/D1D29368-F11B-47D0-98E3-584D8363617B/Library/Caches/"
 let u6 = fileManager.urls(for: .cachesDirectory, in: .userDomainMask)
+
+//"file:///var/mobile/Containers/Data/Application/C93A28DF-B35F-47B3-8F96-2CA01F4EBEAE/Applications/"
+fileManager.urls(for: .applicationDirectory, in: .userDomainMask)
+
+//"file:///var/mobile/Containers/Data/Application/C93A28DF-B35F-47B3-8F96-2CA01F4EBEAE/Library/Application%20Support/"
+fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask)
+
+"file:///var/mobile/Containers/Data/Application/C93A28DF-B35F-47B3-8F96-2CA01F4EBEAE/Desktop/"
+
+"file:///var/mobile/Containers/Data/Application/C93A28DF-B35F-47B3-8F96-2CA01F4EBEAE/Music/"
  */
 
 extension String {
+
+    /// 扩展名
+    var pathExtension: String {
+        get {
+            (self as NSString).pathExtension
+        }
+    }
 
     /// 转换成路径
     func toPath(_ parent: Path? = nil) -> Path {
