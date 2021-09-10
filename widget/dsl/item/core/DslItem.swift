@@ -57,6 +57,11 @@ open class DslItem: NSObject, IDslItem {
         }
     }
 
+    /// 框架设置[itemData]时, 是否需要更新[itemUpdate]
+    var isItemUpdateFromData: (_ data: Any?) -> Bool = {
+        $0 != nil
+    }
+
     /// [自动赋值] 绑定的[DslTableView]视图 [@selector(createTableViewCell:cellForRowAt:item:)]
     var _dslRecyclerView: DslRecycleView? = nil
 
@@ -228,7 +233,7 @@ open class DslItem: NSObject, IDslItem {
     /// 定向更新
     func itemChangeUpdateOther() {
         if let updateList = isItemInUpdateList, let recyclerView = _dslRecyclerView {
-            recyclerView._itemList.forEach {
+            recyclerView.getItemList(false).forEach {
                 if updateList($0) {
                     // 需要更新
                     $0.onItemUpdateFrom?(self)

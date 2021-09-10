@@ -10,13 +10,15 @@ typealias ItemStatus = Int
 
 extension ItemStatus {
     /// 正常
-    static let ITEM_STATUS_NONE = 0x1
+    static let ITEM_STATUS_NONE = 0b1
     /// 刷新中
-    static let ITEM_STATUS_REFRESH = 0x1000
+    static let ITEM_STATUS_REFRESH = 0b10
     /// 异常
-    static let ITEM_STATUS_ERROR = 0x10000
+    static let ITEM_STATUS_ERROR = 0b1000
+    //// 空数据
+    static let ITEM_STATUS_EMPTY = 0b10000
     /// 无更多
-    static let ITEM_STATUS_NO_MORE = 0x100000
+    static let ITEM_STATUS_NO_MORE = 0b100000
 }
 
 protocol IStatusItem: IDslItem {

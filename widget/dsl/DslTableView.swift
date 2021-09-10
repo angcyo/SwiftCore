@@ -7,11 +7,12 @@ import UIKit
 
 class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableViewDataSource*/ {
 
-    /// 所有的数据集合, 但非全部在界面上显示
-    var _itemList: [DslItem] = []
-
     lazy var diffableDataSource: DslTableViewDiffableDataSource = {
         DslTableViewDiffableDataSource(self)
+    }()
+
+    lazy var recyclerDataSource: DslRecyclerDataSource = {
+        DslRecyclerDataSource(self)
     }()
 
     lazy var sectionHelper: SectionHelper = {
@@ -110,7 +111,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     override func layoutSubviews() {
         super.layoutSubviews()
         if needsReload {
-            loadData(_itemList)
+            loadData(recyclerDataSource.getAllItem())
         }
     }
 
@@ -321,7 +322,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
         if dataSource != nil {
             //deleteRows(at: selectList, with: animation)
             for select in selectList {
-                _itemList[select.row].itemUpdate = true
+                getItemList(true)[select.row].itemUpdate = true
             }
         }
     }

@@ -127,3 +127,17 @@ class BaseTableViewController: BaseViewController {
         }
     }*/
 }
+
+extension BaseTableViewController {
+
+    var defaultItemProvide: SectionItemProvide {
+        get {
+            dslTableView.recyclerDataSource.defaultSectionItemProvide
+        }
+    }
+
+    /// 更新数据 [now] 是否立即更新
+    func updateRecyclerDataSource(_ now: Bool = false) {
+        dslTableView.recyclerDataSource.updateDataSource(now)
+    }
+}

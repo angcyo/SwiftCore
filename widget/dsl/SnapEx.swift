@@ -510,7 +510,7 @@ extension UIView {
         make { maker in
             maker.leading.equalTo(view.snap.leading).offset(offsetLeft).priority(priority)
             maker.trailing.equalTo(view.snap.trailing).offset(offsetRight.reverse()).priority(priority)
-            maker.bottom.equalTo(view.snap.bottom).offset(offsetBottom.reverse()).priority(priority)
+            maker.bottom.equalTo(view.snap.bottom).offset(offsetBottom.reverse()).priority(.medium)
             maker.top.equalTo(view.snap.top).offset(offsetTop).priority(.required)
         }
     }
@@ -526,7 +526,7 @@ extension UIView {
         make { maker in
             maker.leading.equalTo(view.snap.leading).offset(offsetLeft).priority(priority)
             maker.trailing.equalTo(view.snap.trailing).offset(offsetRight.reverse()).priority(priority)
-            maker.top.equalTo(view.snap.top).offset(offsetTop).priority(priority)
+            maker.top.equalTo(view.snap.top).offset(offsetTop).priority(.medium)
             maker.bottom.equalTo(view.snap.bottom).offset(offsetBottom.reverse()).priority(.required)
         }
     }
@@ -540,7 +540,7 @@ extension UIView {
         let view = view ?? superview!
         make { maker in
             maker.leading.equalTo(view.snap.leading).offset(offsetLeft).priority(.required)
-            maker.trailing.equalTo(view.snap.trailing).offset(offsetRight.reverse()).priority(priority)
+            maker.trailing.equalTo(view.snap.trailing).offset(offsetRight.reverse()).priority(.medium)
             maker.bottom.equalTo(view.snap.bottom).offset(offsetBottom.reverse()).priority(priority)
             maker.top.equalTo(view.snap.top).offset(offsetTop).priority(priority)
         }
@@ -554,7 +554,7 @@ extension UIView {
                      priority: ConstraintPriority = .medium) {
         let view = view ?? superview!
         make { maker in
-            maker.leading.equalTo(view.snap.leading).offset(offsetLeft).priority(priority)
+            maker.leading.equalTo(view.snap.leading).offset(offsetLeft).priority(.medium)
             maker.trailing.equalTo(view.snap.trailing).offset(offsetRight.reverse()).priority(.required)
             maker.bottom.equalTo(view.snap.bottom).offset(offsetBottom.reverse()).priority(priority)
             maker.top.equalTo(view.snap.top).offset(offsetTop).priority(priority)

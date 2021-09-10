@@ -30,23 +30,28 @@ class SectionHelper {
 
     /// 开始更新数据
     func updateItemList(recyclerView: DslRecycleView, items: [DslItem], animatingDifferences: Bool? = nil, completion: (() -> Void)? = nil) {
-
-        /// 计算动画
-        var animate = true
-        if animatingDifferences == nil {
-            // 智能判断是否要动画
-            if visibleItems.count == 1 && visibleItems.first is IStatusItem && items.count > 0 {
-                animate = false
-            } else {
-                animate = !visibleItems.isEmpty
-            }
-        } else {
-            animate = animatingDifferences!
-        }
-
         ///diff 更新数据
         doMain {
+            /// 计算动画
+            var animate = true
+            if animatingDifferences == nil {
+                // 智能判断是否要动画
+                if self.visibleItems.count == 1 && self.visibleItems.first is IStatusItem && items.count > 0 {
+                    animate = false
+                } else {
+                    animate = !self.visibleItems.isEmpty
+                }
+            } else {
+                animate = animatingDifferences!
+            }
+
             let snapshot = self.createSnapshot(recyclerView, items)
+
+            //切换到情感图, 不执行动画
+            if self.visibleItems.count == 1 && self.visibleItems.first is IStatusItem {
+                animate = false
+            }
+
             //Please always submit updates either always on the main queue or always off the main queue
             if let tableView = recyclerView as? DslTableView {
                 tableView.diffableDataSource.apply(snapshot, animatingDifferences: animate, completion: completion)

@@ -131,6 +131,9 @@ class StatusCellConfig: IDslCellConfig {
     /// 错误布局
     let error: UIView = labelView("~出错吶, 点击重试~")
 
+    /// 空布局
+    let empty: UIView = labelView("~暂无数据~")
+
     /// 无更多布局
     let noMore: UIView = labelView("~没吶~")
 
@@ -143,7 +146,10 @@ class StatusCellConfig: IDslCellConfig {
 
         cell.cellContentView.render(indicator)
         cell.cellContentView.render(error)
+        cell.cellContentView.render(empty)
         cell.cellContentView.render(noMore)
+
+        //let tableView = cell.findAttachedTableView()
 
         with(indicator) {
             $0.makeCenter()
@@ -151,6 +157,10 @@ class StatusCellConfig: IDslCellConfig {
         }
 
         with(error) {
+            $0.makeCenter()
+        }
+
+        with(empty) {
             $0.makeCenter()
         }
 
@@ -169,8 +179,19 @@ class StatusCellConfig: IDslCellConfig {
 
         error.setHidden(status != .ITEM_STATUS_ERROR)
         if status == .ITEM_STATUS_ERROR {
-            if let tip = item.itemData as? String, let error = error as? UILabel {
-                error.setText(tip)
+            if let error = error as? UILabel {
+                if let tip = item.itemData as? String {
+                    error.setText(tip)
+                } else if let err = item.itemData as? Error {
+                    error.setText(err.message)
+                }
+            }
+        }
+
+        empty.setHidden(status != .ITEM_STATUS_EMPTY)
+        if status == .ITEM_STATUS_EMPTY {
+            if let tip = item.itemData as? String, let empty = empty as? UILabel {
+                empty.setText(tip)
             }
         }
 

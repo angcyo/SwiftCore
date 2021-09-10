@@ -65,7 +65,8 @@ extension UIImage {
         //jpegData(compressionQuality: <#T##CGFloat##CoreGraphics.CGFloat#>)
     }
 
-    func toJpegData(compressionQuality: CGFloat = 0.8) -> Data? {
+    /// [compressionQuality] 值越小, 图片质量越低
+    func toJpegData(_ compressionQuality: CGFloat = 0.8) -> Data? {
         jpegData(compressionQuality: compressionQuality)
     }
 }

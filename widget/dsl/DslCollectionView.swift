@@ -7,11 +7,12 @@ import UIKit
 
 class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDelegateFlowLayout {
 
-    /// 所有的数据集合, 但非全部在界面上显示
-    var _itemList: [DslItem] = []
-
     lazy var diffableDataSource: DslCollectionViewDiffableDataSource = {
         DslCollectionViewDiffableDataSource(self)
+    }()
+
+    lazy var recyclerDataSource: DslRecyclerDataSource = {
+        DslRecyclerDataSource(self)
     }()
 
     lazy var sectionHelper: SectionHelper = {
@@ -121,7 +122,7 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
     override func layoutSubviews() {
         super.layoutSubviews()
         if needsReload {
-            loadData(_itemList)
+            loadData(recyclerDataSource.getAllItem())
         }
     }
 
