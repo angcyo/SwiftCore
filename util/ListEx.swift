@@ -14,7 +14,7 @@ extension Array where Element: Equatable {
 
     @discardableResult
     mutating func remove(_ item: Element) -> Bool {
-        let index = self.index() {
+        let index = self.index {
             $0 == item
         }
         if let index = index {
@@ -26,7 +26,7 @@ extension Array where Element: Equatable {
     }
 
     func indexOf(_ object: Element) -> Int {
-        return firstIndexOf(object)
+        firstIndexOf(object)
     }
 
     func firstIndexOf(_ object: Element) -> Int {

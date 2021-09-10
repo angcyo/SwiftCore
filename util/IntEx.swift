@@ -93,7 +93,20 @@ extension CGFloat: Number {
     func toFloat() -> Float {
         Float(self)
     }
+
+    /// 格式化文件大小
+    func toFileSize(format: String = "%4.2f %@") -> String {
+        var convertedValue = self
+        var multiplyFactor = 0
+        let tokens = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+        while (convertedValue > 1024) {
+            convertedValue /= 1024
+            multiplyFactor += 1
+        }
+        return String(format: format, convertedValue, tokens.get(multiplyFactor) ?? "")
+    }
 }
+
 
 public extension Int32 {
 

@@ -58,6 +58,20 @@ extension String {
         }
     }
 
+    /// 最后一段路径
+    var lastPathComponent: String {
+        get {
+            (self as NSString).lastPathComponent
+        }
+    }
+
+    /// 删除最后一段路径
+    var deletingLastPathComponent: String {
+        get {
+            (self as NSString).deletingLastPathComponent
+        }
+    }
+
     /// 转换成路径
     func toPath(_ parent: Path? = nil) -> Path {
         if let parent = parent {

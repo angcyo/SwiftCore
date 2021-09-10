@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 import AlamofireImage
 
-
 ///https://github.com/Alamofire/AlamofireImage
 
 /// image 支持[UIImage] 支持本地图片, 支持在线图片
@@ -87,6 +86,60 @@ extension UIImageView {
         } else {
             self.image = nil
         }
+    }
+}
+
+extension UIImage {
+
+    /// 着色
+    func tintColor(_ color: UIColor) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { context in
+            color.setFill()
+            self.draw(at: .zero)
+            context.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height), blendMode: .sourceAtop)
+        }
+    }
+
+    /// 压缩size
+    func toSize(_ size: CGSize) -> UIImage? {
+        UIGraphicsBeginImageContext(size)
+        self.draw(in: cgRect(0, 0, size.width, size.height))
+        let resultImage = UIGraphicsGetImageFromCurrentImageContext()
+        defer {
+            UIGraphicsEndImageContext()
+        }
+        return resultImage
+    }
+
+    /// 压缩图片到指定大小 b https://www.jianshu.com/p/99c3e6a6c033
+    func compressQualityWithMaxLength(_ maxLength: CGFloat) -> Data {
+        var compression: CGFloat = 1
+        var data = toJpegData(compression)!
+        /*while (data.count > maxLength && compression > 0) {
+            compression -= 0.02;
+            data = toJpegData(compression) // When compression less than a value, this code dose not work
+        }*/
+
+        if (data.count.toCGFloat() < maxLength) {
+            return data
+        }
+
+        var max: CGFloat = 1
+        var min: CGFloat = 0
+
+        for i in 0..<6 {
+            compression = (max + min) / 2
+            data = toJpegData(compression)!
+            if (data.count.toCGFloat() < maxLength * 0.9) {
+                min = compression
+            } else if (data.count.toCGFloat() > maxLength) {
+                max = compression
+            } else {
+                break
+            }
+        }
+        return data
     }
 }
 

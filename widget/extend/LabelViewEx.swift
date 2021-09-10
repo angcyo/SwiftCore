@@ -72,9 +72,9 @@ extension UILabel {
     }
 
     /// 单行显示
-    func singleLine(line: Int = 1) {
+    func singleLine(line: Int = 1, lineBreakMode: NSLineBreakMode = .byTruncatingTail) {
         numberOfLines = line
-        lineBreakMode = /*.byWordWrapping + */.byTruncatingTail
+        self.lineBreakMode = lineBreakMode ///*.byWordWrapping + */.byTruncatingTail
     }
 }
 
@@ -171,5 +171,16 @@ func borderTipLabel(_ text: String? = nil, textColor: UIColor = Res.color.info, 
     if !nilOrEmpty(text) {
         view.sizeToFit()
     }
+    return view
+}
+
+func paddingLabel(size: CGFloat = Res.text.label.size, color: UIColor = Res.text.label.color) -> PaddingLabel {
+    let view = PaddingLabel()
+    view.topInset = 3
+    view.bottomInset = view.topInset
+    view.leftInset = 5
+    view.rightInset = view.leftInset
+    view.textColor = color
+    view.font = UIFont.systemFont(ofSize: size, weight: .regular)
     return view
 }
