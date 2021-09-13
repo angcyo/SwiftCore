@@ -21,6 +21,9 @@ class DslDeviceTableItem: DslTableItem {
                 copyData(info)
                 toast("复制:\(info)")
             }
+
+            //file browser
+            showFileBrowserDialog()
         }
     }
 

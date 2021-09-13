@@ -239,25 +239,16 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
 
     // MARK: 首尾试图获取
 
-    /// 返回头部试图
+    /// 返回头部试图, 这里只需要返回视图即可, fame会被自动设置
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         print("viewForHeaderInSection:\(section)")
-        //return getSectionFirstItem(section)?.itemHeaderView
-        let view = UIView()
-        view.frame = CGRect(x: 0, y: 0, width: 1, height: 1)
-        view.backgroundColor = .blue
-        return view
-        //return nil
+        return getSectionFirstTableItem(section)?.itemHeaderView ?? UIView()
     }
 
     /// 返回尾部试图
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         print("viewForFooterInSection:\(section)")
-        //return getSectionFirstItem(section)?.itemFooterView
-        let view = UIView()
-        view.frame = CGRect(x: 0, y: 0, width: 1, height: 1)
-        return view
-        //return nil
+        return getSectionFirstTableItem(section)?.itemFooterView ?? UIView()
     }
 
     /// 需要cell的样式为:accessoryType = .detailButton 或 .detailDisclosureButton

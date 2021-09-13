@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import SwiftMessages
 
 ///["Documents", ".com.apple.mobile_container_manager.metadata.plist", "Library", "SystemData", "tmp"]
 
@@ -19,6 +20,7 @@ extension FileManager {
 
 class FileBrowserDialog: BaseDialog {
 
+    /// "/var/mobile/Containers/Data/Application/D1D29368-F11B-47D0-98E3-584D8363617B"
     let initPath = NSHomeDirectory() //"/"
     let pathLabel = paddingLabel(color: Res.text.subTitle.color)
     let dslTableView = DslTableView()
@@ -154,6 +156,11 @@ class FileBrowserDialog: BaseDialog {
         messageView.bounceAnimationOffset = 0
         messageView.backgroundHeight = UIScreen.height
 
+        //click close self
+        messageView.onClick { _ in
+            self.toClose()
+        }
+
         /*messageView.backgroundHeight = nil
         messageView.respectSafeArea = true //是否考虑安全区域
 
@@ -183,39 +190,9 @@ class FileBrowserDialog: BaseDialog {
         return messageView
     }
 
-    static func test() {
-        //"/var/mobile/Containers/Data/Application/C93A28DF-B35F-47B3-8F96-2CA01F4EBEAE"
-        let homeDirectory = NSHomeDirectory()
-        let fileManager = FileManager.default
-        // Path.current = Path("/")
-        let u1 = fileManager.urls(for: .cachesDirectory, in: .userDomainMask)
-
-        let f1 = fileManager.listNames(atPath: "/")
-        let f2 = fileManager.listNames(atPath: homeDirectory)
-
-        if let fileNames = try? fileManager.contentsOfDirectory(atPath: homeDirectory) {
-            L.i(fileNames)
-            for name in fileNames {
-                let bean = FileBrowserBean()
-                bean.fileName = name
-                bean.filePath = homeDirectory
-                bean.fileType = name.pathExtension
-                bean.displayName = fileManager.displayName(atPath: name)
-
-                var isDirectory: ObjCBool = false
-                let exist = fileManager.fileExists(atPath: name, isDirectory: &isDirectory)
-                bean.isExists = exist
-                bean.isReadable = fileManager.isReadableFile(atPath: name)
-                bean.isWritable = fileManager.isWritableFile(atPath: name)
-                bean.isExecutable = fileManager.isExecutableFile(atPath: name)
-                bean.isDeletable = fileManager.isDeletableFile(atPath: name)
-                let attributes = try? fileManager.attributesOfItem(atPath: name)
-                L.d("\(name) exist:\(exist) isDirectory:\(isDirectory) \(name.pathExtension)")
-                L.d(attributes)
-            }
-        }
-
-        L.i("")
+    override func configMessage(swiftMessage: SwiftMessages) {
+        super.configMessage(swiftMessage: swiftMessage)
+        swiftMessage.defaultConfig.presentationContext = .window(windowLevel: .alert)
     }
 
     //MARK: file 操作
