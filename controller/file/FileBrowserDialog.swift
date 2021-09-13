@@ -10,9 +10,43 @@ import SwiftMessages
 
 extension FileManager {
 
-    func listNames(atPath path: String) -> [String] {
+    func listNames(atPath path: String) -> [String]? {
         let fileNames = try? contentsOfDirectory(atPath: path)
-        return fileNames ?? []
+        return fileNames
+    }
+
+    /// 排序, 文件夹在前面
+    func listNamesSort(atPath path: String) -> [String]? {
+        let names = listNames(atPath: path)
+        if names == nil {
+            return nil
+        }
+        var list = [FileBrowserBean]()
+        for name in names! {
+            let bean = FileBrowserBean()
+            bean.fileName = name
+            var isDirectory: ObjCBool = false
+            let atPath = path + "/" + name
+            let _ = fileExists(atPath: atPath, isDirectory: &isDirectory)
+            bean.isFolder = isDirectory.boolValue
+            list.add(bean)
+        }
+
+        list.sort { l, r in
+            //自然升序, 值越大越在后面
+            if l.isFolder != r.isFolder {
+                if l.isFolder {
+                    return true
+                } else if r.isFolder {
+                    return false
+                }
+            }
+            return l.fileName ?? "" < r.fileName ?? ""
+        }
+
+        return list.map {
+            $0.fileName ?? "--"
+        }
     }
 }
 
@@ -21,7 +55,7 @@ extension FileManager {
 class FileBrowserDialog: BaseDialog {
 
     /// "/var/mobile/Containers/Data/Application/D1D29368-F11B-47D0-98E3-584D8363617B"
-    let initPath = NSHomeDirectory() //"/"
+    let initPath = Core.HOME //"/"
     let pathLabel = paddingLabel(color: Res.text.subTitle.color)
     let dslTableView = DslTableView()
     let line = hLine()
@@ -204,7 +238,7 @@ class FileBrowserDialog: BaseDialog {
     /// 加载路径
     func loadPath(_ path: String) {
         L.i("加载路径:\(path)")
-        let names = fileManager.listNames(atPath: path)
+        let names = fileManager.listNames(atPath: path) ?? []
         pathLabel.setText(path)
         currentPath = path
 
@@ -233,7 +267,7 @@ class FileBrowserDialog: BaseDialog {
             //L.d(attributes)
 
             if isDirectory.boolValue {
-                bean.fileSize = fileManager.listNames(atPath: atPath).count
+                bean.fileSize = fileManager.listNames(atPath: atPath)?.count ?? 0
             } else {
                 bean.fileSize = attributes?[.size] as? Int ?? 0
             }

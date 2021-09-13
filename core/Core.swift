@@ -37,6 +37,11 @@ class Core {
     /// 空字符时的占位字符
     static var DEF_NIL_STRING = "--"
 
+    /// /var/mobile/Containers/Data/Application/D1D29368-F11B-47D0-98E3-584D8363617B
+    static var HOME = NSHomeDirectory()
+
+    /// /var/mobile/Containers/Data/Application/D1D29368-F11B-47D0-98E3-584D8363617B/Library/Caches
+    static var CACHES = Path.userCaches
 }
 
 ///单例保持对象, 防止ARC

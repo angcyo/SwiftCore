@@ -9,6 +9,7 @@ import SwiftyBeaver
 ///pod 'SwiftyBeaver' #1.9.5
 
 /// 日志框架
+/// https://docs.swiftybeaver.com/article/20-custom-format
 let L = SwiftyBeaver.self
 
 extension SwiftyBeaver {
@@ -36,15 +37,16 @@ extension SwiftyBeaver {
 
 struct SwiftyBeaverEx {
 
+    /// https://docs.swiftybeaver.com/article/20-custom-format
     static func initSwiftyBeaver() {
         let format = "$Dyyyy-MM-dd HH:mm:ss.SSS$d $C$L$c $N.$F:$l $T - $M"
         let file = FileDestination()  // log to Xcode Console
-        file.format = format
+        file.format = "\(format) \n\n"
         //"$DHH:mm:ss.SSS$d $C$L$c $N.$F:$l - $M"
         // add the destinations to SwiftyBeaver
         file.minLevel = .info
         //https://docs.swiftybeaver.com/article/10-log-to-file
-        //file.logFileURL = URL(fileURLWithPath: "/tmp/app_info.log")  // tmp is just possible for a macOS app
+        file.logFileURL = URL(fileURLWithPath: "\(Core.CACHES)/log/\(nowTimeString("yyyy-MM-dd")).log")  // tmp is just possible for a macOS app
 
         if D.isDebug {
             let console = ConsoleDestination()  // log to Xcode Console

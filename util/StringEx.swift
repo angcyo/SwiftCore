@@ -5,6 +5,7 @@
 import Foundation
 import UIKit
 import MobileCoreServices
+import HttpSwift
 
 /// 字符串扩展 https://github.com/amayne/SwiftString
 
@@ -38,6 +39,14 @@ extension String {
 
     func toFileURL(_ isDirectory: Bool = false) -> URL {
         URL(fileURLWithPath: self, isDirectory: isDirectory)
+    }
+
+    func encodeUrl() -> String? {
+        addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)
+    }
+
+    func decodeUrl() -> String? {
+        removingPercentEncoding
     }
 
     /// 如果为空时则返回[empty]
@@ -117,6 +126,7 @@ extension String {
 }
 
 extension Data {
+
     func mimeType() -> String {
         var b: UInt8 = 0
         copyBytes(to: &b, count: 1)
@@ -139,6 +149,14 @@ extension Data {
         default:
             return "application/octet-stream"
         }
+    }
+
+    func toBytes() -> [Byte] {
+        let data = (self as NSData)
+        let b = UnsafePointer<Byte>(OpaquePointer(data.bytes))
+        let s = UnsafeBufferPointer<Byte>(start: b, count: data.length)
+        let bytes = [Byte](s)
+        return bytes
     }
 }
 

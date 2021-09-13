@@ -53,23 +53,39 @@ extension String {
 
     /// 扩展名
     var pathExtension: String {
-        get {
-            (self as NSString).pathExtension
-        }
+        (self as NSString).pathExtension
     }
 
     /// 最后一段路径
     var lastPathComponent: String {
-        get {
-            (self as NSString).lastPathComponent
-        }
+        (self as NSString).lastPathComponent
     }
 
     /// 删除最后一段路径
     var deletingLastPathComponent: String {
-        get {
-            (self as NSString).deletingLastPathComponent
+        (self as NSString).deletingLastPathComponent
+    }
+
+    var expandingTildeInPath: String {
+        (self as NSString).expandingTildeInPath
+    }
+
+    func appendingPathComponent(_ str: String?) -> String {
+        if nilOrEmpty(str) {
+            return self
         }
+
+        let str = str!
+
+        let endsWith = hasSuffix("/")
+        let beginsWith = str.hasPrefix("/")
+        if !endsWith && !beginsWith {
+            return self + "/" + str
+        } else if (endsWith && !beginsWith) || (beginsWith && !endsWith) {
+            return self + str
+        }
+
+        return self[..<self.index(before: endIndex)] + str
     }
 
     /// 转换成路径
