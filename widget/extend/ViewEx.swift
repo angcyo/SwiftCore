@@ -49,6 +49,10 @@ class TargetObserver: NSObject, UIGestureRecognizerDelegate {
                     //UIControl
                     return false
                 }
+                if let superview = touchView.superview, superview is IDslCell && superview.isUserInteractionEnabled {
+                    //cell
+                    return false
+                }
                 if let gestureRecognizers = touchView.gestureRecognizers {
                     let find = gestureRecognizers.find {
                         $0 is UITapGestureRecognizer
