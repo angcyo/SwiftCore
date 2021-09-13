@@ -112,8 +112,10 @@ func bodyTextView(_ text: String? = nil) -> UILabel {
     return view
 }
 
-func desLabel(_ text: String? = nil) -> UILabel {
-    desView(text)
+func desLabel(_ text: String? = nil,
+              size: CGFloat = Res.text.des.size,
+              color: UIColor = Res.text.des.color) -> UILabel {
+    desView(text, size: size, color: color)
 }
 
 func desView(_ text: String? = nil,
@@ -121,6 +123,12 @@ func desView(_ text: String? = nil,
              color: UIColor = Res.text.des.color) -> UILabel {
     let view = labelView(text, size: size, color: color)
     return view
+}
+
+func tipView(_ text: String? = nil,
+             size: CGFloat = Res.text.tip.size,
+             color: UIColor = Res.text.tip.color) -> UILabel {
+    desView(text, size: size, color: color)
 }
 
 /// 填充色 提示性质的Label

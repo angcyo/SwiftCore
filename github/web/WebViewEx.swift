@@ -14,7 +14,13 @@ func showUrl(_ url: String?) -> WebViewController {
     vc.toolbarItemTypes = [.back, .forward, .reload, .activity]
 
     if let url = url {
-        vc.url = url.toURL()
+
+        if url.startWith("/") {
+            //file
+            vc.url = url.toFileURL()
+        } else {
+            vc.url = url.toURL()
+        }
 
         push(vc)
     } else {

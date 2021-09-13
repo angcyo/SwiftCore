@@ -36,9 +36,13 @@ extension String {
         URL(string: self)
     }
 
+    func toFileURL(_ isDirectory: Bool = false) -> URL {
+        URL(fileURLWithPath: self, isDirectory: isDirectory)
+    }
+
     /// 如果为空时则返回[empty]
     func ifEmpty(_ empty: String) -> String {
-        if self.isEmpty || self.lowercased() == "null" {
+        if isEmpty || lowercased() == "null" {
             return empty
         }
         return self
