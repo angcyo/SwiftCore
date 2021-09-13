@@ -358,8 +358,7 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
 
     /// 内容已经滚动
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        //debugPrint("scrollViewDidScroll:\(scrollView.contentOffset)")
-
+        L.v("scrollViewDidScroll:\(scrollView.contentOffset):\(scrollView.contentSize):\(scrollView.contentInset)")
         onScrollViewDidScroll?(self)
     }
 
@@ -367,19 +366,34 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
         debugPrint("scrollViewDidZoom:\(scrollView.zoomScale)")
     }
 
-    /// 即将开始滚动
+    /// 即将开始拖拽
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         debugPrint("scrollViewWillBeginDragging")
     }
 
-    /// 即将结束滚动
+    /// 最后一次拖拽时的速率
+    var lastVelocity: CGPoint = .zero
+
+    /// 即将结束拖拽
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        debugPrint("scrollViewWillEndDragging")
+        debugPrint("scrollViewWillEndDragging:\(velocity):\(targetContentOffset.pointee)")
+        lastVelocity = velocity
+        if velocity.y < 0 {
+            //往下快速滑动
+        } else {
+            //往上快速滑动
+        }
     }
 
-    /// 结束滚动
+    var onScrollViewDidEndDragging: ((UIScrollView) -> Void)? = nil
+
+    /// 结束拖拽
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        debugPrint("scrollViewDidEndDragging")
+        debugPrint("scrollViewDidEndDragging:\(decelerate)")
+        onScrollViewDidEndDragging?(scrollView)
+        if !decelerate {
+            onScrollViewDidEndScroll?(scrollView)
+        }
     }
 
     /// 即将开始减速滚动
@@ -390,11 +404,15 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
     /// 回调
     var onScrollViewDidEndDecelerating: ((UIScrollView) -> Void)? = nil
 
+    /// 结束滚动回调
+    var onScrollViewDidEndScroll: ((UIScrollView) -> Void)? = nil
+
     /// 结束减速滚动
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         //(0.0, -88.0):(375.0, 199.0):UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0):UIEdgeInsets(top: 88.0, left: 0.0, bottom: 34.0, right: 0.0)
         debugPrint("scrollViewDidEndDecelerating:\(scrollView.contentOffset):\(scrollView.contentSize):\(scrollView.contentInset):\(scrollView.adjustedContentInset)")
         onScrollViewDidEndDecelerating?(scrollView)
+        onScrollViewDidEndScroll?(scrollView)
     }
 
     /// 滚动动画结束
