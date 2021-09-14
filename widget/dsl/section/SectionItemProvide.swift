@@ -77,6 +77,10 @@ class SectionItemProvide {
     }
 
     func onSetLoadMore(_ status: ItemStatus = .ITEM_STATUS_REFRESH, data: Any? = nil, enable: Bool = true) {
+        if recyclerView.loadMoreItem?.itemStatus == status && status == .ITEM_STATUS_REFRESH {
+            //已经是刷新状态, 则清空状态
+            recyclerView.loadMoreItem?.itemStatus = .ITEM_STATUS_NONE
+        }
         recyclerView.toLoadMore(status, data: data, enable: enable)
     }
 }

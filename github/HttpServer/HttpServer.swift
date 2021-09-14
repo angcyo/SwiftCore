@@ -15,10 +15,11 @@ class HttpServer {
     /// 启动本地文件浏览服务
     static func startFileServer(_ root: String = Core.HOME, config: ((HttpServer) -> Void)? = nil) -> HttpServer {
         let server = HttpServer()
-        server.server.fileBrowser(in: Core.HOME)
-        server.server.get("{path}") { //"/favicon.ico"
-            L.i("访问:\($0.fullPath)")
-            let path = $0.path.decodeUrl()!
+
+        //server.server.fileBrowser(in: Core.HOME)
+        func handleFileBrowser(_ request: Request) throws -> Response {
+            L.i("访问:\(request.fullPath)")
+            let path = request.path.decodeUrl()!
 
             if path == "/favicon.ico" {
                 let response = Response(.ok,
@@ -35,9 +36,16 @@ class HttpServer {
                     response = try StaticServer.serveFile(at: atPath)
                     response.headers.add(["Content-Type": "text/html;charset=utf-8"])
                 }
-                response.headers.add(["device": DslDeviceTableItem.deviceInfo()])
+                //response.headers.add(["device": DslDeviceTableItem.deviceInfo()])
                 return response
             }
+        }
+
+        server.server.get("/") { //"/favicon.ico"
+            try handleFileBrowser($0)
+        }
+        server.server.get("{path}") { //"/favicon.ico"
+            try handleFileBrowser($0)
         }
         config?(server)
         server.start()
@@ -63,12 +71,20 @@ class HttpServer {
         }
     }
 
+    func stop() {
+        server.stop()
+    }
+
     func _serverAddress() -> String {
         if let _ = certifiatePath {
             return "https://\(address ?? getWiFiAddress() ?? "localhost"):\(port)"
         } else {
             return "http://\(address ?? getWiFiAddress() ?? "localhost"):\(port)"
         }
+    }
+
+    deinit {
+        server.stop()
     }
 
 }

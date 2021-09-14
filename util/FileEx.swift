@@ -96,6 +96,12 @@ extension String {
         return Path(self)
     }
 
+    //.userCaches + "/http
+    @discardableResult
+    func writeToFile(folder: String, name: String, append: Bool = true) -> Bool {
+        saveToFile(path: Path(folder), name: name, append: append)
+    }
+
     /// 将字符串保存到到文本
     ///
     /// - Parameters:

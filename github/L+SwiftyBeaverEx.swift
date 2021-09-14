@@ -64,3 +64,16 @@ struct SwiftyBeaverEx {
         }*/
     }
 }
+
+extension SwiftyBeaver {
+
+    /// 写入日志到log文件夹
+    static func writeLog(_ log: String, folder: String? = nil, name: String? = nil, append: Bool = true) {
+        log.writeToFile(folder: folder ?? (Path.userCaches.standardRawValue + "/log"), name: name ?? "\(dayTimeString()).log", append: append)
+    }
+
+    /// 写入日志到http文件夹
+    static func writeHttp(_ log: String, folder: String? = nil, name: String? = nil, append: Bool = true) {
+        log.writeToFile(folder: folder ?? (Path.userCaches.standardRawValue + "/http"), name: name ?? "\(dayTimeString()).log", append: append)
+    }
+}

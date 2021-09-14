@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 
 /// Cell只包含界面元素, 所有操作在对应的DslItem中进行
-protocol DslCell {
+public protocol DslCell {
 }
 
 extension DslCell {

@@ -7,7 +7,7 @@ import UIKit
 import TangramKit
 
 /// 作用于 [UITableView]
-open class DslTableItem: DslItem {
+open class DslTableItem: DslCollectionItem {
 
     //MARK: [DslTableView] 代理配置
     var itemIndentationLevel: Int = 0
@@ -49,7 +49,7 @@ open class DslTableItem: DslItem {
     }
 }
 
-class DslTableCell: UITableViewCell, IDslCell {
+open class DslTableCell: UITableViewCell, IDslCell {
 
     override init(style: CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -58,7 +58,7 @@ class DslTableCell: UITableViewCell, IDslCell {
         initCell()
     }
 
-    required init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         super.init(coder: coder)
         L.i("创建cell:\(self):\(coder)")
         initCell()
@@ -69,7 +69,7 @@ class DslTableCell: UITableViewCell, IDslCell {
     }
 
     ///  自定义的cell需要放在这里
-    override var contentView: UIView {
+    open override var contentView: UIView {
         super.contentView
     }
 
@@ -92,21 +92,21 @@ class DslTableCell: UITableViewCell, IDslCell {
     }
 
     /// [自动赋值]
-    weak var _item: DslItem? = nil
+    public weak var _item: DslItem? = nil
 
     /// 请重写此方法
-    func getCellConfig() -> IDslCellConfig? {
+    open func getCellConfig() -> IDslCellConfig? {
         nil
     }
 
     /// 添加控件到内容视图中
     @discardableResult
-    func renderCell<T: UIView>(_ view: T, _ action: ((T) -> Void)? = nil) -> T {
+    open func renderCell<T: UIView>(_ view: T, _ action: ((T) -> Void)? = nil) -> T {
         contentView.render(view, action)
     }
 
     // 重写此方法, 在复用之前准备cell
-    override func prepareForReuse() {
+    open override func prepareForReuse() {
         super.prepareForReuse()
         print("prepareForReuse")
     }
@@ -118,12 +118,12 @@ class DslTableCell: UITableViewCell, IDslCell {
         return view
     }*/
 
-    override func awakeFromNib() {
+    open override func awakeFromNib() {
         super.awakeFromNib()
         print("awakeFromNib")
     }
 
-    override func setEditing(_ editing: Bool, animated: Bool) {
+    open override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         //print("setEditing:\(editing):\(animated)")
 
@@ -133,7 +133,7 @@ class DslTableCell: UITableViewCell, IDslCell {
         }
     }
 
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+    open override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
         print("setHighlighted:\(highlighted):\(animated)")
 
@@ -143,7 +143,7 @@ class DslTableCell: UITableViewCell, IDslCell {
         }
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
+    open override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         print("setSelected:\(selected):\(animated)")
 
@@ -153,19 +153,19 @@ class DslTableCell: UITableViewCell, IDslCell {
         }
     }
 
-    override func draw(_ rect: CGRect) {
+    open override func draw(_ rect: CGRect) {
         super.draw(rect)
     }
 
-    override func sizeToFit() {
+    open override func sizeToFit() {
         super.sizeToFit()
     }
 
-    override func sizeThatFits(_ size: CGSize) -> CGSize {
+    open override func sizeThatFits(_ size: CGSize) -> CGSize {
         super.sizeThatFits(size)
     }
 
-    override func systemLayoutSizeFitting(_ targetSize: CGSize) -> CGSize {
+    open override func systemLayoutSizeFitting(_ targetSize: CGSize) -> CGSize {
         super.systemLayoutSizeFitting(targetSize)
     }
 
@@ -175,7 +175,7 @@ class DslTableCell: UITableViewCell, IDslCell {
     /// horizontalFittingPriority 默认是 UILayoutPriority.required.rawValue 1000
     /// verticalFittingPriority 默认时 UILayoutPriority.fittingSizeLevel.rawValue 50
     /// 计算cell的size
-    override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
+    open override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
         //IDslCell
         if let cellConfig = getCellConfig() {
             let rootView = cellConfig.getRootView(self)

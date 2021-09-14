@@ -30,22 +30,22 @@ class HttpPage {
     //需要请求的数据大小
     var requestSize: Int = HttpPage.PAGE_SIZE
 
-    //正在请求的页面
-    var currentRequestPage: Int = HttpPage.FIRST_PAGE
+    //当前页
+    fileprivate var currentPage: Int = HttpPage.FIRST_PAGE
 
     /// 刷新页面
     func onPageRefresh() {
         requestPage = firstPage
-        currentRequestPage = firstPage
+        currentPage = firstPage
     }
 
     /// 加载下一页
     func onPageLoadMore() {
-        currentRequestPage = requestPage + 1
+        requestPage = currentPage + 1
     }
 
     /// 刷新页面
     func onPageEnd() {
-        requestPage = currentRequestPage
+        currentPage = requestPage
     }
 }

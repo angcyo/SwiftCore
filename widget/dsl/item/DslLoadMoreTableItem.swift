@@ -3,8 +3,6 @@
 //
 
 import Foundation
-import UIKit
-import NVActivityIndicatorView
 
 /// 加载更多item
 

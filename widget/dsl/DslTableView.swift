@@ -91,6 +91,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
         allowsMultipleSelection = false //多行选择
         allowsMultipleSelectionDuringEditing = false
 
+        //diffableDataSource.defaultRowAnimation
         delegate = self
         dataSource = diffableDataSource
     }
@@ -98,7 +99,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     // MARK: 加载item的机制
 
     /// 是否需要重新加载items
-    var needsReload = true {
+    var needsReload = false {
         didSet {
             if needsReload {
                 // 需要更新数据

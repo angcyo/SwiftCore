@@ -19,9 +19,13 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
         SectionHelper()
     }()
 
-    lazy var statusItem: IStatusItem? = nil
+    lazy var statusItem: IStatusItem? = {
+        DslStatusCollectionItem()
+    }()
 
-    lazy var loadMoreItem: IStatusItem? = nil
+    lazy var loadMoreItem: IStatusItem? = {
+        DslLoadMoreCollectionItem()
+    }()
 
     /// 网格列数, 可以不指定. 指定了也不是强制生效. item配置具有最高优先级
     var spanCount: Int? = nil
@@ -65,7 +69,7 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
         bounces = true //边界回弹
         minimumZoomScale = 1
         maximumZoomScale = 1
-        bouncesZoom = true //当达到最大限制时, 是否开启zoom
+        bouncesZoom = false //当达到最大限制时, 是否开启zoom
 
         //automaticallyAdjustsScrollIndicatorInsets
         contentInsetAdjustmentBehavior = .automatic //安全区域的行为
@@ -76,7 +80,7 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
         alwaysBounceHorizontal = false
 
         //selection
-        allowsSelection = true //允许选择
+        allowsSelection = false //允许选择
         allowsMultipleSelection = false //多行选择
 
         if #available(iOS 14.0, *) {
@@ -109,7 +113,7 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
     // MARK: 加载item的机制
 
     /// 是否需要重新加载items
-    var needsReload = true {
+    var needsReload = false {
         didSet {
             if needsReload {
                 // 需要更新数据
@@ -131,27 +135,35 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
     /// 指定单元格的大小, 默认是50,50
     func collectionView(_ view: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         // 默认的大小
-        let defSize = (collectionViewLayout as? UICollectionViewFlowLayout)?.itemSize ?? cgSize(Res.size.itemMinHeight)
+        var defSize = (collectionViewLayout as? UICollectionViewFlowLayout)?.itemSize ?? cgSize(Res.size.itemMinHeight)
+        if defSize == UICollectionViewFlowLayout.automaticSize {
+            defSize = cgSize(Res.size.itemMinHeight)
+        }
+
         if let item = getCollectionItem(indexPath) {
 
             //宽度计算
             var width: CGFloat
-            if item.itemWidth == UITableView.automaticDimension {
-                //自动设置宽度
-                if let span = item.itemSpan ?? spanCount {
-                    var maxWidth = view.width - view.contentInset.left - view.contentInset.right
-                    if span > 1 {
-                        maxWidth = maxWidth - collectionView(view, layout: collectionViewLayout, minimumInteritemSpacingForSectionAt: indexPath.section) * (span.toCGFloat() - 1)
-                    }
 
-                    if span > 0 {
-                        width = floorf((maxWidth / span.toCGFloat()).toFloat()).toCGFloat()
-                    } else {
-                        width = maxWidth
-                    }
-                } else {
-                    width = DslItem.automaticSize
+            var maxWidth = view.maxContextWidth
+            if let span = item.itemSpan ?? spanCount {
+                //let sectionInsets = collectionView(view, layout: collectionViewLayout, insetForSectionAt: indexPath.section)
+                //maxWidth = maxWidth - sectionInsets.left - sectionInsets.right
+                if span > 1 {
+                    maxWidth = maxWidth - collectionView(view, layout: collectionViewLayout, minimumInteritemSpacingForSectionAt: indexPath.section) * (span.toCGFloat() - 1)
                 }
+
+                if span > 0 {
+                    width = floorf((maxWidth / span.toCGFloat()).toFloat()).toCGFloat()
+                } else {
+                    width = maxWidth
+                }
+
+                //根据span, 自动计算宽度, 并赋值.
+                item.itemWidth = width
+            } else if item.itemWidth == UITableView.automaticDimension {
+                //自动计算宽度
+                width = maxWidth
             } else {
                 width = item.itemWidth
             }
@@ -160,7 +172,7 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
             var height: CGFloat
             if item.itemHeight == UITableView.automaticDimension {
                 //自动设置宽度, 请在[DslCollectionCell]的[preferredLayoutAttributesFitting]中设置
-                height = DslItem.automaticSize//UITableView.automaticDimension
+                height = defSize.height //DslItem.automaticSize//UITableView.automaticDimension
             } else {
                 height = item.itemHeight
             }
@@ -169,7 +181,6 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
             return cgSize(width, height)
         }
         return defSize
-        //return cgSize(200, 200)
     }
 
     /// section 的边界, 默认是0,0,0,0
@@ -249,15 +260,19 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
     //MARK: display
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        getItem(indexPath)?.bindCellWillDisplay(cell, indexPath)
     }
 
     func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
+        L.d("willDisplaySupplementaryView:\(elementKind):\(view):\(indexPath)")
     }
 
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        getItem(indexPath)?.bindCellDidEndDisplaying(cell, indexPath)
     }
 
     func collectionView(_ collectionView: UICollectionView, didEndDisplayingSupplementaryView view: UICollectionReusableView, forElementOfKind elementKind: String, at indexPath: IndexPath) {
+        L.d("didEndDisplayingSupplementaryView:\(elementKind):\(view):\(indexPath)")
     }
 
     //MARK: menu
@@ -297,7 +312,8 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
     }
 
     func collectionView(_ collectionView: UICollectionView, targetContentOffsetForProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
-        fatalError("collectionView(_:targetContentOffsetForProposedContentOffset:) has not been implemented")
+        L.d("targetContentOffsetForProposedContentOffset:\(proposedContentOffset)")
+        return proposedContentOffset
     }
 
     //MARK: edit

@@ -74,9 +74,14 @@ open class BaseStatusTableItem: DslTableItem, IStatusItem {
                 $0.indicator.startAnimating()
             }
         }
-        if !_isRefreshPending && itemStatus == .ITEM_STATUS_REFRESH {
-            _isRefreshPending = true
-            onItemRefresh?(cell)
+
+        if let view = cell as? UIView {
+            if indexPath.section <= 0 || view.frame.x >= 0 && view.frame.y >= 0 {
+                if !_isRefreshPending && itemStatus == .ITEM_STATUS_REFRESH {
+                    _isRefreshPending = true
+                    onItemRefresh?(cell)
+                }
+            }
         }
     }
 
@@ -112,6 +117,50 @@ class BaseStatusTableCell: DslTableCell {
         } else {
             return super.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
         }
+    }
+}
+
+class BaseStatusCollectionCell: DslCollectionCell {
+
+    let cellConfig = StatusCellConfig()
+
+    override func getCellConfig() -> IDslCellConfig? {
+        cellConfig
+    }
+
+    override func initCell() {
+        super.initCell()
+        //backgroundColor = .red
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        L.d("\(frame)")
+    }
+
+    override func layoutSublayers(of layer: CALayer) {
+        super.layoutSublayers(of: layer)
+        L.d("\(frame)")
+    }
+
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
+
+        if let view = findAttachedCollectionView() as? DslCollectionView {
+            var height = view.maxContextHeight
+            var width = view.maxContextWidth
+            if let item = _item {
+                if item.itemHeight != UITableView.automaticDimension {
+                    height = item.itemHeight
+                }
+                let spacing = view.collectionView(view, layout: view.collectionViewLayout, minimumInteritemSpacingForSectionAt: item.itemIndex?.section ?? 0)
+                width = width - spacing
+            }
+            let size = cgSize(width, height)
+            attributes.frame.size = size
+        }
+
+        return attributes
     }
 }
 

@@ -48,4 +48,9 @@ class DslRecyclerDataSource {
             recyclerView.needsReload = true
         }
     }
+
+    func addItemProvide(_ itemProvide: SectionItemProvide, index: Int = .max) {
+        itemProvideList.insert(itemProvide, at: index.clamp(0, itemProvideList.endIndex))
+        recyclerView.needsReload = true
+    }
 }

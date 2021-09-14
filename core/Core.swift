@@ -23,6 +23,8 @@ class Core {
     let alamofireLogger = FancyAppAlamofireLogger(prettyPrint: true) {
         print()
         L.i($0, #file, #function, #line)
+
+        "\n\(nowTimeString())↓\n\($0)\n".saveToFile(path: .userCaches + "/http", name: "\(dayTimeString()).log")
     }
 
     /// 初始化入口
@@ -35,6 +37,9 @@ class Core {
 
         // 全屏侧滑手势, 启用
         SHFullscreenPopGesture.configure()
+
+        // 设备信息保存
+        L.writeLog(DslDeviceTableItem.deviceInfo(), name: "device.log", append: false)
     }
 
     /// 空字符时的占位字符

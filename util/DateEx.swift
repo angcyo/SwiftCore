@@ -47,6 +47,10 @@ var nowTime: Double {
     Date().timeIntervalSince1970
 }
 
+func dayTimeString(_ pattern: String = "yyyy-MM-dd") -> String {
+    Date().format(pattern)
+}
+
 func nowTimeString(_ pattern: String = "yyyy-MM-dd HH:mm:ss") -> String {
     Date().format(pattern)
 }

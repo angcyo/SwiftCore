@@ -10,10 +10,15 @@ extension SectionItemProvide {
 
     /// 通过数据列表,更新[DslItem]列表
     func loadDataEnd<T: DslItem>(_ itemClass: T.Type = T.self,
-                                 dataList: [Any?]?, error: Error? = nil,
+                                 dataList: [Any?]?,
+                                 error: Error? = nil,
                                  page: HttpPage = .singlePage /*默认单页更新, 即更新整个列表*/,
                                  dsl: ((T) -> Void)? = nil) {
-        if page.currentRequestPage <= page.firstPage {
+        if error == nil {
+            //请求成功, 无错误
+            page.onPageEnd()
+        }
+        if page.requestPage <= page.firstPage {
             //首页数据
             if let error = error {
                 onSetEmptyList(error, data: error)
@@ -42,7 +47,7 @@ extension SectionItemProvide {
             } else {
                 //计算出旧的数据
                 let newCount = dataList?.count ?? 0
-                let start = (page.currentRequestPage - page.firstPage) * page.requestSize
+                let start = (page.requestPage - page.firstPage) * page.requestSize
                 let end = _itemList.endIndex
                 var oldItemList = [DslItem]()
                 for i in start...end {
@@ -52,7 +57,7 @@ extension SectionItemProvide {
                 }
 
                 //开始 CRUD
-                updateItem(itemClass, withIndex: 0, oldItemList: oldItemList, data: dataList, dsl: dsl)
+                updateItem(itemClass, withIndex: start, oldItemList: oldItemList, data: dataList, dsl: dsl)
                 if newCount >= page.requestSize {
                     //激活加载更多
                     onSetLoadMore()

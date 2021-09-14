@@ -67,6 +67,16 @@ class CoreAppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
+    // MARK: UIApplicationDelegate
+
+    func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+        L.i("applicationDidReceiveMemoryWarning")
+    }
+
+    func applicationWillTerminate(_ application: UIApplication) {
+        L.i("applicationWillTerminate")
+    }
+
     // MARK: UISceneSession Lifecycle
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {

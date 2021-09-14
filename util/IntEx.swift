@@ -67,6 +67,12 @@ extension Int: Number {
     func toAngle() -> CGFloat {
         toCGFloat().toAngle()
     }
+
+    func clamp(_ minValue: Int, _ maxValue: Int) -> Int {
+        let min = Swift.min(minValue, maxValue)
+        let max = Swift.max(minValue, maxValue)
+        return self < min ? min : (self > max ? max : self)
+    }
 }
 
 extension UInt: Number {

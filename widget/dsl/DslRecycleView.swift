@@ -48,6 +48,18 @@ extension DslRecycleView {
         }
     }
 
+    func addItemProvide(_ itemProvide: SectionItemProvide, index: Int = .max) {
+        recyclerDataSource.addItemProvide(itemProvide, index: index)
+    }
+
+    @discardableResult
+    func addItemProvide(index: Int = .max, _ dsl: (SectionItemProvide) -> Void) -> SectionItemProvide {
+        let itemProvide = SectionItemProvide(self)
+        dsl(itemProvide)
+        recyclerDataSource.addItemProvide(itemProvide, index: index)
+        return itemProvide
+    }
+
     /// 更新数据 [now] 是否立即更新
     func updateRecyclerDataSource(_ now: Bool = false) {
         recyclerDataSource.updateDataSource(now)
@@ -176,6 +188,7 @@ extension DslRecycleView {
             needsReload = true
         }
     }
+
 }
 
 extension UICollectionView {
@@ -206,4 +219,21 @@ extension UICollectionView {
             collectionViewContentSize.height + contentInset.top + contentInset.bottom
         }
     }
+}
+
+extension UICollectionView {
+
+    //item 允许的最大宽度
+    var maxContextWidth: CGFloat {
+        //let delegate = self.delegate as? UICollectionViewDelegateFlowLayout
+        let insets: UIEdgeInsets = /*delegate?.collectionView(self, layout: collectionViewLayout, insetForSectionAt: 0) ??*/ .zero
+        return width - insets.left - insets.right - contentInset.left - contentInset.right
+    }
+
+    var maxContextHeight: CGFloat {
+        //let delegate = self.delegate as? UICollectionViewDelegateFlowLayout
+        let insets: UIEdgeInsets = /*delegate?.collectionView(self, layout: collectionViewLayout, insetForSectionAt: 0) ??*/ .zero
+        return height - insets.top - insets.bottom - contentInset.top - contentInset.bottom
+    }
+
 }

@@ -9,9 +9,6 @@ import RxSwift
 /// 数据和界面关联的item
 open class DslItem: NSObject, IDslItem {
 
-    /// 需要自适应大小
-    static let automaticSize: CGFloat = 0.00000001
-
     /// cell 界面, 必须
     /// 如果是在DslTableView中, 则必须是UITableViewCell的子类
     /// 如果是在DslCollectionView中, 则必须是UICollectionViewCell的子类
@@ -126,6 +123,9 @@ open class DslItem: NSObject, IDslItem {
         }*/
 
         /*cell.cellOf(MeHeaderTableCell.self) {
+        }*/
+
+        /*cell.cellConfigOf(DslEmptyCellConfig.self) {
         }*/
     }
 

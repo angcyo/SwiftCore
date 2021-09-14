@@ -197,7 +197,7 @@ class DslDeviceTableCell: DslTableCell {
 
         root.cacheRect()
         root.match_parent()
-        root.setPadding(Res.size.leftMargin)
+        //root.setPadding(Res.size.leftMargin)
         //root.tg_gravity = .center
 
         //root.backgroundColor = UIColor.red
@@ -217,6 +217,6 @@ class DslDeviceTableCell: DslTableCell {
 
     /// 获取文本控件的高度
     func sizeOfTextHeight(_ cellWidth: CGFloat) -> CGFloat {
-        text.sizeOf(cgSize(cellWidth - Res.size.leftMargin * 2, .max)).height + Res.size.leftMargin * 2
+        text.sizeOf(cgSize(cellWidth - Res.size.leftMargin * 2, .max)).height
     }
 }

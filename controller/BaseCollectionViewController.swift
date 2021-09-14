@@ -1,20 +1,17 @@
 //
-// Created by angcyo on 21/08/06.
+// Created by angcyo on 21/09/14.
 //
 
 import Foundation
 import UIKit
-import RxKeyboard
 import RxSwift
+import RxKeyboard
 
-class BaseTableViewController: BaseViewController {
+class BaseCollectionViewController: BaseViewController {
 
-    lazy var recyclerView: DslTableView = {
-        createTableView()
+    lazy var recyclerView: DslCollectionView = {
+        createCollectionView()
     }()
-
-    /// 清理选中状态
-    var clearsSelectionOnViewWillAppear: Bool = false
 
     /// 激活键盘监听
     var enableSoftInput: Bool = true {
@@ -34,8 +31,8 @@ class BaseTableViewController: BaseViewController {
     var httpPage = HttpPage()
 
     /// 创建视图
-    func createTableView() -> DslTableView {
-        DslTableView(frame: .zero, style: .plain)
+    func createCollectionView() -> DslCollectionView {
+        DslCollectionView()
         //.apply {
         //let insets = view.safeAreaInsets
         //print($0)
@@ -60,9 +57,9 @@ class BaseTableViewController: BaseViewController {
                 recyclerView.contentInset = inset.resetBottom(height.toFloat())
 
                 //滚动到具有接收者的当前行
-                if let cell = recyclerView.findFirstResponder()?.findAttachedTableCell() {
+                if let cell = recyclerView.findFirstResponder()?.findAttachedCollectionCell() {
                     if let index = recyclerView.indexPath(for: cell) {
-                        recyclerView.scrollToRow(at: index, at: .top, animated: true)
+                        recyclerView.scrollToItem(at: index, at: .top, animated: true)
                     }
                 }
             }).disposed(by: keyboardBag)
@@ -97,14 +94,14 @@ class BaseTableViewController: BaseViewController {
     override func initControllerView() {
         super.initControllerView()
         //dslTableView = DslTableView()
-        initTableView(recyclerView: recyclerView)
+        initCollectionView(recyclerView: recyclerView)
         initItemStatus(recyclerView: recyclerView)
         initKeyboard()
         initRefresh()
     }
 
     /// 初始化
-    func initTableView(recyclerView: DslTableView) {
+    func initCollectionView(recyclerView: DslCollectionView) {
         view.render(recyclerView)
         if recyclerView.frame.isEmpty {
             recyclerView.make {
@@ -118,7 +115,7 @@ class BaseTableViewController: BaseViewController {
         }
     }
 
-    func initItemStatus(recyclerView: DslTableView) {
+    func initItemStatus(recyclerView: DslCollectionView) {
         if let statusItem = recyclerView.statusItem as? BaseStatusTableItem {
             statusItem.onItemRefresh = { _ in
                 self.onStatusRefresh()
@@ -136,9 +133,6 @@ class BaseTableViewController: BaseViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if clearsSelectionOnViewWillAppear {
-            recyclerView.cancelSelected()
-        }
     }
 
     func onStatusRefresh() {
@@ -153,7 +147,7 @@ class BaseTableViewController: BaseViewController {
 
     /// 重写此方法, 实现刷新/加载更多数据
     func onLoadData() {
-
+        //no op
     }
 
     /// 加载数据结束
@@ -185,18 +179,5 @@ class BaseTableViewController: BaseViewController {
             }
         }
     }*/
-}
 
-extension BaseTableViewController {
-
-    var defaultItemProvide: SectionItemProvide {
-        get {
-            recyclerView.recyclerDataSource.defaultSectionItemProvide
-        }
-    }
-
-    /// 更新数据 [now] 是否立即更新
-    func updateRecyclerDataSource(_ now: Bool = false) {
-        recyclerView.recyclerDataSource.updateDataSource(now)
-    }
 }

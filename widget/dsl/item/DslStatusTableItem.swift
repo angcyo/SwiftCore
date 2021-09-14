@@ -3,8 +3,6 @@
 //
 
 import Foundation
-import UIKit
-import NVActivityIndicatorView
 
 /// 情感图切换item
 

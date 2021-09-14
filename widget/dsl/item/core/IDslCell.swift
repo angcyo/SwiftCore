@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 
 /// 扩展cell时的基协议, 方便继承查找
-protocol IDslCell: AnyObject {
+public protocol IDslCell: AnyObject {
 
     /// [自动赋值]
     var _item: DslItem? { get set }
@@ -22,14 +22,13 @@ protocol IDslCell: AnyObject {
 }
 
 /// cell中界面的配置
-protocol IDslCellConfig {
+public protocol IDslCellConfig {
 
     /// 获取跟视图, 此视图会被renderToCell
     func getRootView(_ cell: UIView) -> UIView
 
     /// 初始化 [UITableCell]或者[UICollectionCell]
     func initCellConfig(_ cell: UIView)
-
 }
 
 /// 扩展

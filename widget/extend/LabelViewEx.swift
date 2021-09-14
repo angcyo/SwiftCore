@@ -107,8 +107,10 @@ func subTitleView(_ text: String? = nil,
     return view
 }
 
-func bodyTextView(_ text: String? = nil) -> UILabel {
-    let view = labelView(text, size: Res.text.body.size, color: Res.text.body.color)
+func bodyView(_ text: String? = nil,
+              size: CGFloat = Res.text.body.size,
+              color: UIColor = Res.text.body.color) -> UILabel {
+    let view = labelView(text, size: size, color: color)
     return view
 }
 
