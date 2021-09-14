@@ -58,7 +58,7 @@ extension UIView {
     func onClick(bag: DisposeBag, _ action: @escaping (UITapGestureRecognizer) -> Void) {
         rx.tapGesture { (gesture: UITapGestureRecognizer, delegate: GenericRxGestureRecognizerDelegate<UITapGestureRecognizer>) in
                     delegate.touchReceptionPolicy = .custom { (gesture: UITapGestureRecognizer, touch: RxGestureTouch) in
-                        TargetObserver.ignoreTouch(gesture, shouldReceive: touch)
+                        TargetObserver.shouldReceiveTouch(gesture, shouldReceive: touch)
                     }
                 }
                 .when(.recognized) //UIGestureRecognizer.State

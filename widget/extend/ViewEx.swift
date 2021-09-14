@@ -35,32 +35,39 @@ extension UIView {
 
 class TargetObserver: NSObject, UIGestureRecognizerDelegate {
 
-    /// 是否要忽略当前的UIGestureRecognizer
-    static func ignoreTouch(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+    /// 是否需要当前的UIGestureRecognizer
+    static func shouldReceiveTouch(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         //手势附加的view
         let gestureView = gestureRecognizer.view
 
         //正在touch的view
         let touchView = touch.view
 
+        L.d("shouldReceiveTouch:\(gestureView):\(touchView)")
+
         if touch.tapCount == 1 && gestureView != touchView {
             if let touchView = touchView {
-                if touchView is UIControl && touchView.isUserInteractionEnabled {
+                /*if touchView is UIControl && touchView.isUserInteractionEnabled {
                     //UIControl
                     return false
-                }
-                if let superview = touchView.superview, superview is IDslCell && superview.isUserInteractionEnabled {
-                    //cell
+                }*/
+
+                if touchView.haveGestureRecognizer(UITapGestureRecognizer.self) {
+                    //按下的 view也具有点击事件, 则忽略自身的点击事件
                     return false
                 }
-                if let gestureRecognizers = touchView.gestureRecognizers {
-                    let find = gestureRecognizers.find {
-                        $0 is UITapGestureRecognizer
-                    }
-                    if find != nil {
-                        //具有点击手势
+
+                //view 包含 tableView, 此时点击在 cell 上
+                if let dslCell = touchView.findAttachedDslCell() {
+                    if let item = dslCell._item {
+                        return !(item.itemCanSelect && item.itemCanHighlight)
+                    } else {
                         return false
                     }
+                }
+                if let superview = touchView.superview, superview.isUserInteractionEnabled {
+                    //cell
+                    return false
                 }
             }
         }
@@ -81,7 +88,7 @@ class TargetObserver: NSObject, UIGestureRecognizerDelegate {
     }
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        TargetObserver.ignoreTouch(gestureRecognizer, shouldReceive: touch)
+        TargetObserver.shouldReceiveTouch(gestureRecognizer, shouldReceive: touch)
     }
 }
 
@@ -351,6 +358,16 @@ extension UIView {
         setRound(radii, topLeft: false, topRight: true, bottomLeft: false, bottomRight: true)
     }
 
+    /// 当前视图是否有指定的手势识别器
+    func haveGestureRecognizer<T>(_ type: T.Type = T.self) -> Bool {
+        if let gestureRecognizers = gestureRecognizers {
+            let find = gestureRecognizers.find {
+                $0 is T
+            }
+            return find != nil
+        }
+        return false
+    }
 
     /// 快速监听事件
     /// 返回对象需要保存起来, 否则会被ARC回收, 导致回调不了
@@ -512,6 +529,23 @@ extension UIView {
             if (firstResponder != nil) {
                 return firstResponder
             }
+        }
+
+        return nil;
+    }
+
+    /// 向上查找 IDslCell
+    func findAttachedDslCell() -> IDslCell? {
+        if self is IDslCell {
+            return self as! IDslCell
+        }
+
+        if let superview = superview {
+            let cell = superview.findAttachedDslCell()
+            if (cell != nil) {
+                return cell
+            }
+            return superview.findAttachedDslCell()
         }
 
         return nil;
