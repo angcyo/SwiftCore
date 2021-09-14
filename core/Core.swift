@@ -32,6 +32,9 @@ class Core {
         CrashHandler.initCrashHandler()
         Dialog.initDialog()
         SwiftyBeaverEx.initSwiftyBeaver()
+
+        // 全屏侧滑手势, 启用
+        SHFullscreenPopGesture.configure()
     }
 
     /// 空字符时的占位字符

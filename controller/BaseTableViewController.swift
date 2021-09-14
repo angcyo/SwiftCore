@@ -62,6 +62,7 @@ class BaseTableViewController: BaseViewController {
                 $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             }
         }
+        tableView.sh_scrollViewPopGestureRecognizerEnable = true
     }
 
     /// 键盘监听Bag
