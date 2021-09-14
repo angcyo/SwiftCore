@@ -81,6 +81,11 @@ extension NSObject {
     func getObject(_ key: inout String) -> Any? {
         objc_getAssociatedObject(self, &key)
     }
+
+    /// 打印KVC key列表
+    func logAllKey() {
+        logIvarList(Self.self)
+    }
 }
 
 /// 返回全包名类名 //"Wayto_GBSecurity_iOS.LoginController"
@@ -110,6 +115,7 @@ func logIvarList(_ cls: AnyClass?) {
     if let ivars = class_copyIvarList(cls, &count) {
         for i in 0..<count {
             let ivar = ivars[Int(i)];
+            //String(cString: ivar_getName(ivar))
             print("name:\(ivar_getName(ivar)) type:\(ivar_getTypeEncoding(ivar))")
         }
     }
