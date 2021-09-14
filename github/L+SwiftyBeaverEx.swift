@@ -41,7 +41,7 @@ struct SwiftyBeaverEx {
     static func initSwiftyBeaver() {
         let format = "$Dyyyy-MM-dd HH:mm:ss.SSS$d $C$L$c $N.$F:$l $T - $M"
         let file = FileDestination()  // log to Xcode Console
-        file.format = "\(format) \n\n"
+        file.format = format
         //"$DHH:mm:ss.SSS$d $C$L$c $N.$F:$l - $M"
         // add the destinations to SwiftyBeaver
         file.minLevel = .info
