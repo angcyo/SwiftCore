@@ -177,16 +177,17 @@ extension UIView {
     func makeWidth(_ width: ConstraintRelatableTarget? = nil,
                    minWidth: ConstraintRelatableTarget? = nil,
                    maxWidth: ConstraintRelatableTarget? = nil,
-                   amount: ConstraintMultiplierTarget = 1) {
+                   amount: ConstraintMultiplierTarget = 1,
+                   priority: ConstraintPriority = .required) {
         make { maker in
             if let width = width {
-                maker.width.equalTo(width).multipliedBy(amount)
+                maker.width.equalTo(width).multipliedBy(amount).priority(priority)
             }
             if let min = minWidth {
-                maker.width.greaterThanOrEqualTo(min).multipliedBy(amount)
+                maker.width.greaterThanOrEqualTo(min).multipliedBy(amount).priority(priority)
             }
             if let max = maxWidth {
-                maker.width.lessThanOrEqualTo(max).multipliedBy(amount)
+                maker.width.lessThanOrEqualTo(max).multipliedBy(amount).priority(priority)
             }
         }
     }

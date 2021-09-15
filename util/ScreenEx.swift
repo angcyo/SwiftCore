@@ -102,6 +102,18 @@ func insets(size: CGFloat) -> UIEdgeInsets {
     UIEdgeInsets(top: size, left: size, bottom: size, right: size)
 }
 
+func insets(horizontal: CGFloat) -> UIEdgeInsets {
+    UIEdgeInsets(top: 0, left: horizontal, bottom: 0, right: horizontal)
+}
+
+func insets(vertical: CGFloat) -> UIEdgeInsets {
+    UIEdgeInsets(top: vertical, left: 0, bottom: vertical, right: 0)
+}
+
+func insets(horizontal: CGFloat = 0, vertical: CGFloat = 0) -> UIEdgeInsets {
+    UIEdgeInsets(top: vertical, left: horizontal, bottom: vertical, right: horizontal)
+}
+
 func insets(left: CGFloat = 0, top: CGFloat = 0, right: CGFloat = 0, bottom: CGFloat = 0) -> UIEdgeInsets {
     UIEdgeInsets(top: top, left: left, bottom: bottom, right: right)
 }

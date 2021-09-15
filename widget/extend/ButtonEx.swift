@@ -13,6 +13,7 @@ extension UIButton {
         if all {
             setTitle(title, for: .selected)
             setTitle(title, for: .highlighted)
+            setTitle(title, for: .disabled)
         }
     }
 
@@ -21,6 +22,7 @@ extension UIButton {
         if all {
             setAttributedTitle(title, for: .selected)
             setAttributedTitle(title, for: .highlighted)
+            setAttributedTitle(title, for: .disabled)
         }
     }
 
@@ -33,6 +35,7 @@ extension UIButton {
         if all {
             setTitleColor(color, for: .selected)
             setTitleColor(color, for: .highlighted)
+            setTitleColor(color, for: .disabled)
         }
     }
 
@@ -124,9 +127,33 @@ func borderButton(_ title: String? = nil,
 }
 
 /// 偏平的文本按钮
+func textButton(_ title: String? = nil,
+                titleColor: UIColor = Res.text.title.color,
+                titleSize: CGFloat = Res.text.title.size,
+                insets: UIEdgeInsets? = nil,
+                _ onClick: ((UIResponder) -> Void)? = nil) -> UIButton {
+    let view = UIButton(type: .custom)
+    view.backgroundColor = UIColor.clear
+    view.tintColor = titleColor
+    view.setText(title)
+    view.setTextColor(titleColor)
+    view.setTextSize(titleSize)
+
+    if let insets = insets {
+        view.contentEdgeInsets = insets
+    }
+
+    if let click = onClick {
+        view.onClick(.touchUpInside, click)
+    }
+    return view
+}
+
+/// 偏平的文本按钮
 func labelButton(_ title: String? = nil,
                  titleColor: UIColor = Res.text.label.color,
                  titleSize: CGFloat = Res.text.label.size,
+                 insets: UIEdgeInsets? = nil,
                  _ onClick: ((UIResponder) -> Void)? = nil) -> UIButton {
     let view = UIButton(type: .custom)
     view.backgroundColor = UIColor.clear
@@ -140,6 +167,10 @@ func labelButton(_ title: String? = nil,
     view.setTitleColor(titleColor, for: .highlighted)
     view.setTitleColor(titleColor, for: .disabled)
     view.titleLabel?.setTextSize(titleSize)
+
+    if let insets = insets {
+        view.contentEdgeInsets = insets
+    }
 
     if let click = onClick {
         view.onClick(.touchUpInside, click)
