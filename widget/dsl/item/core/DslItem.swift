@@ -113,7 +113,7 @@ open class DslItem: NSObject, IDslItem {
     /// item与cell绑定
     /// @selector(createTableViewCell:cellForRowAt:item:)
     func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
-        L.d("绑定cell:\(self):\(cell):\(indexPath)")
+        L.d("绑定cell:\(indexPath):\(self):\(cell)")
         bindCellBase(cell, indexPath)
         onBindCell?(cell, indexPath)
         bindCellOverride(cell, indexPath)
@@ -154,14 +154,14 @@ open class DslItem: NSObject, IDslItem {
     /// cell即将显示
     /// @selector(tableView:willDisplay:forRowAt:)
     func bindCellWillDisplay(_ cell: DslCell, _ indexPath: IndexPath) {
-        L.d("cell可见:\(cell):\(indexPath)")
+        L.d("cell可见:\(indexPath):\(cell)")
         onCellWillDisplay?(cell, indexPath)
     }
 
     /// cell即将不可见
     /// @selector(tableView:didEndDisplaying:forRowAt:)
     func bindCellDidEndDisplaying(_ cell: DslCell, _ indexPath: IndexPath) {
-        L.d("cell不可见:\(cell):\(indexPath)")
+        L.d("cell不可见:\(indexPath):\(cell)")
         onCellDidEndDisplaying?(cell, indexPath)
     }
 

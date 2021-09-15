@@ -146,15 +146,17 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
             var width: CGFloat
 
             var maxWidth = view.maxContextWidth
-            if let span = item.itemSpan ?? spanCount {
+            if let _ = item.itemSpan ?? spanCount {
                 //let sectionInsets = collectionView(view, layout: collectionViewLayout, insetForSectionAt: indexPath.section)
                 //maxWidth = maxWidth - sectionInsets.left - sectionInsets.right
-                if span > 1 {
-                    maxWidth = maxWidth - collectionView(view, layout: collectionViewLayout, minimumInteritemSpacingForSectionAt: indexPath.section) * (span.toCGFloat() - 1)
-                }
 
-                if span > 0 {
-                    width = floorf((maxWidth / span.toCGFloat()).toFloat()).toCGFloat()
+                let itemSpan = item.itemSpan ?? 1 //需要占多少列
+                let spanCount = spanCount ?? itemSpan //有多少列
+
+                if spanCount > 1 {
+                    let space = collectionView(view, layout: collectionViewLayout, minimumInteritemSpacingForSectionAt: indexPath.section) * (spanCount.toCGFloat() - 1)
+                    maxWidth = maxWidth - space
+                    width = floorf((maxWidth / spanCount.toCGFloat() * itemSpan.toCGFloat()).toFloat()).toCGFloat()
                 } else {
                     width = maxWidth
                 }
@@ -191,26 +193,28 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
 
     /// section 中item的行间距
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        L.d("minimumLineSpacingForSectionAt:\(section)")
-        return getSectionFirstCollectionItem(section)?.itemSectionLineSpacing ?? /*flowLayout?.minimumLineSpacing ??*/ minimumLineSpacing
+        let space = getSectionFirstCollectionItem(section)?.itemSectionLineSpacing ?? /*flowLayout?.minimumLineSpacing ??*/ minimumLineSpacing
+        L.d("minimumLineSpacingForSectionAt:\(section):\(space)")
+        return space
     }
 
     /// section 中item的列间距
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        L.d("minimumInteritemSpacingForSectionAt:\(section)")
-        return getSectionFirstCollectionItem(section)?.itemSectionInteritemSpacing ?? /*flowLayout?.minimumInteritemSpacing ??*/ minimumInteritemSpacing
+        let space = getSectionFirstCollectionItem(section)?.itemSectionInteritemSpacing ?? /*flowLayout?.minimumInteritemSpacing ??*/ minimumInteritemSpacing
+        L.d("minimumInteritemSpacingForSectionAt:\(section):\(space)")
+        return space
     }
 
     /// 标题视图的宽高
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         L.d("referenceSizeForHeaderInSection:\(section)")
-        return .zero
+        return (collectionViewLayout as? UICollectionViewFlowLayout)?.headerReferenceSize ?? .zero
     }
 
     /// 页脚视图的宽高
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         L.d("referenceSizeForFooterInSection:\(section)")
-        return .zero
+        return (collectionViewLayout as? UICollectionViewFlowLayout)?.footerReferenceSize ?? .zero
     }
 
     // MARK: 代理 UICollectionViewDelegate

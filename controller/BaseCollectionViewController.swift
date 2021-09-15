@@ -67,7 +67,7 @@ class BaseCollectionViewController: BaseViewController {
     }
 
     lazy var refreshControl: UIRefreshControl = {
-        UIRefreshControl()
+        UIRefreshControlFix()
     }()
 
     func initRefresh() {

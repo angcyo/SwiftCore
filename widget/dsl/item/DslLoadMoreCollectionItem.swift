@@ -10,7 +10,7 @@ class DslLoadMoreCollectionItem: BaseStatusTableItem {
 
     override func initItem() {
         super.initItem()
-        itemHeight = 30
+        itemHeight = Res.size.itemMinHeight
     }
 }
 

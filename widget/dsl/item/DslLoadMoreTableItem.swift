@@ -24,7 +24,7 @@ class DslLoadMoreTableCell: BaseStatusTableCell {
 
     override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
         if let _ = findAttachedTableView() {
-            return cgSize(targetSize.width, 30)
+            return cgSize(targetSize.width, Res.size.itemMinHeight)
         } else {
             return super.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
         }

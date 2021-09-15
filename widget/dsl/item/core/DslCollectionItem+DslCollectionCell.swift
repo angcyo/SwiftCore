@@ -13,7 +13,7 @@ open class DslCollectionItem: DslItem {
     /// span 占用宽度的多少分之一
     /// -1表示占满宽度,
     /// 不指定则使用[itemWidth]指定的宽度
-    var itemSpan: Int? = nil//UITableView.automaticDimension
+    var itemSpan: Int? = 1//UITableView.automaticDimension
 
     /// section margin
     var itemSectionEdgeInset: UIEdgeInsets? = nil
@@ -124,12 +124,6 @@ open class DslCollectionCell: UICollectionViewCell, IDslCell {
             //宽度自适应计算
             if item.itemWidth == UITableView.automaticDimension {
                 width = recyclerView?.maxContextWidth ?? UIScreen.width
-
-                if let view = recyclerView {
-                    let spacing = view.collectionView(view, layout: view.collectionViewLayout, minimumInteritemSpacingForSectionAt: item.itemIndex?.section ?? 0)
-                    width = width - spacing
-                }
-
                 //宽度自适应
                 width = min(width, attributes.frame.width)
             } else if item.itemWidth > 0 {
