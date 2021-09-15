@@ -95,7 +95,7 @@ extension SectionItemProvide {
 
         var index = 0
         while (index < itemClass.endIndex) {
-            let cls = itemClass[index]
+            let cls: AnyClass = itemClass[index]
 
             if end {
                 for i in (_itemList.startIndex..<_itemList.endIndex).reversed() {
