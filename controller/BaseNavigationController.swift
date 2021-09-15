@@ -78,7 +78,7 @@ class BaseNavigationController: UINavigationController,
         //navigationBar.barTintColor = UIColor.red //背景着色
 
         //navigationBar.tintColor = UIColor.red //着色
-        //navigationBar.backItem
+        //navigationBar.backItem //0,0 15.33,21   //offset: 7.66 10.5
         //navigationBar.items //navigationBar 管理所有vc的 navigationItem
 
         // 自定义导航栏
