@@ -126,6 +126,8 @@ open class DslCollectionCell: UICollectionViewCell, IDslCell {
                 width = recyclerView?.maxContextWidth ?? UIScreen.width
                 //宽度自适应
                 width = min(width, attributes.frame.width)
+
+                item._itemWidthCache = width
             } else if item.itemWidth > 0 {
                 width = item.itemWidth
             }
@@ -136,6 +138,8 @@ open class DslCollectionCell: UICollectionViewCell, IDslCell {
                 let targetSize = CGSize(width: width, height: 0)
                 let size = contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
                 height = size.height
+
+                item._itemHeightCache = height
             } else if item.itemHeight > 0 {
                 height = item.itemHeight
             }

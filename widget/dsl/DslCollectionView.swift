@@ -165,7 +165,11 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
                 item.itemWidth = width
             } else if item.itemWidth == UITableView.automaticDimension {
                 //自动计算宽度
-                width = maxWidth
+                if item._itemWidthCache > 0 {
+                    width = item._itemWidthCache
+                } else {
+                    width = maxWidth
+                }
             } else {
                 width = item.itemWidth
             }
@@ -174,7 +178,11 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
             var height: CGFloat
             if item.itemHeight == UITableView.automaticDimension {
                 //自动设置宽度, 请在[DslCollectionCell]的[preferredLayoutAttributesFitting]中设置
-                height = defSize.height //DslItem.automaticSize//UITableView.automaticDimension
+                if item._itemHeightCache > 0 {
+                    height = item._itemHeightCache
+                } else {
+                    height = defSize.height //DslItem.automaticSize//UITableView.automaticDimension
+                }
             } else {
                 height = item.itemHeight
             }

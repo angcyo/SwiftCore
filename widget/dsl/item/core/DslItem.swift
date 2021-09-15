@@ -186,7 +186,9 @@ open class DslItem: NSObject, IDslItem {
 
     /// 宽高
     var itemHeight: CGFloat = UITableView.automaticDimension //-1
+    var _itemHeightCache: CGFloat = -1 //自适应时缓存的高度
     var itemWidth: CGFloat = UITableView.automaticDimension //宽度属性只在UICollectionView中有效
+    var _itemWidthCache: CGFloat = -1 //自适应时缓存的宽度
 
     //MARK: - Rx
 
