@@ -17,6 +17,7 @@ struct Res {
         static var big: (size: CGFloat, color: UIColor) = (size: 24.0, color: UIColor.parse("#000000"))
         static var subTitle: (size: CGFloat, color: UIColor) = (size: 16.0, color: UIColor.parse("#161D26"))
         static var des: (size: CGFloat, color: UIColor) = (size: 13.0, color: UIColor.parse("#53575F"))
+        static var des2: (size: CGFloat, color: UIColor) = (size: 14.0, color: UIColor.parse("#8B8F97"))
         static var label: (size: CGFloat, color: UIColor) = (size: 15.0, color: UIColor.parse("#ACB0B7"))
         static var tip: (size: CGFloat, color: UIColor) = (size: 12.0, color: UIColor.parse("#ACB0B7"))
         static var body: (size: CGFloat, color: UIColor) = (size: 14.0, color: UIColor.parse("#161D26"))

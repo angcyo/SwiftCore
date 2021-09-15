@@ -135,7 +135,7 @@ func tipView(_ text: String? = nil,
 
 /// 填充色 提示性质的Label
 func fillTipLabel(_ text: String? = nil, textColor: UIColor = Res.color.info, fillColor: UIColor? = nil) -> PaddingLabel {
-    let backColor = fillColor ?? textColor.alpha(0.3)
+    let backColor = fillColor ?? textColor.toAlpha(0.3)
     let color = textColor
     let view = PaddingLabel()
 

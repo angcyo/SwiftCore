@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import Hue
 
 /// 颜色扩展
 extension UIColor {
@@ -72,22 +73,59 @@ extension UIColor {
                 alpha: CGFloat(a) / 255.0);
     }
 
+    /// [0~1] 的值
     var r: CGFloat {
-        cgColor.components![0]
+        redComponent
     }
     var g: CGFloat {
-        cgColor.components![1]
+        greenComponent
     }
     var b: CGFloat {
-        cgColor.components![2]
+        blueComponent
+    }
+    /// 透明度, 0全透明, 1不透明
+    var a: CGFloat {
+        alphaComponent
     }
 
     /// 修改颜色透明度, 并返回新的颜色
     /// 颜色对象的不透明度值，指定为 0.0 到 1.0 之间的值。 低于 0.0 的 Alpha 值被解释为 0.0，高于 1.0 的值被解释为 1.0
     /// 不透明度 1:完全不透明, 0:完全透明
-    func alpha(_ alpha: Float = 0.3) -> UIColor {
-        let components = cgColor.components!
-        return UIColor(red: components[0], green: components[1], blue: components[2], alpha: alpha.toCGFloat())
+    func toAlpha(_ alpha: CGFloat = 0.3) -> UIColor {
+        //let components = cgColor.components!
+        //return UIColor(red: components[0], green: components[1], blue: components[2], alpha: alpha.toCGFloat())
+        withAlphaComponent(alpha)
+    }
+
+    /// 渐变到另一个颜色 [fraction] 0~1 的进度
+    func toColor(_ endColor: UIColor, fraction: CGFloat) -> UIColor {
+
+        var redCurrent: CGFloat
+        var blueCurrent: CGFloat
+        var greenCurrent: CGFloat
+        var alphaCurrent: CGFloat
+
+        let redStart = r
+        let blueStart = b
+        let greenStart = g
+        let alphaStart = a
+
+        let redEnd = endColor.r
+        let blueEnd = endColor.b
+        let greenEnd = endColor.g
+        let alphaEnd = endColor.a
+
+        let redDifference = redEnd - redStart
+        let blueDifference = blueEnd - blueStart
+        let greenDifference = greenEnd - greenStart
+        let alphaDifference = alphaEnd - alphaStart
+
+        redCurrent = redStart + fraction * redDifference
+        blueCurrent = blueStart + fraction * blueDifference
+        greenCurrent = greenStart + fraction * greenDifference
+        alphaCurrent = alphaStart + fraction * alphaDifference
+
+        return UIColor(red: redCurrent, green: greenCurrent, blue: blueCurrent, alpha: alphaCurrent)
     }
 }
 

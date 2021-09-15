@@ -100,6 +100,10 @@ extension CGFloat: Number {
         Float(self)
     }
 
+    func toCGFloat(_ end: CGFloat, fraction: CGFloat) -> CGFloat {
+        self + fraction * (end - self)
+    }
+
     /// 格式化文件大小
     func toFileSize(format: String = "%4.2f %@") -> String {
         var convertedValue = self

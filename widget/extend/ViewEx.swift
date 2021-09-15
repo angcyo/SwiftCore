@@ -193,7 +193,7 @@ extension UIView {
                 result = view
                 break
             }
-            result = find(condition)
+            result = view.find(condition)
             if result != nil {
                 break
             }

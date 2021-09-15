@@ -46,7 +46,7 @@ extension Style {
 
     /// 填充提示
     func fillTip(_ textColor: UIColor, fillColor: UIColor? = nil) {
-        backColor = fillColor ?? textColor.alpha(0.3)
+        backColor = fillColor ?? textColor.toAlpha(0.3)
         color = textColor
 
         //lineSpacing //行间距
