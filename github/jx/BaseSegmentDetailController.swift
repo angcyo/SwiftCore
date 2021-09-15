@@ -259,7 +259,7 @@ extension BaseSegmentDetailController: JXPagingViewDelegate {
         percent = max(0, min(1, percent))
         navigationBarWrap?.backgroundColor = .clear.toColor(Res.color.controllerBackgroundColor, fraction: percent)
 
-        let heightThreshold: CGFloat = height
+        let heightThreshold: CGFloat = height - navigationBarHeight
         var heightPercent = scrollView.contentOffset.y / heightThreshold
         heightPercent = max(0, min(1, heightPercent))
 
