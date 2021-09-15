@@ -27,6 +27,9 @@ class Core {
         "\n\(nowTimeString())↓\n\($0)\n".saveToFile(path: .userCaches + "/http", name: "\(dayTimeString()).log")
     }
 
+    /// 激活全屏返回手势
+    var enableFullscreenPopGesture = true
+
     /// 初始化入口
     func initCore() {
         uuid = UIDevice.current.identifierForVendor?.uuidString ?? Util.uuid()
@@ -36,7 +39,9 @@ class Core {
         SwiftyBeaverEx.initSwiftyBeaver()
 
         // 全屏侧滑手势, 启用
-        SHFullscreenPopGesture.configure()
+        if enableFullscreenPopGesture {
+            SHFullscreenPopGesture.configure()
+        }
 
         // 设备信息保存
         L.writeLog(DslDeviceTableItem.deviceInfo(), name: "device.log", append: false)

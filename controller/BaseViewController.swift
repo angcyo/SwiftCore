@@ -56,7 +56,11 @@ open class BaseViewController: UIViewController, INavigation, UISceneDelegate {
 
     //MARK: INavigation
 
-    var showNavigationBar: Bool = true
+    var showNavigationBar: Bool = true {
+        didSet {
+            prefersNavigationBarHidden(!showNavigationBar)
+        }
+    }
 
     var showToolbar: Bool = false
 

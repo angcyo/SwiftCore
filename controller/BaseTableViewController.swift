@@ -131,7 +131,9 @@ class BaseTableViewController: BaseViewController {
             }
         }
 
-        recyclerView.sh_scrollViewPopGestureRecognizerEnable = true
+        if Core.shared.enableFullscreenPopGesture {
+            recyclerView.sh_scrollViewPopGestureRecognizerEnable = true
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
