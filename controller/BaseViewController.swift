@@ -195,7 +195,11 @@ open class BaseViewController: UIViewController, INavigation, UISceneDelegate {
     var navigationBar: UINavigationBar? = nil
 
     /// 渲染一个自定义的导航栏
-    func renderNavigationBar() {
+    ///
+    /// - Parameters:
+    ///   - shadow: 是否要阴影线
+    ///   - backItem: 是否需要返回按钮
+    func renderNavigationBar(shadow: Bool = false, backItem: Bool = false) {
         if navigationBarWrap == nil {
             navigationBarWrap = UIView()
         }
@@ -224,20 +228,27 @@ open class BaseViewController: UIViewController, INavigation, UISceneDelegate {
         navigationBarWrap!.backgroundColor = Res.color.controllerBackgroundColor
         //navigationItem.title = title
 
-        /*navigationBar.isTranslucent = false
-        with(navigationBar.standardAppearance) {
-            $0.shadowColor = .clear
-            $0.shadowImage = nil
-            $0.backgroundColor = .clear
-        }*/
+        /*navigationBar.isTranslucent = false*/
 
         ensureNavigationStyle()
         with(navigationItem.standardAppearance) {
             //$0.backgroundImage = nil
             $0.backgroundEffect = nil //去掉模糊效果
             //$0.backgroundColor = .clear
+
+            if !shadow {
+                $0.shadowColor = .clear
+                $0.shadowImage = nil
+            }
         }
 
+        if backItem {
+            navigationItem.appendLeftBarButton(image: sfArrowLeft()) { _ in
+                pop(self)
+            }
+        }
+
+        //push
         navigationBar!.pushItem(navigationItem, animated: false)
     }
 

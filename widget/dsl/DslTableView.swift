@@ -705,8 +705,8 @@ func changeFirstCellHeight(_ tableView: UITableView, defaultHeight: CGFloat? = n
 fileprivate var KEY_DEFAULT_SCROLLER_BEFORE_HEIGHT = "key_default_scroller_before_height"
 
 // y 小于0, 手指向下滑动
-func changeViewHeight(_ tableView: UITableView, view: UIView, defaultHeight: CGFloat? = nil) {
-    let y = tableView.contentOffset.y
+func changeViewHeight(_ scrollView: UIScrollView, view: UIView, defaultHeight: CGFloat? = nil, offsetY: Bool = true) {
+    let y = scrollView.contentOffset.y
     if y <= 0 {
         var height: CGFloat
         if defaultHeight == nil {
@@ -721,6 +721,10 @@ func changeViewHeight(_ tableView: UITableView, view: UIView, defaultHeight: CGF
             height = defaultHeight!
         }
         //下拉的时候, 才放大. 上拉不处理
-        view.frame = CGRect(x: 0, y: tableView.contentOffset.y, width: view.frame.width, height: height - tableView.contentOffset.y)
+        if offsetY {
+            view.frame = CGRect(x: view.frame.origin.x, y: y, width: view.frame.width, height: height - y)
+        } else {
+            view.frame = CGRect(x: view.frame.origin.x, y: view.frame.origin.y, width: view.frame.width, height: height - y)
+        }
     }
 }

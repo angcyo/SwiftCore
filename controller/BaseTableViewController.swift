@@ -6,8 +6,9 @@ import Foundation
 import UIKit
 import RxKeyboard
 import RxSwift
+import JXPagingView
 
-class BaseTableViewController: BaseViewController {
+class BaseTableViewController: BaseViewController, JXPagingViewListViewDelegate {
 
     lazy var recyclerView: DslTableView = {
         createTableView()
@@ -116,6 +117,11 @@ class BaseTableViewController: BaseViewController {
                 $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             }
         }
+
+        //转发
+        recyclerView.onScrollViewDidScrollList.add {
+            self.listViewDidScrollCallback?($0)
+        }
     }
 
     func initItemStatus(recyclerView: DslTableView) {
@@ -187,6 +193,44 @@ class BaseTableViewController: BaseViewController {
             }
         }
     }*/
+
+    //MARK: JXPagingViewListViewDelegate
+
+    func listView() -> UIView {
+        view
+    }
+
+    func listScrollView() -> UIScrollView {
+        recyclerView
+    }
+
+    var listViewDidScrollCallback: ((UIScrollView) -> ())?
+
+    func listViewDidScrollCallback(callback: @escaping (UIScrollView) -> ()) {
+        listViewDidScrollCallback = callback
+    }
+
+    func listScrollViewWillResetContentOffset() {
+        L.d("")
+    }
+
+    func listWillAppear() {
+        L.d("")
+    }
+
+    func listDidAppear() {
+        L.d("")
+    }
+
+    func listWillDisappear() {
+        L.d("")
+    }
+
+    func listDidDisappear() {
+        L.d("")
+    }
+
+    //MARK: JXPagingViewListViewDelegate .end
 }
 
 extension BaseTableViewController {

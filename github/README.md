@@ -25,7 +25,7 @@ pod 'SwiftMessages' //9.0.3
 
 
 
-# 函数扩展库 https://github.com/ankurp/Dollara
+# 函数扩展库 https://github.com/ankurp/Dollara https://dollarswift.org/
 pod 'Dollar' //9.0.0
 ```
 

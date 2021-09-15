@@ -349,11 +349,22 @@ fileprivate extension DispatchQueue {
     }
 }
 
+//MARK: 2021-09-15 angcyo
 
 extension UIViewController {
 
     ///禁止全屏弹出手势
     func disableInteractivePop(_ disable: Bool = true) {
         sh_interactivePopDisabled = disable
+    }
+
+    ///隐藏导航栏
+    func prefersNavigationBarHidden(_ hidden: Bool = true) {
+        sh_prefersNavigationBarHidden = hidden
+    }
+
+    ///手势交互边界距离
+    func interactivePopMaxAllowedInitialDistanceToLeftEdge(_ distance: Double = 0) {
+        sh_interactivePopMaxAllowedInitialDistanceToLeftEdge = distance
     }
 }

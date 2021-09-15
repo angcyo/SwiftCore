@@ -39,7 +39,7 @@ class CoreAppDelegate: UIResponder, UIApplicationDelegate {
     /// 外观init
     func initApplicationAppearance() {
         with(UINavigationBar.appearance()) {
-            //$0.barTintColor = Res.color.colorAccent
+            //$0.barTintColor = Res.color.controllerBackgroundColor
             $0.tintColor = Res.color.colorAccent
             //$0.setTitleColor(Res.text.normal.color)
         }
