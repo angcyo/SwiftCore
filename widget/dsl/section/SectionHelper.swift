@@ -45,7 +45,12 @@ class SectionHelper {
                 animate = animatingDifferences!
             }
 
+            let startTime = nowTime
             let snapshot = self.createSnapshot(recyclerView, items)
+            let endTime = nowTime
+
+            //log
+            L.w("Diff计算结束:原:\(items.count) 后:\(self.visibleItems.count) 耗时:\(endTime - startTime) s")
 
             //切换到情感图, 不执行动画
             if self.visibleItems.count == 1 && self.visibleItems.first is IStatusItem {

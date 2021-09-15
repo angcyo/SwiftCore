@@ -156,6 +156,7 @@ class BaseCollectionViewController: BaseViewController, JXPagingViewListViewDele
     /// 重写此方法, 实现刷新/加载更多数据
     func onLoadData() {
         //no op
+        L.i("加载页面:\(httpPage.requestPage):\(httpPage.requestSize)")
     }
 
     /// 加载数据结束
