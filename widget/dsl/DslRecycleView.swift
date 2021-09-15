@@ -5,6 +5,9 @@
 import Foundation
 import UIKit
 
+/// 滚动回调
+typealias ScrollAction = (UIScrollView) -> Void
+
 protocol DslRecycleView: AnyObject {
 
     /// 所有的数据集合, 但非全部在界面上显示. 包含界面上的所有item和隐藏的item

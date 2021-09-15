@@ -462,7 +462,8 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     // MARK: UIScrollView代理
 
     /// 回调
-    var onScrollViewDidScroll: ((UIScrollView) -> Void)? = nil
+    var onScrollViewDidScroll: ScrollAction? = nil
+    var onScrollViewDidScrollList: [ScrollAction] = []
 
     /// 内容已经滚动
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -474,6 +475,9 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
             //手指向上滑动
         }
 
+        onScrollViewDidScrollList.forEach {
+            $0(scrollView)
+        }
         onScrollViewDidScroll?(self)
     }
 
@@ -500,7 +504,7 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
         }
     }
 
-    var onScrollViewDidEndDragging: ((UIScrollView) -> Void)? = nil
+    var onScrollViewDidEndDragging: ScrollAction? = nil
 
     /// 结束拖拽
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -508,6 +512,9 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
         onScrollViewDidEndDragging?(scrollView)
         if !decelerate {
             onScrollViewDidEndScroll?(scrollView)
+            onScrollViewDidEndScrollList.forEach {
+                $0(scrollView)
+            }
         }
     }
 
@@ -517,10 +524,12 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
     }
 
     /// 回调
-    var onScrollViewDidEndDecelerating: ((UIScrollView) -> Void)? = nil
+    var onScrollViewDidEndDecelerating: ScrollAction? = nil
 
     /// 结束滚动回调
-    var onScrollViewDidEndScroll: ((UIScrollView) -> Void)? = nil
+    var onScrollViewDidEndScroll: ScrollAction? = nil
+    var onScrollViewDidEndScrollList: [ScrollAction] = []
+
 
     /// 结束减速滚动
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -528,6 +537,9 @@ class DslTableView: UITableView, UITableViewDelegate, DslRecycleView/*, UITableV
         debugPrint("scrollViewDidEndDecelerating:\(scrollView.contentOffset):\(scrollView.contentSize):\(scrollView.contentInset):\(scrollView.adjustedContentInset)")
         onScrollViewDidEndDecelerating?(scrollView)
         onScrollViewDidEndScroll?(scrollView)
+        onScrollViewDidEndScrollList.forEach {
+            $0(scrollView)
+        }
     }
 
     /// 滚动动画结束
