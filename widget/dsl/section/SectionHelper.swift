@@ -18,9 +18,9 @@ class SectionHelper {
     var visibleItems: [DslItem] = []
 
     /// 数据拦截器
-    var interceptorList: [ISectionInterceptor] = [DefaultSectionInterceptor(),
-                                                  StatusSectionInterceptor(),
-                                                  LoadMoreSectionInterceptor()]
+    var interceptorList: [BaseSectionInterceptor] = [DefaultSectionInterceptor(),
+                                                     StatusSectionInterceptor(),
+                                                     LoadMoreSectionInterceptor()]
 
     /// 更新后的监听回调
     var updateObserverList: [UpdateObserver] = []
@@ -169,6 +169,12 @@ class SectionHelper {
     }
 
     //MARK: operate
+
+    func addInterceptor(_ interceptor: BaseSectionInterceptor) {
+        if !interceptorList.contains(interceptor) {
+            interceptorList.add(interceptor)
+        }
+    }
 
     func observerUpdate(_ action: @escaping UpdateObserver) {
         updateObserverList.add(action)

@@ -196,18 +196,19 @@ extension UIView {
     func makeHeight(_ height: ConstraintRelatableTarget? = nil,
                     minHeight: ConstraintRelatableTarget? = nil,
                     maxHeight: ConstraintRelatableTarget? = nil,
-                    amount: ConstraintMultiplierTarget = 1) {
+                    amount: ConstraintMultiplierTarget = 1,
+                    priority: ConstraintPriority = .required) {
         make { maker in
             if let height = height {
-                maker.height.equalTo(height).multipliedBy(amount)
+                maker.height.equalTo(height).multipliedBy(amount).priority(priority)
             }
             if let min = minHeight {
                 // 约束最小高度, >=min
-                maker.height.greaterThanOrEqualTo(min).multipliedBy(amount)
+                maker.height.greaterThanOrEqualTo(min).multipliedBy(amount).priority(priority)
             }
             if let max = maxHeight {
                 // 约束最大高度, <=max
-                maker.height.lessThanOrEqualTo(max).multipliedBy(amount)
+                maker.height.lessThanOrEqualTo(max).multipliedBy(amount).priority(priority)
             }
         }
     }

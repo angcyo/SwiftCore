@@ -6,11 +6,9 @@ import Foundation
 
 /// 情感图/加载更多数据拦截器
 
-class StatusSectionInterceptor: ISectionInterceptor {
+class StatusSectionInterceptor: BaseSectionInterceptor {
 
-    var order: InterceptorOrder = -1
-
-    func onInterceptor(_ params: InterceptorParams) {
+    override func onInterceptor(_ params: InterceptorParams) {
         if let recyclerView = params.dslRecyclerView {
             if let statusItem = recyclerView.statusItem, statusItem.itemStatusEnable && !statusItem.isItemHidden {
                 if let item = statusItem as? DslItem, statusItem.itemStatus != .ITEM_STATUS_NONE {

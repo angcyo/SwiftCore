@@ -14,6 +14,7 @@ extension YPImagePicker {
 }
 
 extension YPMediaItem {
+
     func log() {
         switch self {
         case .photo(let photo):
@@ -21,6 +22,14 @@ extension YPMediaItem {
         case .video(let video):
             video.log()
         }
+    }
+
+    static func photoItem(_ image: UIImage) -> YPMediaItem {
+        .photo(p: YPMediaPhoto(image: image))
+    }
+
+    static func videoItem(thumbnail: UIImage, videoURL: URL) -> YPMediaItem {
+        .video(v: YPMediaVideo(thumbnail: thumbnail, videoURL: videoURL))
     }
 }
 
@@ -97,9 +106,9 @@ func _pickerConfiguration() -> YPImagePickerConfiguration {
 }
 
 /// 自定义选择, 选择图片和视频
-func picker(_ configDsl: ((YPImagePickerConfiguration) -> Void)? = nil, _ action: @escaping (_ items: [YPMediaItem], _ cancelled: Bool) -> Void) {
-    let config = _pickerConfiguration()
-    configDsl?(config)
+func picker(_ configDsl: ((inout YPImagePickerConfiguration) -> Void)? = nil, _ action: @escaping (_ items: [YPMediaItem], _ cancelled: Bool) -> Void) {
+    var config = _pickerConfiguration()
+    configDsl?(&config)
     let picker = YPImagePicker(configuration: config)
     picker.didFinishPicking { [unowned picker] items, cancelled in
         //print(items)

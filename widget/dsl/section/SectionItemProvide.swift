@@ -230,6 +230,11 @@ extension SectionItemProvide {
         return updateItem(itemClass, withIndex: targetItemIndex, data: data, dsl: dsl)
     }
 
+    @discardableResult
+    func updateItemList<T: DslItem>(_ itemClass: T.Type = T.self, withIndex at: Int = 0, data: [Any?]? = nil, dsl: ((T) -> Void)? = nil) -> [T] {
+        updateItem(itemClass, withIndex: at, data: data, dsl: dsl)
+    }
+
     /// 在指定位置更新/插入item
     @discardableResult
     func updateItem<T: DslItem>(_ itemClass: T.Type = T.self, withIndex at: Int, data: [Any?]? = nil, dsl: ((T) -> Void)? = nil) -> [T] {

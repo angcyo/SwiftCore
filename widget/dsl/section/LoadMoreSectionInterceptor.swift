@@ -6,11 +6,14 @@ import Foundation
 
 /// 加载更多数据拦截器
 
-class LoadMoreSectionInterceptor: ISectionInterceptor {
+class LoadMoreSectionInterceptor: BaseSectionInterceptor {
 
-    var order: InterceptorOrder = .INTERCEPTOR_ORDER_HIGH * 2
+    override init() {
+        super.init()
+        order = .INTERCEPTOR_ORDER_HIGH * .INTERCEPTOR_ORDER_HIGH
+    }
 
-    func onInterceptor(_ params: InterceptorParams) {
+    override func onInterceptor(_ params: InterceptorParams) {
         params.resultItems.reset(params.requestItems)
 
         if let recyclerView = params.dslRecyclerView {

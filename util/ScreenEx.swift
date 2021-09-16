@@ -151,3 +151,14 @@ extension UIEdgeInsets {
         UIEdgeInsets(top: top, left: left, bottom: bottom.toCGFloat(), right: right)
     }
 }
+
+extension CGSize {
+
+    func isSizeChange(_ size: CGSize) -> Bool {
+        width != size.width || height != size.height
+    }
+
+    func isSizeChange(rect: CGRect) -> Bool {
+        isSizeChange(rect.size)
+    }
+}

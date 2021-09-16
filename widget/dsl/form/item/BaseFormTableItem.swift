@@ -143,6 +143,22 @@ class BaseFormTableCell: DslTableCell {
 
     func initFormCell() {
 
+        renderCell(formLabel) {
+            self.setLabelMinWidth()
+            $0.makeGravityLeft(offset: Res.size.x)
+            $0.makeGravityTop(offset: Res.size.x)
+        }
+        renderCell(formRequired) {
+            $0.makeGravityLeft(offset: self.requiredOffsetLeft)
+            $0.makeCenterY(self.formLabel)
+        }
+        renderCell(formLine) {
+            $0.makeGravityLeft(offset: Res.size.x)
+            $0.makeGravityRight(offset: Res.size.x)
+            $0.makeGravityBottom()
+            $0.makeHeight(Res.size.line)
+        }
+
         // 箭头控件
         formArrow.contentMode = .scaleAspectFit
         //formArrow.frame = cgRect(16, 16)

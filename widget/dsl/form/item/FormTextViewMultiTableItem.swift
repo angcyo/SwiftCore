@@ -46,22 +46,6 @@ class FormTextViewMultiTableCell: BaseFormTableCell {
 
     override func initFormCell() {
         super.initFormCell()
-
-        renderCell(formLabel) {
-            self.setLabelMinWidth()
-            $0.makeGravityLeft(offset: Res.size.x)
-            $0.makeGravityTop(offset: Res.size.x)
-        }
-        renderCell(formRequired) {
-            $0.makeGravityLeft(offset: self.requiredOffsetLeft)
-            $0.makeCenterY(self.formLabel)
-        }
-        renderCell(formLine) {
-            $0.makeGravityLeft(offset: Res.size.x)
-            $0.makeGravityRight(offset: Res.size.x)
-            $0.makeGravityBottom()
-            $0.makeHeight(Res.size.line)
-        }
         renderCell(text) {
             //$0.backgroundColor = .red
             $0.makeGravityLeft(offset: Res.size.x)
@@ -70,5 +54,9 @@ class FormTextViewMultiTableCell: BaseFormTableCell {
             $0.makeTopToBottomOf(self.formLabel, offset: Res.size.x)
             $0.makeHeight(110)
         }
+    }
+
+    override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
+        super.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
     }
 }

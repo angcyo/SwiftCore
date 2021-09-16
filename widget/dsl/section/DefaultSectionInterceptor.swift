@@ -6,11 +6,14 @@ import Foundation
 
 /// 默认数据拦截器
 
-class DefaultSectionInterceptor: ISectionInterceptor {
+class DefaultSectionInterceptor: BaseSectionInterceptor {
 
-    var order: InterceptorOrder = .INTERCEPTOR_ORDER_MEDIUM
+    override init() {
+        super.init()
+        order = .INTERCEPTOR_ORDER_MEDIUM
+    }
 
-    func onInterceptor(_ params: InterceptorParams) {
+    override func onInterceptor(_ params: InterceptorParams) {
         var _itemList: [DslItem] = []
 
         for item in params.requestItems {

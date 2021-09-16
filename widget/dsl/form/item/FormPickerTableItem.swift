@@ -6,13 +6,13 @@ import Foundation
 import UIKit
 import TangramKit
 
-/// 媒体选择表单, YPImagePicker
+/// 媒体选择表单,单选, YPImagePicker
 class FormPickerTableItem: BaseFormTableItem, IPickerItem {
 
     var pickerItemConfig = PickerItemConfig()
 
     /// 默认的图片 (image 支持[UIImage] 支持本地图片, 支持在线图片)
-    var itemImage: Any? = nil
+    var itemImage: AnyImage? = nil
 
     override func initItem() {
         super.initItem()

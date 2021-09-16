@@ -30,6 +30,9 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
     /// 网格列数, 可以不指定. 指定了也不是强制生效. item配置具有最高优先级
     var spanCount: Int? = nil
 
+    /// 高度是否等于宽度
+    var heightEqualToWidth: Bool = false
+
     /// 列间距
     var minimumInteritemSpacing: CGFloat = Res.size.s
 
@@ -50,9 +53,10 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
         self.init(frame: frame, collectionViewLayout: layout)
     }
 
-    public convenience init(frame: CGRect = .zero, spanCount: Int?) {
+    public convenience init(frame: CGRect = .zero, spanCount: Int?, heightEqualToWidth: Bool = false) {
         self.init(frame: frame)
         self.spanCount = spanCount
+        self.heightEqualToWidth = heightEqualToWidth
     }
 
     override init(frame: CGRect = .zero, collectionViewLayout layout: UICollectionViewLayout) {
@@ -176,7 +180,10 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
 
             //高度计算
             var height: CGFloat
-            if item.itemHeight == UITableView.automaticDimension {
+            if heightEqualToWidth {
+                height = width
+                item.itemHeight = height
+            } else if item.itemHeight == UITableView.automaticDimension {
                 //自动设置宽度, 请在[DslCollectionCell]的[preferredLayoutAttributesFitting]中设置
                 if item._itemHeightCache > 0 {
                     height = item._itemHeightCache

@@ -27,22 +27,6 @@ class FormCheckButtonTableCell: BaseFormTableCell {
 
     override func initFormCell() {
         super.initFormCell()
-
-        renderCell(formLabel) {
-            self.setLabelMinWidth()
-            $0.makeGravityLeft(offset: Res.size.x)
-            $0.makeGravityTop(offset: Res.size.x)
-        }
-        renderCell(formRequired) {
-            $0.makeGravityLeft(offset: self.requiredOffsetLeft)
-            $0.makeCenterY(self.formLabel)
-        }
-        renderCell(formLine) {
-            $0.makeGravityLeft(offset: Res.size.x)
-            $0.makeGravityRight(offset: Res.size.x)
-            $0.makeGravityBottom()
-            $0.makeHeight(Res.size.line)
-        }
         renderCell(checkGroup) {
             //$0.backgroundColor = .red
             $0.makeGravityLeft(offset: Res.size.x)

@@ -14,13 +14,26 @@ extension InterceptorOrder {
     static let INTERCEPTOR_ORDER_HIGH = 1000
 }
 
-protocol ISectionInterceptor {
+protocol ISectionInterceptor: Hashable {
 
     /// 拦截器的顺序, 值越大, 执行越后面
     var order: InterceptorOrder { get set }
 
     /// 开始拦截数据, 过滤完之后,
     func onInterceptor(_ params: InterceptorParams)
+}
+
+class BaseSectionInterceptor: NSObject, ISectionInterceptor {
+
+    var order: InterceptorOrder = -1
+
+    override init() {
+        super.init()
+    }
+
+    func onInterceptor(_ params: InterceptorParams) {
+
+    }
 }
 
 class InterceptorParams {
