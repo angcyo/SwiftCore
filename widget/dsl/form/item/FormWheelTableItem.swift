@@ -15,8 +15,8 @@ class FormWheelTableItem: BaseFormTableItem {
         super.initItem()
 
         /// 请实现此方法
-        onItemClick = {
-            toast(self.formItemConfig.formVerifyErrorTip)
+        onItemClick = { [self] in
+            toast(formItemConfig.formVerifyErrorTip)
         }
     }
 

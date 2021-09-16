@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 import TangramKit
 
-/// 支持多行编辑item
+/// 支持多行编辑item, 左右结构
 open class FormTextViewTableItem: BaseFormTableItem, ITextViewItem {
 
     /// 配置项
