@@ -183,6 +183,7 @@ open class DslTableCell: UITableViewCell, IDslCell {
                 return rootView.sizeThatFits(CGSize(width: targetSize.width - safeAreaInsets.left - safeAreaInsets.right, height: targetSize.height))
             }
         }
+        //会获取视图自身的大小[intrinsicContentSize]
         return super.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
     }
 }
