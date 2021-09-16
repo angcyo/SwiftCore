@@ -24,6 +24,74 @@ open class BaseUIView: UIView {
         //
     }
 
+    /// 自身内容大小, 动态计算
+    var contentSize: CGSize = .zero {
+        didSet {
+            if contentSize.width != oldValue.width || contentSize.height != oldValue.height {
+                invalidateIntrinsicContentSize()
+                setNeedsUpdateConstraints()
+            }
+        }
+    }
+
+    //Auto Layout 自身的大小
+    open override var intrinsicContentSize: CGSize {
+        contentSize = onMeasureAndLayout(super.intrinsicContentSize)
+        return contentSize
+    }
+
+    //通知布局系统, 需要自身的大小改变了
+    open override func invalidateIntrinsicContentSize() {
+        super.invalidateIntrinsicContentSize()
+    }
+
+    open override func sizeToFit() {
+        super.sizeToFit()
+    }
+
+    open override func sizeThatFits(_ size: CGSize) -> CGSize {
+        //super.sizeThatFits(size)
+        //cgSize(max(size.width, contentSize.width), max(size.height, contentSize.height))
+        onMeasureAndLayout(size)
+    }
+
+    /// 开始布局
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        contentSize = onMeasureAndLayout(bounds.size)
+    }
+
+    /// 测量和布局
+    func onMeasureAndLayout(_ size: CGSize) -> CGSize {
+        size
+    }
+
+    //MARK: cell 中自适应
+
+    open override func updateConstraints() {
+        super.updateConstraints()
+    }
+
+    open override func systemLayoutSizeFitting(_ targetSize: CGSize) -> CGSize {
+        let size = super.systemLayoutSizeFitting(targetSize)
+        return size
+    }
+
+    open override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
+        let size = super.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
+        return size
+    }
+
+    //MARK: add remove
+
+    open override func didAddSubview(_ subview: UIView) {
+        super.didAddSubview(subview)
+    }
+
+    open override func willRemoveSubview(_ subview: UIView) {
+        super.willRemoveSubview(subview)
+    }
+
     //MARK: rx
 
     /// 手势订阅
@@ -69,6 +137,10 @@ open class BaseUIView: UIView {
 
     open override func touchesEstimatedPropertiesUpdated(_ touches: Set<UITouch>) {
         super.touchesEstimatedPropertiesUpdated(touches)
+    }
+
+    open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        super.hitTest(point, with: event)
     }
 
     //MARK: presses
