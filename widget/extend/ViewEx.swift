@@ -180,6 +180,11 @@ extension UIView {
         }
     }
 
+    /// 枚举child
+    func eachChildIndex(_ action: (UIView, Int) -> Void) {
+        subviews.forEachIndex(action)
+    }
+
     /// 通过id查找控件
     func find(_ id: Int) -> UIView? {
         viewWithTag(id)
