@@ -43,6 +43,11 @@ class TargetObserver: NSObject, UIGestureRecognizerDelegate {
         //正在touch的view
         let touchView = touch.view
 
+        if gestureView?.superview == nil {
+            L.w("无主的手势识别器")
+            return false
+        }
+
         L.d("shouldReceiveTouch:\(gestureView):\(touchView)")
 
         if touch.tapCount == 1 && gestureView != touchView {
@@ -129,6 +134,7 @@ extension UIView {
 
     ///hold 点击事件
     static var KEY_ON_CLICK = "s_key_on_click"
+    static var KEY_ON_LONG_CLICK = "s_key_on_long_click"
 
     ///控件的名字, 可以用来查找控件
     var viewName: String? {
@@ -427,6 +433,40 @@ extension UIView {
         }
     }
 
+    @discardableResult
+    func onLongClick(_ controlEvents: UIControl.Event = .touchUpInside, _ action: @escaping (UIResponder) -> Void) -> Any {
+        let observer = TargetObserver()
+        observer.onAction = action
+
+        //self.isUserInteractionEnabled = true
+
+        let old = getObject(&UIView.KEY_ON_LONG_CLICK)
+
+        if let old = old as? UILongPressGestureRecognizer {
+            removeGestureRecognizer(old)
+        }
+
+        let gesture = UILongPressGestureRecognizer(target: observer,
+                action: #selector(TargetObserver.onActionInner(sender:)))
+
+        gesture.setObject(&UIView.KEY_ON_LONG_CLICK, observer)
+
+        gesture.delegate = observer
+        // 点击一次
+        gesture.numberOfTapsRequired = 1
+        // 一个手指
+        gesture.numberOfTouchesRequired = 1
+
+        //需要交互
+        isUserInteractionEnabled = true
+        //添加手势
+        addGestureRecognizer(gesture)
+
+        setObject(&UIView.KEY_ON_LONG_CLICK, gesture)
+        return gesture
+
+    }
+
     /// 切成圆
     func setCircle() {
         waitBounds {
@@ -712,6 +752,7 @@ extension UIView {
             if let gestureRecognizers = gestureRecognizers {
                 if let gesture = gestureRecognizers.get(0) {
                     gesture.isEnabled = false
+                    L.w("移除手势:\(gesture)")
                     removeGestureRecognizer(gesture)
                 }
             }

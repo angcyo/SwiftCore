@@ -31,10 +31,8 @@ func lantern(_ images: [Any], index: Int = 0) {
                 } else {
                     lanternCell.imageView.image = UIImage(named: imgStr)
                 }
-            } else if let imgObj = img as? UIImage {
-                lanternCell.imageView.image = imgObj
             } else {
-                L.w("不支持的图片类型:\(type(of: img))")
+                lanternCell.imageView.setImage(img)
             }
         }
     }

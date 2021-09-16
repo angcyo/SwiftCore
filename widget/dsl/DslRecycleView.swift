@@ -197,30 +197,27 @@ extension DslRecycleView {
 extension UICollectionView {
 
     var flowLayout: UICollectionViewFlowLayout? {
-        get {
-            collectionViewLayout as? UICollectionViewFlowLayout
-        }
+        collectionViewLayout as? UICollectionViewFlowLayout
     }
 
-    /// 等同于 contentSize
+    /// 整体的高度
+    var collectionContentSize: CGSize {
+        cgSize(contentWidth, contentHeight)
+    }
+
+    /// 布局内容的高度
     var collectionViewContentSize: CGSize {
-        get {
-            collectionViewLayout.collectionViewContentSize
-        }
+        collectionViewLayout.collectionViewContentSize
     }
 
     /// 内容的宽度
     var contentWidth: CGFloat {
-        get {
-            collectionViewContentSize.width + adjustedContentInset.insetHorizontal
-        }
+        collectionViewContentSize.width + adjustedContentInset.insetHorizontal
     }
 
     /// 内容的高度
     var contentHeight: CGFloat {
-        get {
-            collectionViewContentSize.height + adjustedContentInset.insetVertical
-        }
+        collectionViewContentSize.height + adjustedContentInset.insetVertical
     }
 }
 
@@ -239,4 +236,12 @@ extension UICollectionView {
         return height - insets.insetVertical - adjustedContentInset.insetVertical
     }
 
+}
+
+///https://github.com/lczalh/CZKit
+extension UICollectionViewFlowLayout {
+
+    func layoutAlignment(_ alignment: NSTextAlignment = .left) {
+        perform(Selector.init(("_setRowAlignmentsOptions:")), with: NSDictionary.init(dictionary: ["UIFlowLayoutCommonRowHorizontalAlignmentKey": NSNumber.init(value: alignment.rawValue)]));
+    }
 }

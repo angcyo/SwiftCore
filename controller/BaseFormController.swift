@@ -14,6 +14,7 @@ class BaseFormController: BaseTableViewController {
 
     func onSubmit() {
         //no op
+        L.d("提交表单")
     }
 
     func submit(_ submitAction: @escaping (FormParams) -> Void) {

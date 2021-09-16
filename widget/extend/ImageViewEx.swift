@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import AlamofireImage
+import YPImagePicker
 
 ///https://github.com/Alamofire/AlamofireImage
 
@@ -80,6 +81,13 @@ extension UIImageView {
                 }
             } else if let imgObj = img as? UIImage {
                 self.image = imgObj
+            } else if let mediaItem = img as? YPMediaItem {
+                switch mediaItem {
+                case .photo(let photo):
+                    self.image = photo.image
+                case .video(let video):
+                    self.image = video.thumbnail
+                }
             } else {
                 L.w("不支持的图片类型:\(type(of: img))")
             }

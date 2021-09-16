@@ -50,6 +50,9 @@ class DslCollectionView: UICollectionView, DslRecycleView, UICollectionViewDeleg
         layout.sectionInset = .zero
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
+
+        //当只有一个cell时,布局的对齐方式
+        layout.layoutAlignment(.left)
         self.init(frame: frame, collectionViewLayout: layout)
     }
 

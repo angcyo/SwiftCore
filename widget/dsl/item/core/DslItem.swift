@@ -193,14 +193,10 @@ open class DslItem: NSObject, IDslItem {
     //MARK: - Rx
 
     //Rx 自动取消订阅,
-    lazy var disposeBag: DisposeBag = {
-        DisposeBag()
-    }()
+    var disposeBag: DisposeBag = DisposeBag()
 
     /// 手势订阅
-    lazy var gestureDisposeBag: DisposeBag = {
-        DisposeBag()
-    }()
+    var gestureDisposeBag: DisposeBag = DisposeBag()
 
     /// 取消所有订阅
     func reset() {
@@ -354,8 +350,15 @@ extension DslItem {
 
     /// 绑定点击, 长按事件回调
     @objc func bindItemGesture(_ view: UIView) {
-        gestureDisposeBag = DisposeBag() //重置手势监听
         view.clearGestureRecognizers() //移除所有手势识别器, 防止被复用
+        gestureDisposeBag = DisposeBag() //重置手势监听
+
+        if let _ = view.findAttachedCollectionCell() {
+            // 在 UICollectionViewCell 中, 重置bag会导致手势失效, 神奇
+            // 在 UICollectionViewCell 中, rx 的点击手势 回调有BUG...服了
+        } else {
+
+        }
 
         if onItemClick != nil {
             bindItemClick(view)
@@ -367,14 +370,26 @@ extension DslItem {
     }
 
     func bindItemClick(_ view: UIView) {
-        view.onClick(bag: gestureDisposeBag) { _ in
-            self.onItemClick?()
+        if let _ = view.findAttachedCollectionCell() {
+            view.onClick { _ in
+                self.onItemClick?()
+            }
+        } else {
+            view.onClick(bag: gestureDisposeBag) { _ in
+                self.onItemClick?()
+            }
         }
     }
 
     func bindItemLongClick(_ view: UIView) {
-        view.onLongClick(bag: gestureDisposeBag) { _ in
-            self.onItemLongClick?()
+        if let _ = view.findAttachedCollectionCell() {
+            view.onLongClick { _ in
+                self.onItemLongClick?()
+            }
+        } else {
+            view.onLongClick(bag: gestureDisposeBag) { _ in
+                self.onItemLongClick?()
+            }
         }
     }
 

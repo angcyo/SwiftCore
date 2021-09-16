@@ -338,6 +338,7 @@ extension SectionItemProvide {
                     insertItem(newItem, at + updateCount + i, dsl)
                 }
             }
+            recyclerView.needsReload = true
         } else {
             //单条更新
             if let item = _itemList.get(at) {
