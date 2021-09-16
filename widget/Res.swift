@@ -72,6 +72,7 @@ struct Res {
 
         static var estimatedHeight: CGFloat = 0.0000001
         static var line: CGFloat = 1
+        static var linePx: CGFloat = 1 / UIScreen.scale_
 
         static var roundLittle: CGFloat = 2
         static var roundMin: CGFloat = 6
