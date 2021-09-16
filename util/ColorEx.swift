@@ -127,6 +127,35 @@ extension UIColor {
 
         return UIColor(red: redCurrent, green: greenCurrent, blue: blueCurrent, alpha: alphaCurrent)
     }
+
+    /// 颜色变亮
+    func lighterColor(brightness: CGFloat = 0.25) -> UIColor {
+        colorWithAppendingBrightness(aBrightness: 1 + brightness)
+    }
+
+    /// 颜色变暗
+    func darkerColor(brightness: CGFloat = 0.25) -> UIColor {
+        colorWithAppendingBrightness(aBrightness: 1 - brightness)
+    }
+
+    private func colorWithAppendingBrightness(aBrightness: CGFloat) -> UIColor {
+        var hue: CGFloat = 0.0
+        var saturation: CGFloat = 0.0
+        var brightness: CGFloat = 0.0
+        var alpha: CGFloat = 0.0
+
+        if getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha) {
+            return UIColor(hue: hue, saturation: saturation, brightness: brightness * aBrightness, alpha: alpha)
+        } else {
+            return self
+        }
+    }
+
+    /// 调整颜色饱和度
+    /// UIColor+Hue.swift
+    func saturationColor(minSaturation: CGFloat) -> UIColor {
+        color(minSaturation: minSaturation)
+    }
 }
 
 extension String {

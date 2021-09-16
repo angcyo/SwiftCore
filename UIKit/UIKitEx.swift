@@ -42,10 +42,6 @@ extension UIView {
     }
 }
 
-func cgRect(_ x: CGFloat, _ y: CGFloat, _ width: CGFloat, _ height: CGFloat) -> CGRect {
-    CGRect(x: x, y: y, width: width, height: height)
-}
-
 func indexPath(row: Int, section: Int = 0) -> IndexPath {
     IndexPath(row: row, section: section)
 }
