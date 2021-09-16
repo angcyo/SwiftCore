@@ -108,10 +108,11 @@ class BaseCollectionViewController: BaseViewController, JXPagingViewListViewDele
             recyclerView.make {
                 $0.leading.equalTo(view.safeAreaLayoutGuide.snp.leading)
                 $0.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing)
-
                 $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+
                 //$0.bottom.equalTo(UIScreen.height)//view.safeAreaLayoutGuide.snp.bottom
-                $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+                //$0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+                $0.bottom.equalTo(view.snp.bottom)
             }
         }
 
