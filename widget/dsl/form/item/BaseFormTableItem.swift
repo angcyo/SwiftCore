@@ -9,7 +9,17 @@ import UIKit
 open class BaseFormTableItem: DslTableItem, IFormItem {
 
     /// Label, 需要手动使用
-    var itemLabel: String? = nil
+    var itemLabel: String? = nil {
+        didSet {
+            if let label = itemLabel {
+                if self is FormWheelTableItem || self is FormAvatarTableItem {
+                    formItemConfig.formVerifyErrorTip = "请选择\(label)"
+                } else {
+                    formItemConfig.formVerifyErrorTip = "请输入\(label)"
+                }
+            }
+        }
+    }
     var itemLabelMinWidth: CGFloat? = nil
 
     /// 显示底部横线, 需要手动使用, nil 智能设置

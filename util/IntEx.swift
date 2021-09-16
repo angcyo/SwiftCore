@@ -76,6 +76,23 @@ extension Int: Number {
 }
 
 extension UInt: Number {
+    /* Decimal
+
+    public static let leastFiniteMagnitude: Decimal
+
+    public static let greatestFiniteMagnitude: Decimal
+
+    public static let leastNormalMagnitude: Decimal
+
+    public static let leastNonzeroMagnitude: Decimal
+
+    public static let pi: Decimal
+
+    public static var quietNaN: Decimal { get }
+
+    public static var nan: Decimal { get }
+
+    public static var radix: Int { get }*/
 }
 
 extension Float: Number {
