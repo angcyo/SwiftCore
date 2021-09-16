@@ -71,7 +71,7 @@ extension UILabel {
         textColor = toColor(color)
     }
 
-    /// 单行显示
+    /// 单行显示 , 0表示任意行
     func singleLine(line: Int = 1, lineBreakMode: NSLineBreakMode = .byTruncatingTail) {
         numberOfLines = line
         self.lineBreakMode = lineBreakMode ///*.byWordWrapping + */.byTruncatingTail
@@ -87,6 +87,8 @@ func labelView(_ text: String? = nil,
     view.textColor = color
     view.numberOfLines = 0 //任意行
     view.lineBreakMode = .byWordWrapping /*+ .byTruncatingTail*/
+    //view.preferredMaxLayoutWidth = UIScreen.width
+
     if !nilOrEmpty(text) {
         view.sizeToFit()
     }

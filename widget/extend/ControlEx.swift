@@ -26,4 +26,9 @@ extension UIControl {
         hold?.setObject(&key, observer)
         return observer
     }
+
+    /// 移除监听
+    func removeAllTarget(_ target: Any?, action: Selector? = nil, for controlEvents: UIControl.Event = .allEvents) {
+        removeTarget(target, action: action, for: controlEvents)
+    }
 }

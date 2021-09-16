@@ -117,6 +117,16 @@ extension CGFloat: Number {
         Float(self)
     }
 
+    /// 向下取整
+    func toFloorf() -> CGFloat {
+        floorf(toFloat()).toCGFloat()
+    }
+
+    /// 向=上取整
+    func toCeilf() -> CGFloat {
+        ceilf(toFloat()).toCGFloat()
+    }
+
     func toCGFloat(_ end: CGFloat, fraction: CGFloat) -> CGFloat {
         self + fraction * (end - self)
     }

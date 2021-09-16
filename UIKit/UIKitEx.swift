@@ -45,3 +45,8 @@ extension UIView {
 func indexPath(row: Int, section: Int = 0) -> IndexPath {
     IndexPath(row: row, section: section)
 }
+
+/// 抛出异常
+func e(_ message: @autoclosure () -> String = String(), file: StaticString = #file, line: UInt = #line) -> Never {
+    fatalError(message(), file: file, line: line)
+}

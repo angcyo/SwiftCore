@@ -627,15 +627,15 @@ extension UIView {
 extension UIView {
 
     var width: CGFloat {
-        get {
-            bounds.width
-        }
+        bounds.width
     }
 
     var height: CGFloat {
-        get {
-            bounds.height
-        }
+        bounds.height
+    }
+
+    var childCount: Int {
+        subviews.count
     }
 
     /// 返回视图计算后的内容大小 [ignoreHidden]是否忽略视图隐藏, 不忽略则隐藏后size为0
@@ -739,6 +739,34 @@ extension UIView {
         superview?.sendSubviewToBack(self)
     }
 
+    /// 重置子view, 到指定的数量. 使用缓存
+    func resetSubView<T: UIView>(_ view: T.Type = T.self, count: Int, dsl: (_ view: T, _ index: Int) -> Void) {
+        let oldCount = subviews.count
+        let removeCount = oldCount - count
+        let addCount = count - oldCount
+        let updateCount = min(oldCount, count)
+
+        //remove
+        if removeCount > 0 {
+            for i in 0..<removeCount {
+                subviews.reversed().last?.removeFromSuperview()
+            }
+        }
+        //update
+        if updateCount > 0 {
+            for i in 0..<updateCount {
+                dsl(subviews[i] as! T, i)
+            }
+        }
+        //add
+        if addCount > 0 {
+            for i in 0..<addCount {
+                let newView = view.init(frame: .zero)
+                addSubview(newView)
+                dsl(newView, i + max(updateCount, 0))
+            }
+        }
+    }
 }
 
 /// 获取一个渐变 图层
