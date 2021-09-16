@@ -11,6 +11,15 @@ class FormWheelTableItem: BaseFormTableItem {
 
     var itemWheelValue: String? = nil
 
+    override func initItem() {
+        super.initItem()
+
+        /// 请实现此方法
+        onItemClick = {
+            toast(self.formItemConfig.formVerifyErrorTip)
+        }
+    }
+
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
 

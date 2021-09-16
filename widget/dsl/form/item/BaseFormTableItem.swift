@@ -59,6 +59,25 @@ open class BaseFormTableItem: DslTableItem, IFormItem {
     override func bindCellOverride(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCellOverride(cell, indexPath)
 
+        //cell
+        cell.cellOf(BaseFormTableCell.self) {
+            //$0.formLine.visible(_itemShowLine) //Line
+            $0.formLineVisible = _itemShowLine
+
+            $0.formLabel.text = itemLabel //Label
+
+            $0.formRequiredVisible = formItemConfig.formRequired //必填提示
+            ///$0.formRequired.visible(formItemConfig.formRequired) //必填提示
+
+            if let itemLabelMinWidth = itemLabelMinWidth {
+                //label最小宽度
+                $0.labelMinWidth = itemLabelMinWidth
+
+                //$0.formLabel.wrap_content(minWidth: itemLabelMinWidth)
+            }
+        }
+
+        //cell config
         cell.cellConfigOf(BaseFormItemCellConfig.self) {
             //$0.formLine.visible(_itemShowLine) //Line
             $0.formLineVisible = _itemShowLine
@@ -77,6 +96,77 @@ open class BaseFormTableItem: DslTableItem, IFormItem {
         }
     }
 }
+
+//MARK: 只能在UITableView中使用
+
+class BaseFormTableCell: DslTableCell {
+
+    /// 分割线, 自动add
+    let formLine = lineView()
+
+    var formLineVisible = true {
+        didSet {
+            setShowLine()
+        }
+    }
+
+    /// Label, 手动add
+    let formLabel = labelView(size: Res.text.label.size, color: Res.text.subTitle.color)
+
+    var labelMinWidth = Res.size.itemMinLabelWidth {
+        didSet {
+            setLabelMinWidth()
+        }
+    }
+
+    /// 箭头控件, 手动add
+    var formArrow = icon(R.image.icon_arrow_right())
+
+    /// 必填小星星, 自动add
+    let formRequired = labelView("*", size: Res.text.label.size, color: UIColor.red)
+
+    /// 偏移量
+    var requiredOffsetLeft = Res.size.itemRequiredOffsetLeft
+    var requiredOffsetTop = Res.size.itemRequiredOffsetTop
+
+    var formRequiredVisible = false {
+        didSet {
+            setShowRequired()
+        }
+    }
+
+    override func initCell() {
+        super.initCell()
+
+        initFormCell()
+    }
+
+    func initFormCell() {
+
+        // 箭头控件
+        formArrow.contentMode = .scaleAspectFit
+        //formArrow.frame = cgRect(16, 16)
+
+        setShowLine()
+        setShowRequired()
+    }
+
+    /// MARK: change
+
+    func setLabelMinWidth() {
+        formLabel.makeWidth(minWidth: labelMinWidth)
+    }
+
+    func setShowLine() {
+        formLine.setVisible(formLineVisible)
+    }
+
+    func setShowRequired() {
+        formRequired.setVisible(formRequiredVisible)
+    }
+}
+
+//MARK: cell 界面声明, 用于兼容UITableView和UICollectionView
 
 /// 表单item的config基类
 class BaseFormItemCellConfig: IDslCellConfig {
