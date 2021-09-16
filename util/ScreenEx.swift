@@ -119,6 +119,18 @@ func insets(left: CGFloat = 0, top: CGFloat = 0, right: CGFloat = 0, bottom: CGF
 }
 
 extension UIEdgeInsets {
+
+    /// 横向总插入
+    var insetHorizontal: CGFloat {
+        left + right
+    }
+
+    /// 纵向总插入
+    var insetVertical: CGFloat {
+        top + bottom
+    }
+
+    /// 重置底部
     func resetBottom(_ bottom: Float) -> UIEdgeInsets {
         UIEdgeInsets(top: top, left: left, bottom: bottom.toCGFloat(), right: right)
     }

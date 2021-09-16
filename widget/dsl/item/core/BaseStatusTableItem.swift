@@ -113,7 +113,9 @@ class BaseStatusTableCell: DslTableCell {
 
     override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
         if let view = findAttachedTableView() {
-            return cgSize(targetSize.width, view.height - view.rectForHeader(inSection: 0).height - view.rectForHeader(inSection: 0).height)
+            let width = targetSize.width
+            let height = view.height - view.rectForHeader(inSection: 0).height - view.rectForHeader(inSection: 0).height
+            return cgSize(width, height)
         } else {
             return super.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
         }

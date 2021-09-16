@@ -212,14 +212,14 @@ extension UICollectionView {
     /// 内容的宽度
     var contentWidth: CGFloat {
         get {
-            collectionViewContentSize.width + contentInset.left + contentInset.right
+            collectionViewContentSize.width + adjustedContentInset.insetHorizontal
         }
     }
 
     /// 内容的高度
     var contentHeight: CGFloat {
         get {
-            collectionViewContentSize.height + contentInset.top + contentInset.bottom
+            collectionViewContentSize.height + adjustedContentInset.insetVertical
         }
     }
 }
@@ -230,13 +230,13 @@ extension UICollectionView {
     var maxContextWidth: CGFloat {
         //let delegate = self.delegate as? UICollectionViewDelegateFlowLayout
         let insets: UIEdgeInsets = /*delegate?.collectionView(self, layout: collectionViewLayout, insetForSectionAt: 0) ??*/ .zero
-        return width - insets.left - insets.right - contentInset.left - contentInset.right
+        return width - insets.insetHorizontal - adjustedContentInset.insetHorizontal
     }
 
     var maxContextHeight: CGFloat {
         //let delegate = self.delegate as? UICollectionViewDelegateFlowLayout
         let insets: UIEdgeInsets = /*delegate?.collectionView(self, layout: collectionViewLayout, insetForSectionAt: 0) ??*/ .zero
-        return height - insets.top - insets.bottom - contentInset.top - contentInset.bottom
+        return height - insets.insetVertical - adjustedContentInset.insetVertical
     }
 
 }
