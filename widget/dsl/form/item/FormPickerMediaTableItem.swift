@@ -17,8 +17,8 @@ class FormPickerMediaTableItem: BaseFormTableItem, IPickerItem {
         super.initItem()
 
         let addItem = DslImageCollectionItem()
-        addItem.itemImage = R.image.img_add()
-        addItem.itemContentMode = .scaleAspectFit
+        addItem.imageItemConfig.itemImage = R.image.img_add()
+        addItem.imageItemConfig.itemContentMode = .scaleAspectFit
         addItem.onItemClick = {
             self.pickerMedia { items, cancelled in
                 //no op
@@ -45,16 +45,16 @@ class FormPickerMediaTableItem: BaseFormTableItem, IPickerItem {
 
         cell.cellOf(FormPickerMediaTableCell.self) {
             let cell = $0
+            let grid = $0.grid
             $0.grid.defaultItemProvide.updateItemList(DslImageCollectionItem.self, data: pickerItemConfig.itemPreselectedList) {
                 let item = $0
-                $0.itemImage = $0.itemData
+                $0.imageItemConfig.itemImage = $0.itemData
                 $0.onItemClick = {
-                    lantern(cell.grid.allItemImage(), index: item.itemIndex?.row ?? 0)
+                    lantern(grid, indexPath: item.itemIndex!)
                 }
             }
             $0.grid.sectionHelper.addInterceptor(_maxSectionInterceptor)
 
-            let grid = $0.grid
             $0.grid.sectionHelper.observerUpdateOnce {
                 let frame = grid.frame
                 let size = grid.collectionContentSize

@@ -12,7 +12,7 @@ import YPImagePicker
 
 ///https://github.com/Alamofire/AlamofireImage
 
-/// image 支持[UIImage] 支持本地图片, 支持在线图片
+/// image 支持[UIImage] 支持本地图片, 支持在线图片, 支持[YPMediaItem]
 typealias AnyImage = Any
 
 extension UIImageView {

@@ -8,18 +8,15 @@ import YPImagePicker
 
 /// 简单的图片item
 
-class DslImageCollectionItem: DslCollectionItem {
+class DslImageCollectionItem: DslCollectionItem, IImageItem {
 
-    var itemImage: AnyImage? = nil
-
-    var itemContentMode: UIView.ContentMode = .scaleAspectFill
+    var imageItemConfig = ImageItemConfig()
 
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
 
         cell.cellOf(DslImageCollectionCell.self) {
-            $0.image.setImage(itemImage)
-            $0.image.contentMode = itemContentMode
+            initImageItem($0.image)
         }
     }
 }
@@ -39,15 +36,15 @@ class DslImageCollectionCell: DslCollectionCell {
     }
 }
 
-extension DslCollectionView {
+extension DslRecycleView {
 
     /// 获取所有图片
     func allItemImage() -> [AnyImage] {
         let itemList = getItemList(false)
         var result: [AnyImage] = []
         itemList.forEach {
-            if let item = $0 as? DslImageCollectionItem {
-                result.add(item.itemImage)
+            if let item = $0 as? IImageItem {
+                result.add(item.imageItemConfig.itemImage)
             }
         }
         return result
